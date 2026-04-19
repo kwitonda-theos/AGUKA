@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/customer-head :: head('My Jobs - AGUKA')}"></head>
+<body class="bg-surface text-primary flex min-h-screen overflow-x-hidden antialiased">
+
+    <!-- Sidebar -->
+    <th:block th:replace="~{fragments/customer-sidebar :: sidebar('my-jobs')}"></th:block>
+
+    <!-- Main Content Area -->
+    <main class="ml-72 flex-1 p-12 flex flex-col animate-fade-in relative z-0">
+        
+        <!-- Header -->
+        <header class="mb-10">
+            <h1 class="text-3xl font-extrabold mb-2 tracking-tight">My jobs</h1>
+            <p class="text-muted text-base font-medium">Manage and track all your active and past service requests.</p>
+        </header>
+
+        <!-- Filters Section -->
+        <div class="inline-flex bg-[#e2d9cd] p-1.5 rounded-xl mb-12 shadow-inner self-start animate-slide-up">
+            <button class="px-6 py-2.5 rounded-lg text-sm font-bold text-primary bg-white shadow-sm hover:shadow-md transition-all">ALL</button>
+            <button class="px-6 py-2.5 rounded-lg text-sm font-bold text-muted hover:text-primary hover:bg-white/40 transition-colors">Open</button>
+            <button class="px-6 py-2.5 rounded-lg text-sm font-bold text-muted hover:text-primary hover:bg-white/40 transition-colors">In progress</button>
+            <button class="px-6 py-2.5 rounded-lg text-sm font-bold text-muted hover:text-primary hover:bg-white/40 transition-colors">Completed</button>
+            <button class="px-6 py-2.5 rounded-lg text-sm font-bold text-muted hover:text-primary hover:bg-white/40 transition-colors">Cancelled</button>
+        </div>
+
+        <!-- Jobs List -->
+        <div class="flex flex-col gap-6 max-w-5xl animate-slide-up" style="animation-delay: 0.1s;">
+            
+            <!-- Job Card 1 -->
+            <div class="glass-card rounded-2xl p-7 flex flex-col gap-5 group">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center gap-4">
+                        <span class="px-3 py-1 bg-[#C0D1FF] text-[#2f54eb] rounded-md text-xs font-bold uppercase tracking-wide">In progress</span>
+                        <span class="text-sm text-muted font-medium">Created on 23/3/2026</span>
+                    </div>
+                    <div class="text-[11px] font-bold text-muted uppercase tracking-wider">TOTAL BUDGET</div>
+                </div>
+                
+                <div class="flex justify-between items-center">
+                    <h3 class="text-2xl font-extrabold group-hover:text-accent transition-colors">Complete Kitchen Renovation</h3>
+                    <div class="text-2xl font-black text-primary">1,200,000 FRW</div>
+                </div>
+                
+                <div class="flex justify-between items-center pt-2">
+                    <div class="flex items-center gap-6">
+                        <div class="flex items-center gap-2 text-sm text-muted font-medium">
+                            <i class="ri-map-pin-2-line text-lg"></i> kicukiro, Kigali
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-muted font-medium">
+                            <i class="ri-user-smile-line text-lg"></i> eng. raul
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <a href="#" class="text-sm font-bold text-primary hover:text-accent underline-offset-4 hover:underline transition-all">View engineers</a>
+                        <button class="px-6 py-2.5 bg-primary text-white text-sm font-bold rounded-lg shadow-md hover:bg-accent hover:-translate-y-0.5 hover:shadow-lg transition-all">View Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Job Card 2 -->
+            <div class="glass-card rounded-2xl p-7 flex flex-col gap-5 group">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center gap-4">
+                        <span class="px-3 py-1 bg-[#A2E4B8] text-[#13773b] rounded-md text-xs font-bold uppercase tracking-wide">Completed</span>
+                        <span class="text-sm text-muted font-medium">Created on 23/3/2026</span>
+                    </div>
+                    <div class="text-[11px] font-bold text-muted uppercase tracking-wider">TOTAL BUDGET</div>
+                </div>
+                
+                <div class="flex justify-between items-center">
+                    <h3 class="text-2xl font-extrabold group-hover:text-accent transition-colors">Fence renovation</h3>
+                    <div class="text-2xl font-black text-primary">500,000 FRW</div>
+                </div>
+                
+                <div class="flex justify-between items-center pt-2">
+                    <div class="flex items-center gap-6">
+                        <div class="flex items-center gap-2 text-sm text-muted font-medium">
+                            <i class="ri-map-pin-2-line text-lg"></i> kicukiro, Kigali
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-muted font-medium">
+                            Finished on 13/4/2026
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <a href="#" class="text-sm font-bold text-primary hover:text-accent underline-offset-4 hover:underline transition-all">invoice</a>
+                        <button class="px-6 py-2.5 bg-primary text-white text-sm font-bold rounded-lg shadow-md hover:bg-accent hover:-translate-y-0.5 hover:shadow-lg transition-all">View Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Job Card 3 -->
+            <div class="glass-card rounded-2xl p-7 flex flex-col gap-5 group">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center gap-4">
+                        <span class="px-3 py-1 bg-[#CFD1D4] text-[#5c6269] rounded-md text-xs font-bold uppercase tracking-wide">Open</span>
+                        <span class="text-sm text-muted font-medium">Created on 23/3/2026</span>
+                    </div>
+                    <div class="text-[11px] font-bold text-muted uppercase tracking-wider">TOTAL BUDGET</div>
+                </div>
+                
+                <div class="flex justify-between items-center">
+                    <h3 class="text-2xl font-extrabold group-hover:text-accent transition-colors">Home house</h3>
+                    <div class="text-2xl font-black text-primary">80,000,000 FRW</div>
+                </div>
+                
+                <div class="flex justify-between items-center pt-2">
+                    <div class="flex items-center gap-6">
+                        <div class="flex items-center gap-2 text-sm text-muted font-medium">
+                            <i class="ri-map-pin-2-line text-lg"></i> kicukiro, Kigali
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-muted font-medium">
+                            Awaiting Contractor
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <a href="#" class="text-sm font-bold text-primary hover:text-accent underline-offset-4 hover:underline transition-all">Edit</a>
+                        <button class="px-6 py-2.5 bg-primary text-white text-sm font-bold rounded-lg shadow-md hover:bg-accent hover:-translate-y-0.5 hover:shadow-lg transition-all">View Details</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+</html>

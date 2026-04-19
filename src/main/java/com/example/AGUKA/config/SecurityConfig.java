@@ -17,7 +17,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authz -> authz
                 // Allow public access to all auth routes and static assets
-                .requestMatchers("/auth/**", "/assets/**", "/favicon.svg", "/icons/**").permitAll()
+                .requestMatchers("/auth/**", "/assets/**", "/favicon.svg", "/icons/**", "/customer/**").permitAll()
                 // All other requests must be authenticated
                 .anyRequest().authenticated()
             )

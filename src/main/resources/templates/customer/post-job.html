@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/customer-head :: head('Post a Job - AGUKA')}"></head>
+<body class="bg-surface text-primary flex min-h-screen overflow-x-hidden antialiased">
+
+    <!-- Sidebar -->
+    <th:block th:replace="~{fragments/customer-sidebar :: sidebar('post-job')}"></th:block>
+
+    <!-- Main Content Area -->
+    <main class="ml-72 flex-1 p-12 flex flex-col animate-fade-in relative z-0">
+        
+        <!-- Header -->
+        <header class="mb-10">
+            <h1 class="text-3xl font-extrabold mb-2 tracking-tight">Define Your Requirement</h1>
+            <p class="text-muted text-base font-medium">Detail your service needs precisely.</p>
+        </header>
+
+        <!-- Form Container -->
+        <div class="glass-card rounded-2xl p-8 max-w-xl animate-slide-up">
+            <form action="#" method="post" class="space-y-6">
+                
+                <div class="space-y-2 group">
+                    <label class="block text-[15px] font-bold text-primary group-focus-within:text-accent transition-colors" for="title">Title</label>
+                    <input type="text" id="title" class="glass-input w-full p-3 rounded-lg" placeholder="Value">
+                </div>
+                
+                <div class="space-y-2 group">
+                    <label class="block text-[15px] font-bold text-primary group-focus-within:text-accent transition-colors" for="description">Description</label>
+                    <textarea id="description" class="glass-input w-full p-3 rounded-lg resize-y min-h-[100px]" placeholder="Value"></textarea>
+                </div>
+                
+                <div class="space-y-2 group">
+                    <label class="block text-[15px] font-bold text-primary group-focus-within:text-accent transition-colors" for="specialization">Specialization</label>
+                    <div class="relative">
+                        <select id="specialization" class="glass-input w-full p-3 rounded-lg appearance-none cursor-pointer">
+                            <option value="" disabled selected>choose Values</option>
+                            <option value="plumbing">Plumbing</option>
+                            <option value="electrical">Electrical</option>
+                            <option value="construction">Construction</option>
+                            <option value="renovation">Renovation</option>
+                        </select>
+                        <i class="ri-arrow-down-s-line absolute right-4 top-1/2 transform -translate-y-1/2 text-muted pointer-events-none"></i>
+                    </div>
+                </div>
+                
+                <div class="space-y-2 group">
+                    <label class="block text-[15px] font-bold text-primary group-focus-within:text-accent transition-colors" for="location">Location</label>
+                    <input type="text" id="location" class="glass-input w-full p-3 rounded-lg" placeholder="Value">
+                </div>
+                
+                <div class="space-y-2 group">
+                    <label class="block text-[15px] font-bold text-primary group-focus-within:text-accent transition-colors" for="budget">Budget</label>
+                    <input type="number" id="budget" class="glass-input w-full p-3 rounded-lg" placeholder="INT">
+                </div>
+                
+                <div class="space-y-2 group">
+                    <label class="block text-[15px] font-bold text-primary group-focus-within:text-accent transition-colors" for="preferred-date">Preferred date</label>
+                    <input type="text" id="preferred-date" class="glass-input w-full p-3 rounded-lg" placeholder="Value">
+                </div>
+                
+                <div class="pt-2">
+                    <button type="submit" class="w-full py-3.5 bg-primary text-white font-black uppercase tracking-wider rounded-lg shadow-md hover:bg-accent hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </main>
+
+</body>
+</html>
