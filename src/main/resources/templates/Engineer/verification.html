@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engineer Verification - AGUKA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #101214;
+            --panel: #d9d4c7;
+            --brand: #01473c;
+            --text: #0d493f;
+            --muted: #4f6f67;
+            --line: #1a6657;
+            --star: #f2c24f;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            font-family: "Kumbh Sans", sans-serif;
+            color: var(--text);
+        }
+
+        .layout {
+            width: 100%;
+            margin: 0;
+            background: var(--panel);
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .top-bar {
+            background: var(--brand);
+            color: #fff;
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            padding: 0.65rem 1rem;
+        }
+
+        .content {
+            padding: 1.2rem 3.2rem 2.4rem;
+        }
+
+        .hero {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            align-items: flex-start;
+            margin-bottom: 1.25rem;
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: 2.3rem;
+            line-height: 1.15;
+        }
+
+        .hero p {
+            margin: 0.2rem 0 0;
+            color: var(--muted);
+            font-size: 1.18rem;
+        }
+
+        .status-wrap {
+            min-width: 16rem;
+            text-align: right;
+        }
+
+        .avatar {
+            width: 2.8rem;
+            height: 2.8rem;
+            border-radius: 999px;
+            background: #c9c9c9;
+            margin-left: auto;
+            margin-bottom: 0.4rem;
+        }
+
+        .status {
+            font-size: 1.2rem;
+            color: #315f55;
+        }
+
+        .section-title {
+            margin: 1.1rem 0 0.35rem;
+            font-size: 2rem;
+        }
+
+        .section-note {
+            margin: 0 0 0.7rem;
+            color: var(--muted);
+            font-size: 1.15rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.65rem 1.5rem;
+        }
+
+        .field label {
+            display: block;
+            font-size: 1.42rem;
+            margin-bottom: 0.25rem;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            border: 2px solid var(--line);
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 0.4rem;
+            padding: 0.56rem 0.85rem;
+            font-size: 1.2rem;
+            font-family: inherit;
+            color: var(--text);
+            outline: none;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(26, 102, 87, 0.2);
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #6a857f;
+        }
+
+        textarea {
+            min-height: 6rem;
+            resize: vertical;
+        }
+
+        .wide {
+            grid-column: 1 / -1;
+        }
+
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            padding: 0.45rem;
+            border: 2px solid var(--line);
+            border-radius: 0.4rem;
+            min-height: 2.85rem;
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        .skill-chip {
+            padding: 0.18rem 0.55rem;
+            border-radius: 999px;
+            background: rgba(1, 71, 60, 0.15);
+            color: var(--brand);
+            font-size: 0.96rem;
+            font-weight: 600;
+        }
+
+        .skills input {
+            border: none;
+            background: transparent;
+            box-shadow: none;
+            min-width: 9rem;
+            padding: 0.18rem 0.25rem;
+            font-size: 1rem;
+        }
+
+        .stars {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            font-size: 2.2rem;
+            color: var(--star);
+            margin: 0.35rem 0 1.1rem;
+            line-height: 1;
+        }
+
+        .stars span {
+            color: var(--muted);
+            font-size: 1.4rem;
+        }
+
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+            max-width: 18rem;
+        }
+
+        button {
+            border: none;
+            border-radius: 0.4rem;
+            background: var(--brand);
+            color: #fff;
+            font-size: 1.35rem;
+            font-weight: 500;
+            padding: 0.62rem 1rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        button:hover {
+            opacity: 0.94;
+        }
+
+        .hint {
+            margin: 0.6rem 0;
+            color: var(--muted);
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 900px) {
+            .content {
+                padding: 1rem 1.1rem 2rem;
+            }
+
+            .hero {
+                flex-direction: column;
+            }
+
+            .status-wrap {
+                text-align: left;
+                min-width: auto;
+            }
+
+            .avatar {
+                margin-left: 0;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1,
+            .section-title {
+                font-size: 1.7rem;
+            }
+
+            .field label {
+                font-size: 1.03rem;
+            }
+
+            input,
+            select,
+            textarea,
+            button,
+            .hint,
+            .hero p,
+            .status,
+            .section-note,
+            .stars span {
+                font-size: 0.98rem;
+            }
+
+            .stars {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="layout">
+        <header class="top-bar">AGUKA</header>
+
+        <form class="content" action="#" method="post">
+            <section class="hero">
+                <div>
+                    <h1>Engineer Profile</h1>
+                    <p>Complete your profile to get matched with construction jobs.</p>
+                </div>
+                <div class="status-wrap">
+                    <div class="avatar" aria-hidden="true"></div>
+                    <div class="status">verified / under preview/ unverified</div>
+                </div>
+            </section>
+
+            <h2 class="section-title">Personal information</h2>
+            <div class="grid">
+                <div class="field">
+                    <label for="name">Name</label>
+                    <input id="name" type="text" placeholder="your name (read-only)" readonly>
+                </div>
+                <div class="field">
+                    <label for="phone">phone</label>
+                    <input id="phone" type="tel" placeholder="your phone">
+                </div>
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input id="email" type="email" placeholder="your email (read-only)" readonly>
+                </div>
+                <div class="field">
+                    <label for="location">Location</label>
+                    <input id="location" type="text" placeholder="your location">
+                </div>
+            </div>
+
+            <h2 class="section-title">Professional information</h2>
+            <div class="grid">
+                <div class="field">
+                    <label for="profession">Profession</label>
+                    <select id="profession">
+                        <option value="">your profession (drop down)</option>
+                        <option>civil engineer</option>
+                        <option>architect</option>
+                        <option>project manager</option>
+                        <option>quantity surveyor</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="experience">years of experience</label>
+                    <select id="experience">
+                        <option value="">number drop down</option>
+                        <option>1 - 2 years</option>
+                        <option>3 - 5 years</option>
+                        <option>6 - 9 years</option>
+                        <option>10+ years</option>
+                    </select>
+                </div>
+                <div class="field wide">
+                    <label for="skillsInput">skills</label>
+                    <div class="skills" id="skillsBox">
+                        <input id="skillsInput" type="text" placeholder="multiple inputs" aria-label="Add skill">
+                    </div>
+                </div>
+                <div class="field wide">
+                    <label for="bio">short bio</label>
+                    <textarea id="bio" placeholder="Briefly describe your experience and the type of projects you worked on."></textarea>
+                </div>
+            </div>
+
+            <h2 class="section-title">Work preferences</h2>
+            <div class="grid">
+                <div class="field">
+                    <label for="available">available for work?</label>
+                    <select id="available">
+                        <option value="">yes / no</option>
+                        <option>yes</option>
+                        <option>no</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="travel">willing to travel</label>
+                    <select id="travel">
+                        <option value="">with in district /nationwide</option>
+                        <option>within district</option>
+                        <option>nationwide</option>
+                    </select>
+                </div>
+            </div>
+
+            <h2 class="section-title">Verification</h2>
+            <p class="section-note">Verified engineers get more job opportunities and higher trust from clients.</p>
+            <div class="grid">
+                <div class="field">
+                    <label for="nationalId">National ID number</label>
+                    <input id="nationalId" type="text" placeholder="enter id number">
+                </div>
+                <div class="field">
+                    <label for="uploadId">upload national ID</label>
+                    <input id="uploadId" type="file">
+                </div>
+            </div>
+
+            <h2 class="section-title">Professional Documents</h2>
+            <p class="section-note">Uploading certificates improves your chances of being hired.</p>
+            <div class="grid">
+                <div class="field">
+                    <label for="certificates">certificates</label>
+                    <input id="certificates" type="file" multiple>
+                </div>
+            </div>
+
+            <h2 class="section-title">Profile photo</h2>
+            <p class="section-note">A clear photo helps clients trust and recognize you.</p>
+            <div class="grid">
+                <div class="field">
+                    <label for="photo">upload picture</label>
+                    <input id="photo" type="file" accept="image/*">
+                </div>
+            </div>
+
+            <h2 class="section-title">Ratings &amp; reviews</h2>
+            <div class="stars" aria-label="Rating 5 out of 5">★★★★★ <span>5/5</span></div>
+
+            <div class="actions">
+                <button type="submit">Save</button>
+                <p class="hint">Note: submit for verification after making sure that all the required documents are available</p>
+                <button type="button">submit for verification</button>
+            </div>
+        </form>
+    </main>
+
+    <script>
+        const skillsInput = document.getElementById("skillsInput");
+        const skillsBox = document.getElementById("skillsBox");
+
+        skillsInput.addEventListener("keydown", function (event) {
+            if (event.key !== "Enter") {
+                return;
+            }
+
+            event.preventDefault();
+            const value = skillsInput.value.trim();
+            if (!value) {
+                return;
+            }
+
+            const chip = document.createElement("span");
+            chip.className = "skill-chip";
+            chip.textContent = value;
+            skillsBox.insertBefore(chip, skillsInput);
+            skillsInput.value = "";
+        });
+    </script>
+</body>
+</html>

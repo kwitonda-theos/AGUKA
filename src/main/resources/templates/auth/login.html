@@ -60,7 +60,7 @@
             </div>
 
             <!-- Form -->
-            <form action="/login" method="post" class="space-y-5">
+            <form action="/auth/verify" method="get" class="space-y-5">
                 
                 <!-- Email -->
                 <div class="space-y-1.5 group">
@@ -94,7 +94,7 @@
                         <input type="checkbox" class="w-4 h-4 rounded border-primary/30 bg-white/50 text-primary focus:ring-primary/30 cursor-pointer transition-all">
                         <span class="text-sm font-medium text-primary/70 group-hover:text-primary transition-colors">Remember me</span>
                     </label>
-                    <a href="#" class="text-sm font-semibold text-primary/90 hover:text-primary transition-colors">Forgot password?</a>
+                    <a href="/auth/reset-password" class="text-sm font-semibold text-primary/90 hover:text-primary transition-colors">Forgot password?</a>
                 </div>
 
                 <!-- Submit Button -->
@@ -111,6 +111,7 @@
                     Don't have an account? 
                     <a href="/auth/role-confirmation" class="text-primary hover:text-primary/90 font-bold ml-1 relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left">Register</a>
                 </div>
+
             </form>
         </div>
     </main>

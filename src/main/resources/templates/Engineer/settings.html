@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engineer Settings - AGUKA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #111315;
+            --panel: #dad6c9;
+            --brand: #01473c;
+            --brand-soft: #055847;
+            --line: #2b6f61;
+            --text: #0a4339;
+            --muted: #56736d;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: "Kumbh Sans", sans-serif;
+        }
+
+        .app {
+            width: 100%;
+            min-height: 100vh;
+            margin: 0;
+            border-radius: 0;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+        }
+
+        .sidebar {
+            background: linear-gradient(180deg, var(--brand), #024338 65%);
+            color: var(--white);
+            padding: 1.2rem 1.4rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            margin: 0 0 1.35rem;
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+
+        .nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.62rem;
+            color: #e8f0ed;
+            text-decoration: none;
+            padding: 0.56rem 0.1rem;
+            border-radius: 8px;
+            font-size: 1.5rem;
+            transition: background-color 160ms ease;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .nav-item svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            stroke: #d9ebe5;
+            stroke-width: 1.85;
+            fill: none;
+        }
+
+        .profile-cta {
+            margin-top: auto;
+            background: var(--brand-soft);
+            border-radius: 10px;
+            padding: 0.45rem 0.65rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.65rem;
+            max-width: 165px;
+        }
+
+        .avatar {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background: #cfd6d3;
+        }
+
+        .profile-cta span {
+            font-size: 1.4rem;
+            color: #edf4f1;
+        }
+
+        .main {
+            background: var(--panel);
+            padding: 1.3rem 1.75rem 1.5rem;
+        }
+
+        .title {
+            margin: 0;
+            font-size: 1.9rem;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            margin: 0.18rem 0 1rem;
+            color: var(--muted);
+            font-size: 1.18rem;
+        }
+
+        .settings-card {
+            border: 1.6px solid var(--line);
+            border-radius: 8px;
+            background: #dfdbcf;
+            padding: 0.9rem 1rem 1rem;
+            max-width: 860px;
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            margin: 0 0 0.75rem;
+            font-size: 1.45rem;
+            font-weight: 600;
+            color: #123b34;
+        }
+
+        .card-title svg {
+            width: 1.3rem;
+            height: 1.3rem;
+            stroke: #193f38;
+            fill: none;
+            stroke-width: 1.8;
+        }
+
+        .field {
+            margin-bottom: 0.55rem;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 0.22rem;
+            font-size: 1.25rem;
+            color: #2d504a;
+        }
+
+        .field select {
+            width: 100%;
+            border: 1.6px solid var(--line);
+            border-radius: 8px;
+            background: #d6d4cd;
+            color: #3c5450;
+            font-size: 1.05rem;
+            padding: 0.56rem 2rem 0.56rem 0.75rem;
+            appearance: none;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .select-wrap {
+            position: relative;
+        }
+
+        .select-wrap::after {
+            content: "";
+            position: absolute;
+            right: 0.85rem;
+            top: 50%;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 6px solid #3b4c48;
+            transform: translateY(-30%);
+            pointer-events: none;
+        }
+
+        @media (max-width: 980px) {
+            .app {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-cta {
+                margin-top: 0.8rem;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .main {
+                padding: 1rem;
+            }
+
+            .logo {
+                font-size: 1.55rem;
+            }
+
+            .nav-item,
+            .profile-cta span,
+            .title {
+                font-size: 1.15rem;
+            }
+
+            .field label {
+                font-size: 0.98rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="app">
+        <aside class="sidebar">
+            <h1 class="logo">AGUKA</h1>
+
+            <nav class="nav" aria-label="Sidebar navigation">
+                <a class="nav-item" href="/engineer/dashboard">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 1 16 0"></path><path d="M8 13h3"></path><path d="M13 9l-2 4"></path><circle cx="12" cy="12" r="9"></circle></svg>
+                    <span>Dashboard</span>
+                </a>
+                <a class="nav-item" href="/engineer/projects">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="8" r="3"></circle><circle cx="16" cy="8" r="3"></circle><path d="M3 20a5 5 0 0 1 10 0"></path><path d="M11 20a5 5 0 0 1 10 0"></path></svg>
+                    <span>Browse jobs</span>
+                </a>
+                <a class="nav-item" href="/engineer/projects">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v6"></path><path d="M6 21l6-6 6 6"></path><circle cx="12" cy="9" r="3"></circle></svg>
+                    <span>Projects</span>
+                </a>
+                <a class="nav-item" href="/engineer/notifications">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h8a4 4 0 0 1 0 8H9l-3 3z"></path><path d="M14 4h2a2 2 0 0 1 2 2v2"></path></svg>
+                    <span>Notifications</span>
+                </a>
+                <a class="nav-item active" href="/engineer/settings">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1 1 0 0 0 .2 1.1l.1.1a2 2 0 0 1-2.8 2.8l-.1-.1a1 1 0 0 0-1.1-.2 1 1 0 0 0-.6.9V20a2 2 0 0 1-4 0v-.2a1 1 0 0 0-.6-.9 1 1 0 0 0-1.1.2l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1 1 0 0 0 .2-1.1 1 1 0 0 0-.9-.6H4a2 2 0 1 1 0-4h.2a1 1 0 0 0 .9-.6 1 1 0 0 0-.2-1.1l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1 1 0 0 0 1.1.2H9a1 1 0 0 0 .6-.9V4a2 2 0 0 1 4 0v.2a1 1 0 0 0 .6.9h.1a1 1 0 0 0 1.1-.2l.1-.1a2 2 0 0 1 2.8 2.8l-.1.1a1 1 0 0 0-.2 1.1v.1a1 1 0 0 0 .9.6H20a2 2 0 0 1 0 4h-.2a1 1 0 0 0-.9.6z"></path></svg>
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+            <div class="profile-cta">
+                <div class="avatar" aria-hidden="true"></div>
+                <span>Profile</span>
+            </div>
+        </aside>
+
+        <section class="main">
+            <h2 class="title">Settings</h2>
+            <p class="subtitle">configure AGUKA to your liking</p>
+
+            <section class="settings-card" aria-label="System preferences">
+                <h3 class="card-title">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><circle cx="10" cy="10" r="1.2"></circle><circle cx="15" cy="8" r="1"></circle><path d="M12 21a4.8 4.8 0 0 0 0-9.6h-1"></path></svg>
+                    <span>System preferences</span>
+                </h3>
+
+                <div class="field">
+                    <label for="theme">Theme</label>
+                    <div class="select-wrap">
+                        <select id="theme" name="theme">
+                            <option selected>Light</option>
+                            <option>Dark</option>
+                            <option>System</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="language">Language</label>
+                    <div class="select-wrap">
+                        <select id="language" name="language">
+                            <option selected>english</option>
+                            <option>french</option>
+                            <option>kinyarwanda</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="refresh">Auto refresh interval</label>
+                    <div class="select-wrap">
+                        <select id="refresh" name="refresh">
+                            <option selected>30 s</option>
+                            <option>15 s</option>
+                            <option>60 s</option>
+                            <option>120 s</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </main>
+</body>
+</html>
