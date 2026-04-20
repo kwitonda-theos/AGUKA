@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/customer-head :: head('Matched Engineers - AGUKA')}"></head>
+<body class="bg-surface text-primary flex min-h-screen overflow-x-hidden antialiased">
+
+    <!-- Sidebar -->
+    <th:block th:replace="~{fragments/customer-sidebar :: sidebar('engineers')}"></th:block>
+
+    <!-- Main Content Area -->
+    <main class="ml-72 flex-1 p-12 flex flex-col animate-fade-in relative z-0">
+        
+        <!-- Header -->
+        <header class="mb-10">
+            <h1 class="text-3xl font-extrabold mb-2 tracking-tight">Matched Engineers</h1>
+            <p class="text-muted text-base font-medium">Review applicants and pick the best fit.</p>
+        </header>
+
+        <!-- Job Filter Details -->
+        <div class="glass-card rounded-2xl p-6 px-8 mb-10 flex items-center gap-6 max-w-4xl animate-slide-up">
+            <label for="job-select" class="font-bold text-lg">job:</label>
+            <input type="text" id="job-select" class="glass-input flex-1 max-w-[400px] p-3 rounded-lg bg-black/5" value="beza apartment" readonly>
+        </div>
+
+        <!-- Engineers List -->
+        <div class="flex flex-col gap-6 max-w-4xl animate-slide-up" style="animation-delay: 0.1s;">
+            
+            <!-- Engineer Card 1 -->
+            <div class="glass-card rounded-2xl p-8 flex flex-col bg-white/10 group">
+                <div class="flex items-start gap-6 mb-6">
+                    <div class="w-16 h-16 rounded-full bg-[#5c6269] flex-shrink-0 shadow-sm"></div>
+                    <div class="flex-1 flex flex-col gap-1.5">
+                        <div class="flex items-center gap-4">
+                            <h3 class="text-[20px] font-bold">Eng. kwitonda</h3>
+                            <span class="bg-[#A2E4B8] text-[#13773b] px-3.5 py-1 rounded-full text-xs font-bold tracking-wide">verified</span>
+                        </div>
+                        <div class="text-[15px] text-muted font-semibold">Engineer</div>
+                        <div class="flex items-center gap-5 mt-1 text-sm text-muted font-medium">
+                            <span class="flex items-center gap-1.5 text-[#8b9e25] font-bold"><i class="ri-star-fill"></i> 4.9</span>
+                            <span class="flex items-center gap-1.5"><i class="ri-map-pin-2-line"></i> kicukiro, Kigali</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-black/5 rounded-xl p-4 px-5 mb-6 text-[15px] font-medium italic border border-black/5">
+                    "hi! i have years of experience with this kind of work ..."
+                </div>
+                
+                <button class="w-full py-3.5 bg-primary text-white font-bold rounded-xl shadow-md hover:bg-accent hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300">
+                    select engineer
+                </button>
+            </div>
+
+            <!-- Engineer Card 2 -->
+            <div class="glass-card rounded-2xl p-8 flex flex-col bg-white/10 group">
+                <div class="flex items-start gap-6 mb-6">
+                    <div class="w-16 h-16 rounded-full bg-[#5c6269] flex-shrink-0 shadow-sm"></div>
+                    <div class="flex-1 flex flex-col gap-1.5">
+                        <div class="flex items-center gap-4">
+                            <h3 class="text-[20px] font-bold">Eng. heritier</h3>
+                            <span class="bg-[#A2E4B8] text-[#13773b] px-3.5 py-1 rounded-full text-xs font-bold tracking-wide">verified</span>
+                        </div>
+                        <div class="text-[15px] text-muted font-semibold">Engineer</div>
+                        <div class="flex items-center gap-5 mt-1 text-sm text-muted font-medium">
+                            <span class="flex items-center gap-1.5 text-[#8b9e25] font-bold"><i class="ri-star-fill"></i> 4.9</span>
+                            <span class="flex items-center gap-1.5"><i class="ri-map-pin-2-line"></i> kicukiro, Kigali</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-black/5 rounded-xl p-4 px-5 mb-6 text-[15px] font-medium italic border border-black/5">
+                    "hi! i have years of experience with this kind of work ..."
+                </div>
+                
+                <button class="w-full py-3.5 bg-primary text-white font-bold rounded-xl shadow-md hover:bg-accent hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300">
+                    select engineer
+                </button>
+            </div>
+            
+        </div>
+
+    </main>
+
+</body>
+</html>

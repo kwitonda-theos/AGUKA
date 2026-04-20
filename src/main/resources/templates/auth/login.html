@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log In - AGUKA</title>
+    <meta name="description" content="Log in to your AGUKA account to connect with engineers and clients.">
     <!-- Google Fonts: Kumbh Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -22,99 +23,291 @@
                         surface: '#EAE3D3',
                         background: '#06392F',
                     },
-                    animation: {
-                        'float': 'float 6s ease-in-out infinite',
-                        'fade-in': 'fadeIn 0.6s ease-out forwards',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        },
-                        fadeIn: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        }
-                    }
                 }
             }
         }
     </script>
+    <style>
+        /* Left panel stays fixed while right side scrolls */
+        .auth-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+        .left-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 45%;
+            height: 100vh;
+            overflow: hidden;
+            z-index: 10;
+        }
+        .right-panel {
+            margin-left: 45%;
+            width: 55%;
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+
+        /* Animated shapes */
+        @keyframes floatShape1 {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-18px) rotate(8deg); }
+        }
+        @keyframes floatShape2 {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(-6deg); }
+        }
+        @keyframes floatShape3 {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-22px) scale(1.05); }
+        }
+        @keyframes waveMove {
+            0% { d: path("M20,100 Q120,40 220,100 Q320,160 420,100 Q520,40 620,100"); }
+            50% { d: path("M20,100 Q120,160 220,100 Q320,40 420,100 Q520,160 620,100"); }
+            100% { d: path("M20,100 Q120,40 220,100 Q320,160 420,100 Q520,40 620,100"); }
+        }
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulseDot {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        .shape-1 { animation: floatShape1 7s ease-in-out infinite; }
+        .shape-2 { animation: floatShape2 9s ease-in-out infinite; animation-delay: 1s; }
+        .shape-3 { animation: floatShape3 6s ease-in-out infinite; animation-delay: 2s; }
+        .shape-4 { animation: floatShape1 8s ease-in-out infinite; animation-delay: 0.5s; }
+        .shape-5 { animation: floatShape2 10s ease-in-out infinite; animation-delay: 3s; }
+
+        .left-panel-content { animation: slideInLeft 0.8s ease-out forwards; }
+        .right-panel-content { animation: slideInRight 0.8s ease-out forwards; }
+
+        .form-field {
+            animation: fadeInUp 0.5s ease-out forwards;
+            opacity: 0;
+        }
+        .form-field:nth-child(1) { animation-delay: 0.1s; }
+        .form-field:nth-child(2) { animation-delay: 0.2s; }
+        .form-field:nth-child(3) { animation-delay: 0.3s; }
+        .form-field:nth-child(4) { animation-delay: 0.4s; }
+        .form-field:nth-child(5) { animation-delay: 0.5s; }
+
+        .wave-path {
+            animation: waveMove 8s ease-in-out infinite;
+        }
+
+        /* Input focus effect */
+        .auth-input {
+            transition: all 0.3s ease;
+            border: 1.5px solid rgba(6,57,47,0.15);
+        }
+        .auth-input:focus {
+            outline: none;
+            border-color: #06392F;
+            box-shadow: 0 0 0 3px rgba(6,57,47,0.12);
+            background: white;
+        }
+
+        /* Submit button */
+        .submit-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .submit-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.5s ease, height 0.5s ease;
+        }
+        .submit-btn:hover::after { width: 300px; height: 300px; }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(6,57,47,0.35); }
+        .submit-btn:active { transform: translateY(0); }
+
+        /* Responsive: stack on small screens */
+        @media (max-width: 768px) {
+            .left-panel { position: relative; width: 100%; height: auto; }
+            .right-panel { margin-left: 0; width: 100%; }
+            .auth-layout { flex-direction: column; }
+        }
+
+        /* Decorative blob */
+        .blob {
+            filter: blur(60px);
+            opacity: 0.15;
+        }
+    </style>
 </head>
-<body class="bg-background text-surface font-sans antialiased min-h-screen flex flex-col items-center justify-center relative overflow-x-hidden py-8">
+<body class="font-sans antialiased bg-surface">
 
-    <!-- Decorative Background Elements -->
-    <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-white/5 rounded-full filter blur-3xl animate-float" style="animation-delay: 0s;"></div>
-    <div class="absolute bottom-[-10%] right-[-5%] w-80 h-80 bg-white/5 rounded-full filter blur-3xl animate-float" style="animation-delay: 2s;"></div>
+    <div class="auth-layout">
 
-    <!-- Main Container -->
-    <main class="relative z-10 w-full max-w-lg p-4 sm:p-8 animate-fade-in">
-        
-        <!-- Premium Form Card -->
-        <div class="bg-surface rounded-3xl shadow-[0_15px_40px_rgba(0,0,0,0.4)] border border-white/10 p-8 sm:py-12 sm:px-16 text-primary">
-            
-            <!-- Branding Header -->
-            <div class="text-center mb-10">
-                <h1 class="text-3xl tracking-tight font-extrabold text-primary mb-2">AGUKA</h1>
-                <p class="text-primary/70 text-sm font-medium">Welcome back, please log in.</p>
+        <!-- ===== LEFT PANEL (Fixed, doesn't scroll) ===== -->
+        <div class="left-panel bg-primary flex flex-col justify-between p-10 lg:p-16">
+
+            <!-- Decorative animated shapes -->
+            <div class="absolute inset-0 overflow-hidden pointer-events-none">
+                <!-- Blurred blob backgrounds -->
+                <div class="blob absolute top-[-10%] right-[-10%] w-72 h-72 rounded-full bg-emerald-400 shape-1"></div>
+                <div class="blob absolute bottom-[10%] left-[-5%] w-56 h-56 rounded-full bg-teal-300 shape-3"></div>
+
+                <!-- Geometric floating shapes — AGUKA brand feel -->
+                <!-- Pink/magenta square -->
+                <div class="shape-1 absolute top-[15%] right-[18%] w-10 h-10 bg-pink-500 rounded-md opacity-90"></div>
+                <!-- Blue circle -->
+                <div class="shape-2 absolute top-[18%] right-[38%] w-6 h-6 bg-blue-400 rounded-full opacity-90"></div>
+                <!-- Orange hexagon-ish -->
+                <div class="shape-3 absolute bottom-[14%] left-[12%] w-12 h-12 bg-orange-400 rounded-xl opacity-90" style="clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);"></div>
+                <!-- Cyan small square -->
+                <div class="shape-4 absolute bottom-[28%] right-[20%] w-5 h-5 bg-cyan-400 rounded-sm opacity-80"></div>
+                <!-- Small magenta dot -->
+                <div class="shape-5 absolute top-[45%] left-[8%] w-4 h-4 bg-pink-400 rounded-full opacity-70" style="animation: pulseDot 3s ease-in-out infinite;"></div>
+
+                <!-- Animated SVG wave line -->
+                <svg class="absolute inset-0 w-full h-full" viewBox="0 0 640 400" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path class="wave-path" d="M-20,200 Q80,120 200,200 Q320,280 440,200 Q560,120 660,200" stroke="url(#waveGrad)" stroke-width="3" fill="none" opacity="0.7"/>
+                    <defs>
+                        <linearGradient id="waveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#3B82F6"/>
+                            <stop offset="40%" stop-color="#EC4899"/>
+                            <stop offset="70%" stop-color="#F97316"/>
+                            <stop offset="100%" stop-color="#06B6D4"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
             </div>
 
-            <!-- Form -->
-            <form action="/auth/verify" method="get" class="space-y-5">
-                
-                <!-- Email -->
-                <div class="space-y-1.5 group">
-                    <label for="email" class="block text-sm font-semibold text-primary/80 transition-colors group-focus-within:text-primary">Email Address</label>
-                    <input 
-                        type="email" 
-                        id="email" 
-                        name="username" 
-                        placeholder="you@example.com" 
-                        required
-                        class="w-full px-4 py-3.5 bg-white/40 border border-primary/10 text-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 focus:bg-white placeholder-primary/40 transition-all duration-300"
-                    >
+            <!-- Branding -->
+            <div class="left-panel-content relative z-10">
+                <div>
+                    <p class="text-surface/60 text-xs font-semibold uppercase tracking-widest mb-1">AGUKA</p>
+                    <p class="text-surface/80 text-sm font-medium">Engineering Platform</p>
                 </div>
+            </div>
 
-                <!-- Password -->
-                <div class="space-y-1.5 group">
-                    <label for="password" class="block text-sm font-semibold text-primary/80 transition-colors group-focus-within:text-primary">Password</label>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        name="password" 
-                        placeholder="••••••••" 
-                        required
-                        class="w-full px-4 py-3.5 bg-white/40 border border-primary/10 text-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 focus:bg-white placeholder-primary/40 transition-all duration-300"
-                    >
-                </div>
+            <!-- Main Tagline -->
+            <div class="left-panel-content relative z-10">
+                <h1 class="text-4xl lg:text-5xl font-extrabold text-surface leading-tight mb-6">
+                    Connect With<br>Top Engineers
+                </h1>
+                <p class="text-surface/70 text-base font-medium max-w-xs leading-relaxed">
+                    Find verified professionals or post your next big project — all in one place.
+                </p>
+            </div>
 
-                <!-- Options -->
-                <div class="flex items-center justify-between py-2">
-                    <label class="flex items-center space-x-2.5 cursor-pointer group">
-                        <input type="checkbox" class="w-4 h-4 rounded border-primary/30 bg-white/50 text-primary focus:ring-primary/30 cursor-pointer transition-all">
-                        <span class="text-sm font-medium text-primary/70 group-hover:text-primary transition-colors">Remember me</span>
-                    </label>
-                    <a href="/auth/reset-password" class="text-sm font-semibold text-primary/90 hover:text-primary transition-colors">Forgot password?</a>
+            <!-- Bottom decorative indicator -->
+            <div class="left-panel-content relative z-10 flex items-center gap-3">
+                <div class="flex gap-2">
+                    <div class="w-8 h-1.5 bg-surface rounded-full"></div>
+                    <div class="w-2 h-1.5 bg-surface/40 rounded-full"></div>
+                    <div class="w-2 h-1.5 bg-surface/40 rounded-full"></div>
                 </div>
-
-                <!-- Submit Button -->
-                <div class="pt-4 mt-2">
-                    <button 
-                        type="submit" 
-                        class="w-full bg-primary hover:bg-opacity-90 hover:-translate-y-0.5 active:translate-y-0 text-surface font-bold py-3.5 px-6 rounded-xl shadow-[0_10px_20px_rgb(6,57,47,0.2)] hover:shadow-[0_10px_25px_rgb(6,57,47,0.3)] transition-all duration-300"
-                    >
-                        Sign In
-                    </button>
-                </div>
-                
-                <div class="mt-8 text-center text-sm font-medium text-primary/70">
-                    Don't have an account? 
-                    <a href="/auth/role-confirmation" class="text-primary hover:text-primary/90 font-bold ml-1 relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left">Register</a>
-                </div>
-
-            </form>
+                <span class="text-surface/50 text-xs font-medium">Sign In</span>
+            </div>
         </div>
-    </main>
+
+        <!-- ===== RIGHT PANEL (Scrollable) ===== -->
+        <div class="right-panel bg-surface flex items-center justify-center px-8 py-16">
+            <div class="right-panel-content w-full max-w-md">
+
+                <!-- Back link -->
+                <a href="/" id="back-link" class="inline-flex items-center gap-2 text-primary/60 text-sm font-medium hover:text-primary transition-colors mb-10 group">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Go back
+                </a>
+
+                <!-- Heading -->
+                <div class="mb-8 form-field">
+                    <h2 class="text-3xl font-extrabold text-primary mb-2">Log In</h2>
+                    <p class="text-primary/60 text-sm">Welcome back — let's pick up where you left off.</p>
+                </div>
+
+                <!-- Form -->
+                <form action="/login" method="post" class="space-y-5">
+
+                    <!-- Email -->
+                    <div class="form-field space-y-1.5">
+                        <label for="email" class="block text-sm font-semibold text-primary/80">Email Address</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="username"
+                            placeholder="you@example.com"
+                            required
+                            class="auth-input w-full px-4 py-3.5 bg-white/60 text-primary rounded-xl placeholder-primary/35 text-sm"
+                        >
+                    </div>
+
+                    <!-- Password -->
+                    <div class="form-field space-y-1.5">
+                        <label for="password" class="block text-sm font-semibold text-primary/80">Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="••••••••"
+                            required
+                            class="auth-input w-full px-4 py-3.5 bg-white/60 text-primary rounded-xl placeholder-primary/35 text-sm"
+                        >
+                    </div>
+
+                    <!-- Options -->
+                    <div class="form-field flex items-center justify-between py-1">
+                        <label class="flex items-center gap-2.5 cursor-pointer group">
+                            <input type="checkbox" id="remember-me" class="w-4 h-4 rounded border-primary/30 bg-white/50 text-primary focus:ring-primary/30 cursor-pointer">
+                            <span class="text-sm font-medium text-primary/60 group-hover:text-primary transition-colors">Remember me</span>
+                        </label>
+                        <a href="#" class="text-sm font-semibold text-primary/80 hover:text-primary transition-colors">Forgot password?</a>
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="form-field pt-3">
+                        <button
+                            type="submit"
+                            id="login-submit"
+                            class="submit-btn w-full bg-primary text-surface font-bold py-3.5 px-6 rounded-xl text-sm"
+                        >
+                            Sign In
+                        </button>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="form-field flex items-center gap-4 py-1">
+                        <div class="flex-1 h-px bg-primary/15"></div>
+                        <span class="text-xs font-semibold text-primary/40 uppercase tracking-wide">or</span>
+                        <div class="flex-1 h-px bg-primary/15"></div>
+                    </div>
+
+                    <!-- Sign up link -->
+                    <div class="form-field text-center text-sm font-medium text-primary/60">
+                        Don't have an account?
+                        <a href="/auth/role-confirmation" class="text-primary font-bold ml-1 hover:underline">Register</a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
 
 </body>
 </html>
