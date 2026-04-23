@@ -28,4 +28,14 @@ public class AuthController {
     public String engineerSignup() {
         return "auth/engineer";
     }
+
+    @GetMapping("/verify")
+    public String verifyAccount() {
+        return "auth/verify";
+    }
+
+    @GetMapping("/reset-password")
+    public String resetPassword() {
+        return "auth/reset-password";
+    }
 }

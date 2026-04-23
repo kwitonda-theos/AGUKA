@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2-Step Verification - AGUKA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #06392f;
+            --panel: #e8e3d7;
+            --ink: #0a4a3d;
+            --ink-soft: #37655b;
+            --ok: #0f8b5d;
+            --line: #1f6455;
+            --focus: #174f44;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Kumbh Sans", sans-serif;
+            background:
+                radial-gradient(60rem 30rem at -10% -20%, rgba(255, 255, 255, 0.08), transparent 60%),
+                radial-gradient(36rem 18rem at 115% 120%, rgba(255, 255, 255, 0.08), transparent 60%),
+                var(--bg-main);
+            color: var(--ink);
+            display: grid;
+            place-items: center;
+            padding: 1rem;
+        }
+
+        .auth-shell {
+            width: min(46rem, 100%);
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.28);
+            background: var(--panel);
+            animation: rise 420ms ease-out;
+        }
+
+        .auth-content {
+            padding: 2.2rem 3.5rem 2.75rem;
+        }
+
+        .brand {
+            margin: 0;
+            font-size: 1.55rem;
+            letter-spacing: 0.08em;
+            font-weight: 700;
+            color: var(--bg-main);
+            text-align: center;
+            margin-bottom: 0.35rem;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2rem;
+            line-height: 1.2;
+            color: var(--ink);
+            text-align: center;
+        }
+
+        .subtitle {
+            margin: 0.5rem 0 1.25rem;
+            color: var(--ink-soft);
+            font-size: 1.05rem;
+            text-align: center;
+        }
+
+        .stepper {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin: 1.3rem 0 1.8rem;
+            color: var(--ink-soft);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .step {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.9rem;
+            height: 1.9rem;
+            border-radius: 999px;
+            border: 2px solid var(--line);
+            transition: 200ms ease;
+        }
+
+        .step.active {
+            background: var(--line);
+            color: #fff;
+        }
+
+        .step.done {
+            background: var(--ok);
+            border-color: var(--ok);
+            color: #fff;
+        }
+
+        .step-sep {
+            width: 2rem;
+            height: 2px;
+            background: rgba(10, 74, 61, 0.35);
+        }
+
+        .panel {
+            display: none;
+            animation: fade 260ms ease;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        .field {
+            margin-top: 1rem;
+        }
+
+        label {
+            display: inline-block;
+            margin-bottom: 0.35rem;
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        input[type="email"],
+        input[type="text"] {
+            width: 100%;
+            max-width: 23rem;
+            padding: 0.68rem 0.8rem;
+            border: 2px solid var(--line);
+            border-radius: 0.45rem;
+            outline: none;
+            background: rgba(255, 255, 255, 0.3);
+            color: var(--ink);
+            font-size: 1rem;
+            transition: 180ms ease;
+        }
+
+        input::placeholder {
+            color: #6d8a83;
+        }
+
+        input:focus {
+            border-color: var(--focus);
+            box-shadow: 0 0 0 3px rgba(31, 100, 85, 0.16);
+            background: #fff;
+        }
+
+        .actions {
+            margin-top: 0.6rem;
+        }
+
+        button {
+            border: none;
+            border-radius: 0.45rem;
+            background: var(--bg-main);
+            color: #fff;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 1rem;
+            min-width: 11.8rem;
+            padding: 0.68rem 1rem;
+            cursor: pointer;
+            transition: transform 180ms ease, opacity 180ms ease;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            opacity: 0.94;
+        }
+
+        .otp-help {
+            margin-top: 0.4rem;
+            color: var(--ink-soft);
+            font-size: 0.95rem;
+        }
+
+        .inline-link {
+            background: none;
+            color: var(--line);
+            border: none;
+            padding: 0;
+            margin-top: 0.75rem;
+            min-width: 0;
+            font-size: 1rem;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .message {
+            margin-top: 0.9rem;
+            font-size: 0.92rem;
+            color: var(--ok);
+            font-weight: 600;
+        }
+
+        @keyframes rise {
+            from {
+                transform: translateY(14px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fade {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .auth-content {
+                padding: 1.5rem 1.2rem 2rem;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            .subtitle {
+                font-size: 0.97rem;
+            }
+
+            input[type="email"],
+            input[type="text"],
+            button {
+                max-width: 100%;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="auth-shell" aria-live="polite">
+        <section class="auth-content">
+            <h2 class="brand">AGUKA</h2>
+            <h1>Verify your account</h1>
+            <p class="subtitle">Enter the code sent to your phone or email.</p>
+
+            <div class="stepper" aria-label="Verification steps">
+                <span id="step1" class="step active">1</span>
+                <span>Send code</span>
+                <span class="step-sep"></span>
+                <span id="step2" class="step">2</span>
+                <span>Verify OTP</span>
+            </div>
+
+            <form id="twoStepForm" action="#" method="post">
+                <div id="panelEmail" class="panel active">
+                    <div class="field">
+                        <label for="email">Email</label>
+                        <input id="email" name="email" type="email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="actions">
+                        <button type="button" id="sendCodeBtn">Send code</button>
+                    </div>
+                    <p id="sentMessage" class="message hidden">Code sent. Check your inbox and continue to step 2.</p>
+                </div>
+
+                <div id="panelOtp" class="panel">
+                    <div class="field">
+                        <label for="otp">OTP</label>
+                        <input id="otp" name="otp" type="text" inputmode="numeric" maxlength="6" placeholder="Enter OTP here" required>
+                        <p class="otp-help">Use the 6-digit code we sent.</p>
+                    </div>
+                    <div class="actions">
+                        <button type="submit" id="verifyBtn">Verify</button>
+                    </div>
+                    <button type="button" id="resendBtn" class="inline-link">Resend code</button>
+                    <p id="resendMessage" class="message hidden">A new code has been sent.</p>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        const panelEmail = document.getElementById("panelEmail");
+        const panelOtp = document.getElementById("panelOtp");
+        const sendCodeBtn = document.getElementById("sendCodeBtn");
+        const resendBtn = document.getElementById("resendBtn");
+        const sentMessage = document.getElementById("sentMessage");
+        const resendMessage = document.getElementById("resendMessage");
+        const step1 = document.getElementById("step1");
+        const step2 = document.getElementById("step2");
+        const emailInput = document.getElementById("email");
+        const otpInput = document.getElementById("otp");
+
+        function goToStepTwo() {
+            panelEmail.classList.remove("active");
+            panelOtp.classList.add("active");
+            step1.classList.remove("active");
+            step1.classList.add("done");
+            step2.classList.add("active");
+            sentMessage.classList.remove("hidden");
+            resendMessage.classList.add("hidden");
+            otpInput.focus();
+        }
+
+        sendCodeBtn.addEventListener("click", function () {
+            if (!emailInput.checkValidity()) {
+                emailInput.reportValidity();
+                return;
+            }
+            goToStepTwo();
+        });
+
+        resendBtn.addEventListener("click", function () {
+            resendMessage.classList.remove("hidden");
+        });
+
+        document.getElementById("twoStepForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+            if (!otpInput.value.trim()) {
+                otpInput.reportValidity();
+                return;
+            }
+            alert("Verification successful. You can now continue.");
+        });
+    </script>
+</body>
+</html>
