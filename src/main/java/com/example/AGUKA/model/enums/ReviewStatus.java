@@ -1,5 +1,7 @@
 package com.example.AGUKA.model.enums;
 
-public class ReviewStatus {
-    
+public enum ReviewStatus {
+    PENDING,
+    APPROVED,
+    FLAGGED
 }

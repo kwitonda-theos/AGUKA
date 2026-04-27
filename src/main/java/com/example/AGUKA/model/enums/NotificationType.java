@@ -5,5 +5,6 @@ public enum NotificationType {
     ALERT,
     MESSAGE,
     JOB_UPDATE,
+    JOB_MATCHED,
     VERIFICATION
 }
