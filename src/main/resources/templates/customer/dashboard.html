@@ -14,29 +14,29 @@
 
         <!-- Header -->
         <header class="mb-10">
-            <h1 class="text-3xl font-extrabold mb-2 tracking-tight">Welcome back, customer's name</h1>
-            <p class="text-muted text-base font-medium">Here's the latest overview of your estate services and active jobs.</p>
+            <h1 class="text-3xl font-extrabold mb-2 tracking-tight" th:text="#{dashboard.welcome('customer\'s name')}">Welcome back, customer's name</h1>
+            <p class="text-muted text-base font-medium" th:text="#{dashboard.overview}">Here's the latest overview of your estate services and active jobs.</p>
         </header>
 
         <!-- Stats Overview -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 animate-slide-up">
             <div class="glass-card rounded-2xl p-6">
-                <div class="text-[14px] font-semibold text-muted uppercase tracking-wider mb-3">Total Jobs posted</div>
+                <div class="text-[14px] font-semibold text-muted uppercase tracking-wider mb-3" th:text="#{dashboard.total_jobs}">Total Jobs posted</div>
                 <div class="text-4xl font-black">1</div>
             </div>
             <div class="glass-card rounded-2xl p-6">
-                <div class="text-[14px] font-semibold text-muted uppercase tracking-wider mb-3">Active Jobs</div>
+                <div class="text-[14px] font-semibold text-muted uppercase tracking-wider mb-3" th:text="#{dashboard.active_jobs}">Active Jobs</div>
                 <div class="text-4xl font-black text-accent">3</div>
             </div>
             <div class="glass-card rounded-2xl p-6">
-                <div class="text-[14px] font-semibold text-muted uppercase tracking-wider mb-3">Completed jobs</div>
+                <div class="text-[14px] font-semibold text-muted uppercase tracking-wider mb-3" th:text="#{dashboard.completed_jobs}">Completed jobs</div>
                 <div class="text-4xl font-black">5</div>
             </div>
         </div>
 
         <!-- Recent Activity Section -->
         <section class="animate-slide-up" style="animation-delay: 0.1s;">
-            <h2 class="text-xl font-bold text-primary mb-6">Recent activity list</h2>
+            <h2 class="text-xl font-bold text-primary mb-6" th:text="#{dashboard.recent_activity}">Recent activity list</h2>
             
             <div class="flex flex-col gap-4 max-w-5xl">
                 <!-- Activity Item 1 -->
@@ -47,7 +47,7 @@
                     <div class="flex-1">
                         <div class="flex items-center gap-4 mb-1">
                             <h3 class="text-[17px] font-bold group-hover:text-accent transition-colors">GLOBAL CONSTRUCTION project</h3>
-                            <span class="px-3 py-1 bg-[#C0D1FF] text-[#2f54eb] rounded-full text-xs font-bold leading-none tracking-wide shadow-sm">In progress</span>
+                            <span class="px-3 py-1 bg-[#C0D1FF] text-[#2f54eb] rounded-full text-xs font-bold leading-none tracking-wide shadow-sm" th:text="#{job.status.in_progress}">In progress</span>
                         </div>
                         <p class="text-sm font-medium text-muted italic">replacing out dated panels</p>
                     </div>
@@ -61,7 +61,7 @@
                     <div class="flex-1">
                         <div class="flex items-center gap-4 mb-1">
                             <h3 class="text-[17px] font-bold group-hover:text-accent transition-colors">home house project</h3>
-                            <span class="px-3 py-1 bg-[#A2E4B8] text-[#13773b] rounded-full text-xs font-bold leading-none tracking-wide shadow-sm">Completed</span>
+                            <span class="px-3 py-1 bg-[#A2E4B8] text-[#13773b] rounded-full text-xs font-bold leading-none tracking-wide shadow-sm" th:text="#{job.status.completed}">Completed</span>
                         </div>
                         <p class="text-sm font-medium text-muted italic">Engineer heritier finished your project</p>
                     </div>
@@ -75,7 +75,7 @@
                     <div class="flex-1">
                         <div class="flex items-center gap-4 mb-1">
                             <h3 class="text-[17px] font-bold group-hover:text-accent transition-colors">apartment building</h3>
-                            <span class="px-3 py-1 bg-[#CFD1D4] text-[#5c6269] rounded-full text-xs font-bold leading-none tracking-wide shadow-sm">Pending schedule</span>
+                            <span class="px-3 py-1 bg-[#CFD1D4] text-[#5c6269] rounded-full text-xs font-bold leading-none tracking-wide shadow-sm" th:text="#{job.status.pending}">Pending schedule</span>
                         </div>
                         <p class="text-sm font-medium text-muted italic">waiting for contractor to confirm availability</p>
                     </div>

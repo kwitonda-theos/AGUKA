@@ -13,49 +13,49 @@
             <a href="/customer/dashboard" 
                th:class="'nav-link ' + (${activeTab == 'dashboard'} ? 'nav-link-active' : '')">
                 <i class="ri-dashboard-line mr-4 text-xl opacity-90"></i>
-                <span>Dashboard</span>
+                <span th:text="#{nav.dashboard}">Dashboard</span>
             </a>
         </li>
         <li>
             <a href="/customer/my-jobs" 
                th:class="'nav-link ' + (${activeTab == 'my-jobs'} ? 'nav-link-active' : '')">
                 <i class="ri-briefcase-line mr-4 text-xl opacity-90"></i>
-                <span>My jobs</span>
+                <span th:text="#{nav.my_jobs}">My jobs</span>
             </a>
         </li>
         <li>
             <a href="/customer/post-job" 
                th:class="'nav-link ' + (${activeTab == 'post-job'} ? 'nav-link-active' : '')">
                 <i class="ri-add-circle-line mr-4 text-xl opacity-90"></i>
-                <span>Post a job</span>
+                <span th:text="#{nav.post_job}">Post a job</span>
             </a>
         </li>
         <li>
             <a href="/customer/engineers" 
                th:class="'nav-link ' + (${activeTab == 'engineers'} ? 'nav-link-active' : '')">
                 <i class="ri-user-settings-line mr-4 text-xl opacity-90"></i>
-                <span>Engineers</span>
+                <span th:text="#{nav.engineers}">Engineers</span>
             </a>
         </li>
         <li>
             <a href="/customer/notifications" 
                th:class="'nav-link ' + (${activeTab == 'notifications'} ? 'nav-link-active' : '')">
                 <i class="ri-notification-3-line mr-4 text-xl opacity-90"></i>
-                <span>Notifications</span>
+                <span th:text="#{nav.notifications}">Notifications</span>
             </a>
         </li>
         <li>
             <a href="/customer/settings" 
                th:class="'nav-link ' + (${activeTab == 'settings'} ? 'nav-link-active' : '')">
                 <i class="ri-settings-3-line mr-4 text-xl opacity-90"></i>
-                <span>Settings</span>
+                <span th:text="#{nav.settings}">Settings</span>
             </a>
         </li>
     </ul>
 
     <div class="px-8 py-5 mx-6 bg-white/10 rounded-xl flex items-center cursor-pointer hover:bg-white/15 transition-colors border border-white/5 shadow-inner">
         <div class="w-10 h-10 rounded-full bg-[#d9d9d9] mr-4 shadow-sm"></div>
-        <span class="font-semibold text-base text-white/90">Profile</span>
+        <span class="font-semibold text-base text-white/90" th:text="#{nav.profile}">Profile</span>
     </div>
 </aside>
 
