@@ -19,6 +19,17 @@
             --white: #ffffff;
         }
 
+        body[data-theme="dark"] {
+            --bg: #d7d1c2;
+            --panel: #202328;
+            --brand: #0f6654;
+            --brand-soft: #185e51;
+            --text: #e8f1ed;
+            --muted: #a7b8b3;
+            --line: #7ea89e;
+            --white: #ffffff;
+        }
+
         * {
             box-sizing: border-box;
         }
@@ -210,8 +221,9 @@
             overflow: hidden;
             display: grid;
             grid-template-columns: 95px 1fr;
-            background: #dfdbcf;
+            background: var(--chip);
             margin-bottom: 0.9rem;
+            color: var(--text);
         }
 
         .thumb {
@@ -236,28 +248,28 @@
             font-size: 1.2rem;
             font-weight: 700;
             text-transform: uppercase;
-            color: #102f2b;
+            color: var(--text);
         }
 
         .job-price {
             margin: 0;
             font-size: 1.08rem;
             font-weight: 700;
-            color: #102f2b;
+            color: var(--text);
         }
 
         .meta {
             display: flex;
             gap: 1.2rem;
             margin: 0.4rem 0 0.45rem;
-            color: #708882;
+            color: var(--muted);
             font-size: 0.78rem;
         }
 
         .meta span::before {
             content: "◦";
             margin-right: 0.35rem;
-            color: #3c635b;
+            color: var(--line);
         }
 
         .job-desc {
@@ -294,6 +306,104 @@
             color: var(--text);
         }
 
+        .page-controls {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            z-index: 25;
+        }
+
+        .control {
+            border: 1.5px solid rgba(7, 63, 53, 0.2);
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--text);
+            border-radius: 999px;
+            height: 2.8rem;
+            padding: 0 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .control svg {
+            width: 1.05rem;
+            height: 1.05rem;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .control-theme {
+            width: 2.8rem;
+            justify-content: center;
+            padding: 0;
+        }
+
+        .control-language {
+            padding-right: 0.55rem;
+        }
+
+        .language-select {
+            border: none;
+            background: transparent;
+            color: inherit;
+            font: inherit;
+            font-weight: 700;
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+            padding-right: 0.2rem;
+            display: none;
+        }
+
+        .language-initials {
+            margin-left: 0.45rem;
+            font-weight: 800;
+            color: var(--brand);
+            font-size: 0.92rem;
+            letter-spacing: 0.02em;
+        }
+
+        .control-language { position: relative; }
+        .language-menu {
+            position: absolute;
+            top: 3.4rem;
+            right: 0;
+            min-width: 170px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(10,10,10,0.12);
+            overflow: hidden;
+            display: none;
+            z-index: 40;
+        }
+        .control-language:hover .language-menu { display: block; }
+        .language-menu .language-selected { padding: 12px 14px; color: var(--brand); font-weight:800; }
+        .language-menu ul { list-style: none; margin:0; padding:6px 0; }
+        .language-menu li { padding: 9px 14px; cursor: pointer; color: #4b5560; }
+        .language-menu li:hover { background: #f5f5f5; }
+        .language-menu li.active { color: var(--brand); font-weight:700; }
+        body[data-theme="dark"] .language-menu { background: var(--panel); color: var(--text); box-shadow: 0 8px 20px rgba(0,0,0,0.28); }
+        body[data-theme="dark"] .language-menu li:hover { background: rgba(255,255,255,0.03); }
+
+        .control:hover {
+            transform: translateY(-1px);
+        }
+
+        body[data-theme="dark"] .control {
+            background: rgba(16, 18, 20, 0.28);
+            border-color: rgba(232, 241, 237, 0.18);
+            color: #eef4f1;
+        }
+
         @media (max-width: 980px) {
             .app {
                 grid-template-columns: 1fr;
@@ -301,6 +411,11 @@
 
             .profile-cta {
                 margin-top: 0.8rem;
+            }
+
+            .page-controls {
+                top: 0.8rem;
+                right: 0.8rem;
             }
         }
 
@@ -334,6 +449,28 @@
     </style>
 </head>
 <body>
+    <div class="page-controls" aria-label="Page utilities">
+        <div class="control control-language" aria-label="Translate page">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h8"></path><path d="M8 3v2"></path><path d="M6 5c.8 4 3.3 7 6 9"></path><path d="M10 5c0 3.8-2 7.2-5 10"></path><path d="M14 19h6"></path><path d="M16.5 13l3.5 6"></path><path d="M18.2 16h-3.4"></path></svg>
+            <span class="language-initials">EN</span>
+            <select class="language-select" aria-label="Select language">
+                <option value="en" selected>EN</option>
+                <option value="fr">FR</option>
+                <option value="rw">RW</option>
+            </select>
+            <div class="language-menu" aria-hidden="false">
+                <div class="language-selected">English</div>
+                <ul>
+                    <li data-lang="en" class="active">English</li>
+                    <li data-lang="fr">Français</li>
+                    <li data-lang="rw">Kinyarwanda</li>
+                </ul>
+            </div>
+        </div>
+        <button class="control control-theme" type="button" aria-label="Toggle theme">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.2 8.2 0 0 1 9.5 4a7.7 7.7 0 1 0 10.5 10.5Z"></path></svg>
+        </button>
+    </div>
     <main class="app">
         <aside class="sidebar">
             <h1 class="logo">AGUKA</h1>
@@ -354,10 +491,6 @@
                 <a class="nav-item" href="/engineer/notifications">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h8a4 4 0 0 1 0 8H9l-3 3z"></path><path d="M14 4h2a2 2 0 0 1 2 2v2"></path></svg>
                     <span>Notifications</span>
-                </a>
-                <a class="nav-item" href="/engineer/settings">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1 1 0 0 0 .2 1.1l.1.1a2 2 0 0 1-2.8 2.8l-.1-.1a1 1 0 0 0-1.1-.2 1 1 0 0 0-.6.9V20a2 2 0 0 1-4 0v-.2a1 1 0 0 0-.6-.9 1 1 0 0 0-1.1.2l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1 1 0 0 0 .2-1.1 1 1 0 0 0-.9-.6H4a2 2 0 1 1 0-4h.2a1 1 0 0 0 .9-.6 1 1 0 0 0-.2-1.1l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1 1 0 0 0 1.1.2H9a1 1 0 0 0 .6-.9V4a2 2 0 0 1 4 0v.2a1 1 0 0 0 .6.9h.1a1 1 0 0 0 1.1-.2l.1-.1a2 2 0 0 1 2.8 2.8l-.1.1a1 1 0 0 0-.2 1.1v.1a1 1 0 0 0 .9.6H20a2 2 0 0 1 0 4h-.2a1 1 0 0 0-.9.6z"></path></svg>
-                    <span>Settings</span>
                 </a>
             </nav>
 
@@ -446,4 +579,160 @@
         </section>
     </main>
 </body>
+<script>
+    (function () {
+        const languageSelect = document.querySelector(".language-select");
+        const themeButton = document.querySelector(".control-theme");
+        const body = document.body;
+        const savedTheme = localStorage.getItem("engineer-theme");
+        const savedLanguage = localStorage.getItem("engineer-language") || "en";
+
+        const translations = {
+            en: {
+                title: "Engineer Projects - AGUKA",
+                nav: ["Dashboard", "Browse jobs", "Projects", "Notifications"],
+                profile: "Profile",
+                heading: "Browse jobs",
+                subtitle: "Find and search for posted jobs tailored to you.",
+                filters: ["Location", "Budget", "Specialization"],
+                locations: ["kicukiro", "nyarugenge", "gasabo"],
+                budgets: ["10,000,000 - 20,000,000", "20,000,000 - 50,000,000", "50,000,000+"],
+                specializations: ["civil engineer", "architect", "structural engineer"],
+                section: "jobs",
+                job1: {
+                    name: "Kigali Smart Grid Expansion",
+                    meta: ["kicukiro, Kigali", "KIGALI group"],
+                    desc: "Structural audit and schematic reinforcement for phase 2 of the urban electrification project. Requires immediate onsite verification.",
+                    primary: "Apply now",
+                    secondary: "Remove",
+                },
+                job2: {
+                    name: "Heritier's House",
+                    meta: ["nyarugenge, norvege", "heritier"],
+                    desc: "Modern sub-urban house for heritier",
+                    primary: "Apply now",
+                    secondary: "Remove",
+                },
+            },
+            fr: {
+                title: "Projets de l'ingénieur - AGUKA",
+                nav: ["Tableau de bord", "Parcourir les offres", "Projets", "Notifications"],
+                profile: "Profil",
+                heading: "Parcourir les offres",
+                subtitle: "Trouvez et recherchez des emplois publiés qui vous correspondent.",
+                filters: ["Lieu", "Budget", "Spécialisation"],
+                locations: ["kicukiro", "nyarugenge", "gasabo"],
+                budgets: ["10 000 000 - 20 000 000", "20 000 000 - 50 000 000", "50 000 000+"],
+                specializations: ["ingénieur civil", "architecte", "ingénieur structure"],
+                section: "emplois",
+                job1: {
+                    name: "Extension du réseau intelligent de Kigali",
+                    meta: ["kicukiro, Kigali", "groupe KIGALI"],
+                    desc: "Audit structurel et renforcement des plans pour la phase 2 du projet d'électrification urbaine. Vérification sur site immédiate requise.",
+                    primary: "Postuler maintenant",
+                    secondary: "Retirer",
+                },
+                job2: {
+                    name: "Maison d'Heritier",
+                    meta: ["nyarugenge, Norvège", "Heritier"],
+                    desc: "Maison moderne de banlieue pour Heritier",
+                    primary: "Postuler maintenant",
+                    secondary: "Retirer",
+                },
+            },
+            rw: {
+                title: "Imishinga y'umuhanga - AGUKA",
+                nav: ["Ahabanza", "Sura imirimo", "Imishinga", "Amatangazo"],
+                profile: "Umwirondoro",
+                heading: "Sura imirimo",
+                subtitle: "Shaka kandi ushakishe imirimo yashyizweho ihuye nawe.",
+                filters: ["Aho iri", "Ingengo y'imari", "Ubuhezanguni"],
+                locations: ["kicukiro", "nyarugenge", "gasabo"],
+                budgets: ["10.000.000 - 20.000.000", "20.000.000 - 50.000.000", "50.000.000+"],
+                specializations: ["umuhanga mu bwubatsi", "umwubatsi", "umuhanga mu miterere"],
+                section: "imirimo",
+                job1: {
+                    name: "Kwagura urusobe rw'amashanyarazi rwa Kigali",
+                    meta: ["kicukiro, Kigali", "Itsinda KIGALI"],
+                    desc: "Isuzuma ry'imiterere n'ubushimangira bw'ibishushanyo ku cyiciro cya 2 cy'umushinga wo kumurika umujyi. Harasabwa kugenzura aho hakoreshwa ako kanya.",
+                    primary: "Saba ubu",
+                    secondary: "Kuraho",
+                },
+                job2: {
+                    name: "Inzu ya Heritier",
+                    meta: ["nyarugenge, Noruveji", "Heritier"],
+                    desc: "Inzu ya kijyambere yo mu nkengero za Heritier",
+                    primary: "Saba ubu",
+                    secondary: "Kuraho",
+                },
+            },
+        };
+
+        const navLabels = document.querySelectorAll(".nav-item span");
+        const profileLabel = document.querySelector(".profile-cta span");
+        const heading = document.querySelector(".title");
+        const subtitle = document.querySelector(".subtitle");
+        const filterLabels = document.querySelectorAll(".filter label");
+        const locationSelect = document.getElementById("location");
+        const budgetSelect = document.getElementById("budget");
+        const specializationSelect = document.getElementById("specialization");
+        const section = document.querySelector(".section-title");
+        const jobCards = document.querySelectorAll(".job-card");
+
+        function setSelectOptions(select, options) {
+            Array.from(select.options).forEach((option, index) => {
+                option.textContent = options[index];
+            });
+        }
+
+        function applyLanguage(language) {
+            const copy = translations[language] || translations.en;
+
+            document.documentElement.lang = language;
+            document.title = copy.title;
+            navLabels.forEach((label, index) => {
+                label.textContent = copy.nav[index];
+            });
+            profileLabel.textContent = copy.profile;
+            heading.textContent = copy.heading;
+            subtitle.textContent = copy.subtitle;
+            filterLabels.forEach((label, index) => {
+                label.textContent = copy.filters[index];
+            });
+            setSelectOptions(locationSelect, copy.locations);
+            setSelectOptions(budgetSelect, copy.budgets);
+            setSelectOptions(specializationSelect, copy.specializations);
+            section.textContent = copy.section;
+
+            jobCards[0].querySelector(".job-name").textContent = copy.job1.name;
+            jobCards[0].querySelector(".meta").children[0].textContent = copy.job1.meta[0];
+            jobCards[0].querySelector(".meta").children[1].textContent = copy.job1.meta[1];
+            jobCards[0].querySelector(".job-desc").textContent = copy.job1.desc;
+            jobCards[0].querySelectorAll(".btn")[0].textContent = copy.job1.primary;
+            jobCards[0].querySelectorAll(".btn")[1].textContent = copy.job1.secondary;
+
+            jobCards[1].querySelector(".job-name").textContent = copy.job2.name;
+            jobCards[1].querySelector(".meta").children[0].textContent = copy.job2.meta[0];
+            jobCards[1].querySelector(".meta").children[1].textContent = copy.job2.meta[1];
+            jobCards[1].querySelector(".job-desc").textContent = copy.job2.desc;
+            jobCards[1].querySelectorAll(".btn")[0].textContent = copy.job2.primary;
+            jobCards[1].querySelectorAll(".btn")[1].textContent = copy.job2.secondary;
+        }
+
+        if (savedTheme === "dark") {
+            body.dataset.theme = "dark";
+        }
+
+        languageSelect.value = savedLanguage;
+        applyLanguage(savedLanguage);
+
+        languageSelect.addEventListener("change", () => {
+            const language = languageSelect.value;
+            localStorage.setItem("engineer-language", language);
+            applyLanguage(language);
+        });
+
+    })();
+</script>
+<script src="/assets/engineer-language.js"></script>
 </html>
