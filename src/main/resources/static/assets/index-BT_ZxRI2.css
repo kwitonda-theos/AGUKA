@@ -75,8 +75,8 @@
         --default-transition-timing-function: cubic-bezier(.4, 0, .2, 1);
         --default-font-family: var(--font-sans);
         --default-mono-font-family: var(--font-mono);
-        --color-primary-green: #062a1c;
-        --color-accent-green: #0b3d2e;
+        --color-primary-green: #06392F;
+        --color-accent-green: #06392F;
         --color-beige: #f1ede4
     }
 }
@@ -713,7 +713,7 @@
     }
 
     .text-primary-green\/80 {
-        color: #062a1ccc
+        color: #06392Fcc
     }
 
     @supports (color:color-mix(in lab, red, red)) {
