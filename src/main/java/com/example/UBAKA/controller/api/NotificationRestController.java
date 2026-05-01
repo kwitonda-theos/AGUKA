@@ -34,7 +34,7 @@ public class NotificationRestController {
      */
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Notification>> getNotificationsByUser(@PathVariable Long userId) {
-        List<Notification> notifications = notificationService.getNotificationsByUser(userId);
+        List<Notification> notifications = notificationService.getUserNotifications(userId);
         return ResponseEntity.ok(notifications);
     }
 
@@ -51,7 +51,7 @@ public class NotificationRestController {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", userId));
 
-        Notification notification = notificationService.createNotification(user, title, message, type);
+        Notification notification = notificationService.createNotification(user.getId(), title, message, type);
         return ResponseEntity.status(HttpStatus.CREATED).body(notification);
     }
 }
