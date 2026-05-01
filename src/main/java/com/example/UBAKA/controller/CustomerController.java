@@ -33,8 +33,4 @@ public class CustomerController {
         return "customer/notifications";
     }
 
-    @GetMapping("/settings")
-    public String settings() {
-        return "customer/settings";
-    }
-}
+}
