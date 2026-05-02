@@ -17,6 +17,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
@@ -28,6 +29,8 @@
                         accent: '#0a4f42',
                         muted: 'rgba(6, 57, 47, 0.7)',
                         borderline: 'rgba(6, 57, 47, 0.3)',
+                        darkbg: '#121816',
+                        darkcard: '#1a231f'
                     },
                     animation: {
                         'fade-in': 'fadeIn 0.6s ease-out forwards',
@@ -50,16 +53,27 @@
     <style type="text/tailwindcss">
         @layer utilities {
             .glass-card {
-                @apply bg-white/30 backdrop-blur-sm border border-borderline shadow-lg shadow-black/5 hover:shadow-black/10 hover:-translate-y-1 transition-all duration-300;
+                @apply bg-white/30 dark:bg-darkcard/80 backdrop-blur-sm border border-borderline dark:border-white/5 shadow-lg shadow-black/5 dark:shadow-black/20 hover:shadow-black/10 dark:hover:shadow-black/40 hover:-translate-y-1 transition-all duration-300;
             }
             .glass-input {
-                @apply bg-white/40 border-primary focus:border-primary focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all outline-none font-medium text-primary placeholder-muted/80;
+                @apply bg-white/40 dark:bg-darkbg/60 border-primary dark:border-white/10 focus:border-primary dark:focus:border-white/30 focus:ring-2 focus:ring-primary/20 dark:focus:ring-white/10 focus:bg-white dark:focus:bg-darkcard transition-all outline-none font-medium text-primary dark:text-[#EAE3D3] placeholder-muted/80 dark:placeholder-white/40;
             }
             .nav-link {
-                @apply flex items-center px-10 py-4 text-white/80 no-underline text-base font-medium transition-colors hover:bg-white/5 hover:text-white relative;
+                @apply flex items-center px-10 py-4 text-white/80 dark:text-white/70 no-underline text-base font-medium transition-colors hover:bg-white/5 dark:hover:bg-white/5 hover:text-white dark:hover:text-white relative;
             }
             .nav-link-active {
-                @apply text-white bg-white/5 after:absolute after:left-0 after:top-0 after:h-full after:w-1 after:bg-surface after:rounded-r;
+                @apply text-white dark:text-white bg-white/5 dark:bg-white/5 after:absolute after:left-0 after:top-0 after:h-full after:w-1 after:bg-surface dark:after:bg-[#EAE3D3] after:rounded-r;
+            }
+            
+            /* Dark mode text overrides for readability */
+            .dark .text-primary {
+                color: #EAE3D3 !important;
+            }
+            .dark .text-muted {
+                color: rgba(234, 227, 211, 0.7) !important;
+            }
+            .dark .bg-\[\#e2d9cd\] {
+                background-color: #1a231f !important;
             }
         }
     </style>

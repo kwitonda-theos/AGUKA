@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/customer-head :: head('Dashboard - UBAKA')}"></head>
-<body class="bg-surface text-primary flex min-h-screen overflow-x-hidden antialiased">
+<body class="bg-surface dark:bg-darkbg text-primary dark:text-[#EAE3D3] flex min-h-screen overflow-x-hidden antialiased">
 
     <!-- Sidebar -->
     <th:block th:replace="~{fragments/customer-sidebar :: sidebar('dashboard')}"></th:block>
@@ -14,7 +14,7 @@
 
         <!-- Header -->
         <header class="mb-10">
-            <h1 class="text-3xl font-extrabold mb-2 tracking-tight" th:text="#{dashboard.welcome('customer\'s name')}">Welcome back, customer's name</h1>
+            <h1 class="text-3xl font-extrabold mb-2 tracking-tight" th:text="'Welcome back, ' + ${customerName}">Welcome back, customer's name</h1>
             <p class="text-muted text-base font-medium" th:text="#{dashboard.overview}">Here's the latest overview of your estate services and active jobs.</p>
         </header>
 
@@ -22,15 +22,15 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 animate-slide-up">
             <div class="glass-card rounded-2xl p-6">
                 <div class="text-[14px] font-semibold text-muted uppercase tracking-wider mb-3" th:text="#{dashboard.total_jobs}">Total Jobs posted</div>
-                <div class="text-4xl font-black">1</div>
+                <div class="text-4xl font-black" th:text="${totalJobs}">1</div>
             </div>
             <div class="glass-card rounded-2xl p-6">
                 <div class="text-[14px] font-semibold text-muted uppercase tracking-wider mb-3" th:text="#{dashboard.active_jobs}">Active Jobs</div>
-                <div class="text-4xl font-black text-accent">3</div>
+                <div class="text-4xl font-black text-accent" th:text="${activeJobs}">3</div>
             </div>
             <div class="glass-card rounded-2xl p-6">
                 <div class="text-[14px] font-semibold text-muted uppercase tracking-wider mb-3" th:text="#{dashboard.completed_jobs}">Completed jobs</div>
-                <div class="text-4xl font-black">5</div>
+                <div class="text-4xl font-black" th:text="${completedJobs}">5</div>
             </div>
         </div>
 
@@ -39,47 +39,22 @@
             <h2 class="text-xl font-bold text-primary mb-6" th:text="#{dashboard.recent_activity}">Recent activity list</h2>
             
             <div class="flex flex-col gap-4 max-w-5xl">
-                <!-- Activity Item 1 -->
-                <div class="glass-card rounded-xl p-5 px-6 flex flex-col md:flex-row md:items-center gap-4 group cursor-pointer">
-                    <div class="text-sm font-bold text-muted/80 md:w-32 flex-shrink-0 md:border-r border-borderline/50 md:mr-4 pr-4 uppercase tracking-wider">
+                <!-- Activity Items -->
+                <div th:each="job : ${recentJobs}" class="glass-card rounded-xl p-5 px-6 flex flex-col md:flex-row md:items-center gap-4 group cursor-pointer">
+                    <div class="text-sm font-bold text-muted/80 md:w-32 flex-shrink-0 md:border-r border-borderline/50 md:mr-4 pr-4 uppercase tracking-wider" th:text="${#temporals.format(job.createdAt, 'dd/MM/yyyy')}">
                         24/10/2023
                     </div>
                     <div class="flex-1">
                         <div class="flex items-center gap-4 mb-1">
-                            <h3 class="text-[17px] font-bold group-hover:text-accent transition-colors">GLOBAL CONSTRUCTION project</h3>
-                            <span class="px-3 py-1 bg-[#C0D1FF] text-[#2f54eb] rounded-full text-xs font-bold leading-none tracking-wide shadow-sm" th:text="#{job.status.in_progress}">In progress</span>
+                            <h3 class="text-[17px] font-bold group-hover:text-accent transition-colors" th:text="${job.title}">Project</h3>
+                            <span th:if="${job.status.name() == 'IN_PROGRESS'}" class="px-3 py-1 bg-[#C0D1FF] text-[#2f54eb] rounded-full text-xs font-bold leading-none tracking-wide shadow-sm" th:text="#{job.status.in_progress}">In progress</span>
+                            <span th:if="${job.status.name() == 'COMPLETED'}" class="px-3 py-1 bg-[#A2E4B8] text-[#13773b] rounded-full text-xs font-bold leading-none tracking-wide shadow-sm" th:text="#{job.status.completed}">Completed</span>
+                            <span th:unless="${job.status.name() == 'IN_PROGRESS' or job.status.name() == 'COMPLETED'}" class="px-3 py-1 bg-[#CFD1D4] text-[#5c6269] rounded-full text-xs font-bold leading-none tracking-wide shadow-sm" th:text="${job.status.name()}">Pending</span>
                         </div>
-                        <p class="text-sm font-medium text-muted italic">replacing out dated panels</p>
+                        <p class="text-sm font-medium text-muted italic" th:text="${job.description}">description</p>
                     </div>
                 </div>
-
-                <!-- Activity Item 2 -->
-                <div class="glass-card rounded-xl p-5 px-6 flex flex-col md:flex-row md:items-center gap-4 group cursor-pointer">
-                    <div class="text-sm font-bold text-muted/80 md:w-32 flex-shrink-0 md:border-r border-borderline/50 md:mr-4 pr-4 uppercase tracking-wider">
-                        24/10/2023
-                    </div>
-                    <div class="flex-1">
-                        <div class="flex items-center gap-4 mb-1">
-                            <h3 class="text-[17px] font-bold group-hover:text-accent transition-colors">home house project</h3>
-                            <span class="px-3 py-1 bg-[#A2E4B8] text-[#13773b] rounded-full text-xs font-bold leading-none tracking-wide shadow-sm" th:text="#{job.status.completed}">Completed</span>
-                        </div>
-                        <p class="text-sm font-medium text-muted italic">Engineer heritier finished your project</p>
-                    </div>
-                </div>
-
-                <!-- Activity Item 3 -->
-                <div class="glass-card rounded-xl p-5 px-6 flex flex-col md:flex-row md:items-center gap-4 group cursor-pointer">
-                    <div class="text-sm font-bold text-muted/80 md:w-32 flex-shrink-0 md:border-r border-borderline/50 md:mr-4 pr-4 uppercase tracking-wider">
-                        24/10/2023
-                    </div>
-                    <div class="flex-1">
-                        <div class="flex items-center gap-4 mb-1">
-                            <h3 class="text-[17px] font-bold group-hover:text-accent transition-colors">apartment building</h3>
-                            <span class="px-3 py-1 bg-[#CFD1D4] text-[#5c6269] rounded-full text-xs font-bold leading-none tracking-wide shadow-sm" th:text="#{job.status.pending}">Pending schedule</span>
-                        </div>
-                        <p class="text-sm font-medium text-muted italic">waiting for contractor to confirm availability</p>
-                    </div>
-                </div>
+                <div th:if="${#lists.isEmpty(recentJobs)}" class="text-muted font-medium italic">No recent activity.</div>
             </div>
         </section>
 
