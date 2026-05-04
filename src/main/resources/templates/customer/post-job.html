@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/customer-head :: head('Post a Job - UBAKA')}"></head>
-<body class="bg-surface text-primary flex min-h-screen overflow-x-hidden antialiased">
+<body class="bg-surface dark:bg-darkbg text-primary dark:text-[#EAE3D3] flex min-h-screen overflow-x-hidden antialiased">
 
     <!-- Sidebar -->
     <th:block th:replace="~{fragments/customer-sidebar :: sidebar('post-job')}"></th:block>
@@ -11,55 +11,55 @@
         
         <!-- Header -->
         <header class="mb-10">
-            <h1 class="text-3xl font-extrabold mb-2 tracking-tight">Define Your Requirement</h1>
-            <p class="text-muted text-base font-medium">Detail your service needs precisely.</p>
+            <h1 class="text-3xl font-extrabold mb-2 tracking-tight" th:text="#{post_job.title}">Define Your Requirement</h1>
+            <p class="text-muted text-base font-medium" th:text="#{post_job.subtitle}">Detail your service needs precisely.</p>
         </header>
 
         <!-- Form Container -->
         <div class="glass-card rounded-2xl p-8 max-w-xl animate-slide-up">
-            <form action="#" method="post" class="space-y-6">
+            <form th:action="@{/customer/post-job}" th:object="${job}" method="post" class="space-y-6">
                 
                 <div class="space-y-2 group">
-                    <label class="block text-[15px] font-bold text-primary group-focus-within:text-accent transition-colors" for="title">Title</label>
-                    <input type="text" id="title" class="glass-input w-full p-3 rounded-lg" placeholder="Value">
+                    <label class="block text-[15px] font-bold text-primary group-focus-within:text-accent transition-colors" for="title" th:text="#{label.title}">Title</label>
+                    <input type="text" id="title" th:field="*{title}" class="glass-input w-full p-3 rounded-lg" th:placeholder="#{placeholder.value}" required>
                 </div>
                 
                 <div class="space-y-2 group">
-                    <label class="block text-[15px] font-bold text-primary group-focus-within:text-accent transition-colors" for="description">Description</label>
-                    <textarea id="description" class="glass-input w-full p-3 rounded-lg resize-y min-h-[100px]" placeholder="Value"></textarea>
+                    <label class="block text-[15px] font-bold text-primary group-focus-within:text-accent transition-colors" for="description" th:text="#{label.description}">Description</label>
+                    <textarea id="description" th:field="*{description}" class="glass-input w-full p-3 rounded-lg resize-y min-h-[100px]" th:placeholder="#{placeholder.value}" required></textarea>
                 </div>
                 
                 <div class="space-y-2 group">
-                    <label class="block text-[15px] font-bold text-primary group-focus-within:text-accent transition-colors" for="specialization">Specialization</label>
+                    <label class="block text-[15px] font-bold text-primary group-focus-within:text-accent transition-colors" for="specializationRequired" th:text="#{label.specialization}">Specialization</label>
                     <div class="relative">
-                        <select id="specialization" class="glass-input w-full p-3 rounded-lg appearance-none cursor-pointer">
-                            <option value="" disabled selected>choose Values</option>
-                            <option value="plumbing">Plumbing</option>
-                            <option value="electrical">Electrical</option>
-                            <option value="construction">Construction</option>
-                            <option value="renovation">Renovation</option>
+                        <select id="specializationRequired" th:field="*{specializationRequired}" class="glass-input w-full p-3 rounded-lg appearance-none cursor-pointer" required>
+                            <option value="" disabled selected th:text="#{placeholder.choose}">Select specialization</option>
+                            <option value="Plumbing" th:text="#{specialization.plumbing}">Plumbing</option>
+                            <option value="Electrical" th:text="#{specialization.electrical}">Electrical</option>
+                            <option value="Construction" th:text="#{specialization.construction}">Construction</option>
+                            <option value="Renovation" th:text="#{specialization.renovation}">Renovation</option>
                         </select>
                         <i class="ri-arrow-down-s-line absolute right-4 top-1/2 transform -translate-y-1/2 text-muted pointer-events-none"></i>
                     </div>
                 </div>
                 
                 <div class="space-y-2 group">
-                    <label class="block text-[15px] font-bold text-primary group-focus-within:text-accent transition-colors" for="location">Location</label>
-                    <input type="text" id="location" class="glass-input w-full p-3 rounded-lg" placeholder="Value">
+                    <label class="block text-[15px] font-bold text-primary group-focus-within:text-accent transition-colors" for="location" th:text="#{label.location}">Location</label>
+                    <input type="text" id="location" th:field="*{location}" class="glass-input w-full p-3 rounded-lg" th:placeholder="#{placeholder.value}" required>
                 </div>
                 
                 <div class="space-y-2 group">
-                    <label class="block text-[15px] font-bold text-primary group-focus-within:text-accent transition-colors" for="budget">Budget</label>
-                    <input type="number" id="budget" class="glass-input w-full p-3 rounded-lg" placeholder="INT">
+                    <label class="block text-[15px] font-bold text-primary group-focus-within:text-accent transition-colors" for="budget" th:text="#{label.budget}">Budget</label>
+                    <input type="number" id="budget" th:field="*{budget}" class="glass-input w-full p-3 rounded-lg" th:placeholder="#{placeholder.int}">
                 </div>
                 
                 <div class="space-y-2 group">
-                    <label class="block text-[15px] font-bold text-primary group-focus-within:text-accent transition-colors" for="preferred-date">Preferred date</label>
-                    <input type="text" id="preferred-date" class="glass-input w-full p-3 rounded-lg" placeholder="Value">
+                    <label class="block text-[15px] font-bold text-primary group-focus-within:text-accent transition-colors" for="preferredDate" th:text="#{label.preferred_date}">Preferred date</label>
+                    <input type="date" id="preferredDate" th:field="*{preferredDate}" class="glass-input w-full p-3 rounded-lg">
                 </div>
                 
                 <div class="pt-2">
-                    <button type="submit" class="w-full py-3.5 bg-primary text-white font-black uppercase tracking-wider rounded-lg shadow-md hover:bg-accent hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300">
+                    <button type="submit" class="w-full py-3.5 bg-primary text-white font-black uppercase tracking-wider rounded-lg shadow-md hover:bg-accent hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300" th:text="#{button.submit}">
                         Submit
                     </button>
                 </div>

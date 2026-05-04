@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/customer-head :: head('Notifications - UBAKA')}"></head>
-<body class="bg-surface text-primary flex min-h-screen overflow-x-hidden antialiased">
+<body class="bg-surface dark:bg-darkbg text-primary dark:text-[#EAE3D3] flex min-h-screen overflow-x-hidden antialiased">
 
     <!-- Sidebar -->
     <th:block th:replace="~{fragments/customer-sidebar :: sidebar('notifications')}"></th:block>
@@ -11,26 +11,24 @@
         
         <!-- Header -->
         <header class="mb-10">
-            <h1 class="text-3xl font-extrabold mb-2 tracking-tight">Notifications</h1>
-            <p class="text-muted text-base font-medium">See who contacted you or responses from the jobs you applied to.</p>
+            <h1 class="text-3xl font-extrabold mb-2 tracking-tight" th:text="#{notifications.title}">Notifications</h1>
+            <p class="text-muted text-base font-medium" th:text="#{notifications.subtitle}">See who contacted you or responses from the jobs you applied to.</p>
         </header>
 
         <!-- Notifications List -->
         <div class="flex flex-col gap-5 max-w-4xl animate-slide-up">
             
-            <!-- Notification Card 1 -->
-            <div class="glass-card rounded-2xl p-6 px-8 flex flex-col gap-4 group hover:bg-white/40">
+            <div th:each="notif : ${notifications}" class="glass-card rounded-2xl p-6 px-8 flex flex-col gap-4 group hover:bg-white/40">
                 <div class="flex justify-between items-start">
                     <div class="text-[16px] pr-8">
-                        <span class="font-black text-primary">ALEX</span>
-                        <span class="text-muted font-medium mx-1.5">approved you in</span>
-                        <span class="font-extrabold text-primary">GLOBAL CONSTRUCTION project</span>
+                        <span class="font-black text-primary" th:text="${notif.title}">Notification Title</span>
+                        <span class="text-muted font-medium mx-1.5" th:if="${notif.type != null}" th:text="'- ' + ${notif.type.name()}">- TYPE</span>
                     </div>
-                    <div class="text-[11px] font-bold text-muted uppercase tracking-wider whitespace-nowrap mt-1">JUST NOW</div>
+                    <div class="text-[11px] font-bold text-muted uppercase tracking-wider whitespace-nowrap mt-1" th:text="${#temporals.format(notif.createdAt, 'dd/MM/yyyy HH:mm')}">JUST NOW</div>
                 </div>
                 <div class="flex justify-between items-end">
-                    <div class="text-[15px] text-muted italic font-medium">
-                        Kindly look at your whatsapp to see further details
+                    <div class="text-[15px] text-muted italic font-medium" th:text="${notif.message}">
+                        Notification message content here.
                     </div>
                     <button class="text-2xl text-primary opacity-80 hover:opacity-100 hover:text-red-600 transition-colors bg-white/50 hover:bg-red-50 p-2 rounded-full -mr-2 -mb-2" title="Delete notification">
                         <i class="ri-delete-bin-5-fill"></i>
@@ -38,25 +36,7 @@
                 </div>
             </div>
 
-            <!-- Notification Card 2 -->
-            <div class="glass-card rounded-2xl p-6 px-8 flex flex-col gap-4 group hover:bg-white/40">
-                <div class="flex justify-between items-start">
-                    <div class="text-[16px] pr-8">
-                        <span class="font-black text-primary">Heritier</span>
-                        <span class="text-muted font-medium mx-1.5">completed project</span>
-                        <span class="font-extrabold text-primary">kigali construction project</span>
-                    </div>
-                    <div class="text-[11px] font-bold text-muted uppercase tracking-wider whitespace-nowrap mt-1">JUST NOW</div>
-                </div>
-                <div class="flex justify-between items-end">
-                    <div class="text-[15px] text-muted italic font-medium">
-                        your approved the completion of this project
-                    </div>
-                    <button class="text-2xl text-primary opacity-80 hover:opacity-100 hover:text-red-600 transition-colors bg-white/50 hover:bg-red-50 p-2 rounded-full -mr-2 -mb-2" title="Delete notification">
-                        <i class="ri-delete-bin-5-fill"></i>
-                    </button>
-                </div>
-            </div>
+            <div th:if="${#lists.isEmpty(notifications)}" class="text-muted font-medium italic" th:text="#{notifications.no_notifications}">No notifications yet.</div>
             
         </div>
 

@@ -94,7 +94,7 @@ public class MatchingServiceImpl implements MatchingService {
         // 3. Send notification to each matched engineer
         for (Engineer engineer : matchedEngineers) {
             notificationService.createNotification(
-                    engineer.getUser(),
+                    engineer.getUser().getId(),
                     "New Job Match",
                     "A new job matches your skills in " + specialization,
                     NotificationType.JOB_MATCHED

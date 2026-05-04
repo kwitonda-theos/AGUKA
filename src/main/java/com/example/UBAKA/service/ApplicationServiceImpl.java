@@ -74,10 +74,10 @@ public class ApplicationServiceImpl implements ApplicationService {
 
         // 6. Notify the customer who owns the job
         notificationService.createNotification(
-                job.getCustomer().getUser(),
+                job.getCustomer().getUser().getId(),
                 "New Application",
                 "An engineer has applied to your job: " + job.getTitle(),
-                NotificationType.JOB_UPDATE
+                NotificationType.APPLICATION_RECEIVED
         );
 
         return savedApplication;
@@ -103,10 +103,10 @@ public class ApplicationServiceImpl implements ApplicationService {
 
         // 4. Notify engineer
         notificationService.createNotification(
-                application.getEngineer().getUser(),
+                application.getEngineer().getUser().getId(),
                 "Application Accepted",
                 "Your application for \"" + application.getJob().getTitle() + "\" has been accepted.",
-                NotificationType.JOB_UPDATE
+                NotificationType.ENGINEER_SELECTED
         );
 
         return updatedApplication;
@@ -132,10 +132,10 @@ public class ApplicationServiceImpl implements ApplicationService {
 
         // 4. Notify engineer
         notificationService.createNotification(
-                application.getEngineer().getUser(),
+                application.getEngineer().getUser().getId(),
                 "Application Declined",
                 "Your application for \"" + application.getJob().getTitle() + "\" has been declined.",
-                NotificationType.JOB_UPDATE
+                NotificationType.APPLICATION_RECEIVED
         );
 
         return updatedApplication;

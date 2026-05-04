@@ -47,17 +47,17 @@
     </ul>
 
     <!-- Theme & Language Controls (Top Right Corner) -->
-    <div class="fixed top-12 right-12 z-50 flex items-center space-x-6 text-[#06392F] dark:text-[#06392F]">
+    <div class="fixed top-12 right-12 z-50 flex items-center space-x-3">
         
         <!-- Language Selector Dropdown -->
         <div class="relative group">
-            <button class="flex items-center space-x-1 hover:opacity-80 transition-opacity cursor-pointer" title="Change Language">
-                <i class="ri-translate-2 text-[22px]"></i>
-                <span class="text-[15px] font-bold ml-1 uppercase mt-0.5">EN</span>
+            <button class="flex items-center space-x-1.5 px-5 py-2.5 rounded-full bg-[#EAE3D3] dark:bg-darkcard border border-black/5 dark:border-white/10 text-primary dark:text-[#EAE3D3] shadow-sm hover:shadow-md transition-all cursor-pointer" title="Change Language">
+                <i class="ri-translate-2 text-[20px]"></i>
+                <span class="text-[15px] font-extrabold uppercase mt-0.5">EN</span>
             </button>
             
             <!-- Clean Languages Box (Shows on hover) -->
-            <div class="absolute top-full right-0 mt-4 w-44 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+            <div class="absolute top-full right-0 mt-3 w-44 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
                 <!-- invisible bridge to keep hover state active -->
                 <div class="absolute -top-4 left-0 w-full h-4"></div>
                 <div class="bg-white dark:bg-[#1a1a1a] rounded-xl shadow-2xl border border-black/5 dark:border-white/10 py-2 flex flex-col">
@@ -69,8 +69,8 @@
         </div>
 
         <!-- Theme Toggle -->
-        <button onclick="toggleTheme()" class="text-[22px] hover:opacity-80 transition-opacity" title="Toggle Theme">
-            <i class="ri-moon-line" id="theme-icon"></i>
+        <button onclick="toggleTheme()" class="w-[46px] h-[46px] flex items-center justify-center rounded-full bg-[#EAE3D3] dark:bg-darkcard border border-black/5 dark:border-white/10 text-primary dark:text-[#EAE3D3] shadow-sm hover:shadow-md transition-all" title="Toggle Theme">
+            <i class="ri-moon-line text-[22px]" id="theme-icon"></i>
         </button>
     </div>
 

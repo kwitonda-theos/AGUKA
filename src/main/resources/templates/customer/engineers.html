@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/customer-head :: head('Matched Engineers - UBAKA')}"></head>
-<body class="bg-surface text-primary flex min-h-screen overflow-x-hidden antialiased">
+<body class="bg-surface dark:bg-darkbg text-primary dark:text-[#EAE3D3] flex min-h-screen overflow-x-hidden antialiased">
 
     <!-- Sidebar -->
     <th:block th:replace="~{fragments/customer-sidebar :: sidebar('engineers')}"></th:block>
@@ -11,71 +11,56 @@
         
         <!-- Header -->
         <header class="mb-10">
-            <h1 class="text-3xl font-extrabold mb-2 tracking-tight">Matched Engineers</h1>
-            <p class="text-muted text-base font-medium">Review applicants and pick the best fit.</p>
+            <h1 class="text-3xl font-extrabold mb-2 tracking-tight" th:text="#{engineers.title}">Matched Engineers</h1>
+            <p class="text-muted text-base font-medium" th:text="#{engineers.subtitle}">Review applicants and pick the best fit.</p>
         </header>
 
         <!-- Job Filter Details -->
         <div class="glass-card rounded-2xl p-6 px-8 mb-10 flex items-center gap-6 max-w-4xl animate-slide-up">
-            <label for="job-select" class="font-bold text-lg">job:</label>
-            <input type="text" id="job-select" class="glass-input flex-1 max-w-[400px] p-3 rounded-lg bg-black/5" value="beza apartment" readonly>
+            <form th:action="@{/customer/engineers}" method="get" class="flex items-center" id="jobFilterForm">
+                <label for="jobSelect" class="font-bold text-primary mr-4" th:text="#{engineers.select_job}">Select Job:</label>
+                <div class="relative w-80">
+                    <select id="jobSelect" name="jobId" class="glass-input w-full p-3 pr-10 rounded-lg appearance-none cursor-pointer" onchange="document.getElementById('jobFilterForm').submit();">
+                        <option value="" disabled selected th:unless="${selectedJobId != null}" th:text="#{engineers.choose_job}">-- Choose a job to view applicants --</option>
+                        <option th:each="job : ${jobs}" th:value="${job.id}" th:text="${job.title}" th:selected="${job.id == selectedJobId}">Job Title</option>
+                    </select>
+                    <i class="ri-arrow-down-s-line absolute right-4 top-1/2 transform -translate-y-1/2 text-muted pointer-events-none"></i>
+                </div>
+            </form>
         </div>
 
         <!-- Engineers List -->
-        <div class="flex flex-col gap-6 max-w-4xl animate-slide-up" style="animation-delay: 0.1s;">
+        <div class="flex flex-col gap-6 max-w-4xl animate-slide-up" style="animation-delay: 0.1s;" th:if="${applications != null}">
             
-            <!-- Engineer Card 1 -->
-            <div class="glass-card rounded-2xl p-8 flex flex-col bg-white/10 group">
+            <div th:each="app : ${applications}" class="glass-card rounded-2xl p-8 flex flex-col bg-white/10 group">
                 <div class="flex items-start gap-6 mb-6">
-                    <div class="w-16 h-16 rounded-full bg-[#5c6269] flex-shrink-0 shadow-sm"></div>
+                    <div class="w-16 h-16 rounded-full bg-[#5c6269] flex-shrink-0 shadow-sm flex items-center justify-center text-white text-xl font-bold uppercase" th:text="${#strings.substring(app.engineer.user.fullName,0,1)}">E</div>
                     <div class="flex-1 flex flex-col gap-1.5">
                         <div class="flex items-center gap-4">
-                            <h3 class="text-[20px] font-bold">Eng. kwitonda</h3>
-                            <span class="bg-[#A2E4B8] text-[#13773b] px-3.5 py-1 rounded-full text-xs font-bold tracking-wide">verified</span>
+                            <h3 class="text-[20px] font-bold" th:text="${app.engineer.user.fullName}">Eng. kwitonda</h3>
+                            <span th:if="${app.engineer.verificationStatus.name() == 'VERIFIED' or app.engineer.verificationStatus.name() == 'APPROVED'}" class="bg-[#A2E4B8] text-[#13773b] px-3.5 py-1 rounded-full text-xs font-bold tracking-wide" th:text="#{label.verified}">verified</span>
                         </div>
-                        <div class="text-[15px] text-muted font-semibold">Engineer</div>
+                        <div class="text-[15px] text-muted font-semibold" th:text="${app.engineer.specialization}">Engineer</div>
                         <div class="flex items-center gap-5 mt-1 text-sm text-muted font-medium">
-                            <span class="flex items-center gap-1.5 text-[#8b9e25] font-bold"><i class="ri-star-fill"></i> 4.9</span>
-                            <span class="flex items-center gap-1.5"><i class="ri-map-pin-2-line"></i> kicukiro, Kigali</span>
+                            <span class="flex items-center gap-1.5 text-[#8b9e25] font-bold"><i class="ri-star-fill"></i> <span th:text="${app.engineer.averageRating != null ? app.engineer.averageRating : 'New'}">4.9</span></span>
+                            <span class="flex items-center gap-1.5"><i class="ri-map-pin-2-line"></i> <span th:text="${app.engineer.location != null ? app.engineer.location : 'N/A'}">kicukiro, Kigali</span></span>
                         </div>
                     </div>
                 </div>
                 
-                <div class="bg-black/5 rounded-xl p-4 px-5 mb-6 text-[15px] font-medium italic border border-black/5">
+                <div class="bg-black/5 rounded-xl p-4 px-5 mb-6 text-[15px] font-medium italic border border-black/5" th:text="${app.engineer.bio != null ? '&quot;' + app.engineer.bio + '&quot;' : 'No bio provided'}">
                     "hi! i have years of experience with this kind of work ..."
                 </div>
                 
-                <button class="w-full py-3.5 bg-primary text-white font-bold rounded-xl shadow-md hover:bg-accent hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300">
-                    select engineer
-                </button>
-            </div>
-
-            <!-- Engineer Card 2 -->
-            <div class="glass-card rounded-2xl p-8 flex flex-col bg-white/10 group">
-                <div class="flex items-start gap-6 mb-6">
-                    <div class="w-16 h-16 rounded-full bg-[#5c6269] flex-shrink-0 shadow-sm"></div>
-                    <div class="flex-1 flex flex-col gap-1.5">
-                        <div class="flex items-center gap-4">
-                            <h3 class="text-[20px] font-bold">Eng. heritier</h3>
-                            <span class="bg-[#A2E4B8] text-[#13773b] px-3.5 py-1 rounded-full text-xs font-bold tracking-wide">verified</span>
-                        </div>
-                        <div class="text-[15px] text-muted font-semibold">Engineer</div>
-                        <div class="flex items-center gap-5 mt-1 text-sm text-muted font-medium">
-                            <span class="flex items-center gap-1.5 text-[#8b9e25] font-bold"><i class="ri-star-fill"></i> 4.9</span>
-                            <span class="flex items-center gap-1.5"><i class="ri-map-pin-2-line"></i> kicukiro, Kigali</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="bg-black/5 rounded-xl p-4 px-5 mb-6 text-[15px] font-medium italic border border-black/5">
-                    "hi! i have years of experience with this kind of work ..."
-                </div>
-                
-                <button class="w-full py-3.5 bg-primary text-white font-bold rounded-xl shadow-md hover:bg-accent hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300">
-                    select engineer
-                </button>
+                <form th:action="@{/customer/applications/{id}/accept(id=${app.id})}" method="post" class="w-full">
+                    <button type="submit" class="w-full py-3.5 bg-primary text-white font-bold rounded-xl shadow-md hover:bg-accent hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300">
+                        Select engineer
+                    </button>
+                </form>
             </div>
             
+            <div th:if="${#lists.isEmpty(applications) and selectedJobId != null}" class="text-muted font-medium italic mt-4" th:text="#{engineers.no_applicants}">No applicants found for this job yet.</div>
+            <div th:if="${selectedJobId == null}" class="text-muted font-medium italic mt-4" th:text="#{engineers.please_select}">Please select a job from the dropdown above to view matched engineers and applicants.</div>
         </div>
 
     </main>

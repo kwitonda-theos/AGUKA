@@ -1,10 +1,10 @@
 package com.example.UBAKA.model.enums;
 
 public enum NotificationType {
-    INFO,
-    ALERT,
-    MESSAGE,
-    JOB_UPDATE,
     JOB_MATCHED,
-    VERIFICATION
+    APPLICATION_RECEIVED,
+    ENGINEER_SELECTED,
+    JOB_STARTED,
+    JOB_COMPLETED,
+    REVIEW_REQUEST
 }
