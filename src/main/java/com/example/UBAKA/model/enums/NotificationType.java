@@ -6,5 +6,6 @@ public enum NotificationType {
     ENGINEER_SELECTED,
     JOB_STARTED,
     JOB_COMPLETED,
+    JOB_UPDATE,
     REVIEW_REQUEST
 }

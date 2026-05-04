@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -242,7 +242,18 @@
                 </div>
 
                 <!-- Form -->
-                <form action="/login" method="post" class="space-y-5">
+                <!-- Error / Logout / Registered messages -->
+                <div th:if="${param.error}" class="form-field mb-4 px-4 py-3 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm font-semibold">
+                    Invalid email or password. Please try again.
+                </div>
+                <div th:if="${param.logout}" class="form-field mb-4 px-4 py-3 bg-green-50 border border-green-200 text-green-700 rounded-xl text-sm font-semibold">
+                    You have been logged out successfully.
+                </div>
+                <div th:if="${param.registered}" class="form-field mb-4 px-4 py-3 bg-green-50 border border-green-200 text-green-700 rounded-xl text-sm font-semibold">
+                    Account created successfully! Please log in.
+                </div>
+
+                <form th:action="@{/auth/login}" method="post" class="space-y-5">
 
                     <!-- Email -->
                     <div class="form-field space-y-1.5">
