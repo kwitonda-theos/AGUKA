@@ -51,9 +51,13 @@ public class RegistrationController {
             return "auth/client";
         }
 
-        // 2. Check email not already taken
+        // 2. Check email and phone not already taken
         if (userRepository.findByEmail(email).isPresent()) {
             model.addAttribute("error", "An account with that email already exists.");
+            return "auth/client";
+        }
+        if (phone != null && !phone.trim().isEmpty() && userRepository.findByPhone(phone).isPresent()) {
+            model.addAttribute("error", "An account with that phone number already exists.");
             return "auth/client";
         }
 
@@ -99,9 +103,13 @@ public class RegistrationController {
             return "auth/engineer";
         }
 
-        // 2. Check email not already taken
+        // 2. Check email and phone not already taken
         if (userRepository.findByEmail(email).isPresent()) {
             model.addAttribute("error", "An account with that email already exists.");
+            return "auth/engineer";
+        }
+        if (phone != null && !phone.trim().isEmpty() && userRepository.findByPhone(phone).isPresent()) {
+            model.addAttribute("error", "An account with that phone number already exists.");
             return "auth/engineer";
         }
 
