@@ -10,6 +10,8 @@ import com.example.UBAKA.repository.UserRepository;
 import com.example.UBAKA.service.ApplicationService;
 import com.example.UBAKA.service.JobService;
 import com.example.UBAKA.service.NotificationService;
+import com.example.UBAKA.model.enums.AvailabilityStatus;
+import com.example.UBAKA.model.enums.VerificationStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,12 +41,31 @@ public class EngineerDashboardController {
         this.engineerRepository = engineerRepository;
     }
 
+    @ModelAttribute
+    public void addCommonAttributes(Authentication auth, Model model) {
+        if (auth != null && auth.isAuthenticated()) {
+            Engineer engineer = getEngineer(auth);
+            model.addAttribute("engineer", engineer);
+            model.addAttribute("engineerName", engineer.getUser().getFullName());
+            model.addAttribute("profileStatus", engineer.getVerificationStatus().name());
+        }
+    }
+
     /** Resolves the logged-in user's Engineer record from the security context. */
     private Engineer getEngineer(Authentication auth) {
         String email = auth.getName();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found: " + email));
-        return user.getEngineer();
+        Engineer engineer = user.getEngineer();
+        if (engineer == null) {
+            engineer = new Engineer();
+            engineer.setUser(user);
+            engineer.setVerificationStatus(VerificationStatus.PENDING);
+            engineer.setAvailabilityStatus(AvailabilityStatus.AVAILABLE);
+            engineer.setSpecialization("General");
+            engineer = engineerRepository.save(engineer);
+        }
+        return engineer;
     }
 
     @GetMapping("/verification")
@@ -52,12 +73,29 @@ public class EngineerDashboardController {
         return "Engineer/verification";
     }
 
+    @PostMapping("/verification")
+    public String engineerVerificationPost(@ModelAttribute Engineer engineerForm, Authentication auth) {
+        Engineer engineer = getEngineer(auth);
+        engineer.setLocation(engineerForm.getLocation());
+        engineer.setSpecialization(engineerForm.getSpecialization());
+        engineer.setExperienceYears(engineerForm.getExperienceYears());
+        engineer.setBio(engineerForm.getBio());
+        engineer.setNationalIdNumber(engineerForm.getNationalIdNumber());
+        engineer.setAvailabilityStatus(engineerForm.getAvailabilityStatus());
+        engineerRepository.save(engineer);
+        return "redirect:/engineer/verification?success";
+    }
+
     @GetMapping("/dashboard")
     public String engineerDashboard(Authentication auth, Model model) {
         Engineer engineer = getEngineer(auth);
-        if (engineer != null) {
-            model.addAttribute("engineerName", engineer.getUser().getFullName());
-        }
+        // Calculate dynamic stats
+        List<JobApplication> applications = applicationService.getApplicationsByEngineer(engineer.getId());
+        model.addAttribute("activeApplications", applications.size());
+        
+        String rating = engineer.getAverageRating() != null ? engineer.getAverageRating() + "/5" : "No rating";
+        model.addAttribute("rating", rating);
+        
         List<Job> openJobs = jobService.getOpenJobs();
         model.addAttribute("openJobs", openJobs);
         return "Engineer/dashboard";
@@ -66,18 +104,15 @@ public class EngineerDashboardController {
     @GetMapping("/projects")
     public String engineerProjects(Authentication auth, Model model) {
         Engineer engineer = getEngineer(auth);
-        if (engineer == null) return "redirect:/auth/login";
-
         List<JobApplication> applications = applicationService.getApplicationsByEngineer(engineer.getId());
         model.addAttribute("applications", applications);
+        model.addAttribute("openJobs", jobService.getOpenJobs());
         return "Engineer/projects";
     }
 
     @GetMapping("/notifications")
     public String engineerNotifications(Authentication auth, Model model) {
         Engineer engineer = getEngineer(auth);
-        if (engineer == null) return "redirect:/auth/login";
-
         // Notifications are linked to User, not Engineer
         Long userId = engineer.getUser().getId();
         List<Notification> notifications = notificationService.getUserNotifications(userId);
