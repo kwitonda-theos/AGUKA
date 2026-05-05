@@ -6,9 +6,104 @@
     <!-- Sidebar -->
     <th:block th:replace="~{fragments/customer-sidebar :: sidebar('my-jobs')}"></th:block>
 
+    <!-- =====================  JOB DETAILS MODAL  ===================== -->
+    <div id="jobModal"
+         class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300"
+         onclick="closeModal(event)">
+
+        <div class="bg-white dark:bg-[#1a1a1a] rounded-3xl shadow-2xl w-full max-w-2xl mx-4 p-0 overflow-hidden
+                    transform scale-95 transition-all duration-300" id="modalCard">
+
+            <!-- Modal header bar -->
+            <div class="bg-primary text-white px-8 py-5 flex items-center justify-between">
+                <div>
+                    <div class="text-xs font-bold uppercase tracking-widest opacity-70 mb-0.5">Job Details</div>
+                    <h2 class="text-xl font-extrabold tracking-tight" id="modal-title">Job Title</h2>
+                </div>
+                <button onclick="closeModal()" class="w-9 h-9 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center transition-colors">
+                    <i class="ri-close-line text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Status + Date row -->
+            <div class="px-8 py-4 border-b border-black/5 dark:border-white/5 flex items-center gap-4 bg-black/2">
+                <span id="modal-status-badge" class="px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wide">Status</span>
+                <span class="text-sm text-muted font-medium" id="modal-created">Created on —</span>
+            </div>
+
+            <!-- Body -->
+            <div class="px-8 py-6 grid grid-cols-2 gap-x-10 gap-y-5">
+
+                <!-- Description (full width) -->
+                <div class="col-span-2">
+                    <div class="text-[11px] font-bold text-muted uppercase tracking-widest mb-1.5">Description</div>
+                    <p class="text-[15px] font-medium leading-relaxed" id="modal-description">—</p>
+                </div>
+
+                <!-- Specialization -->
+                <div>
+                    <div class="text-[11px] font-bold text-muted uppercase tracking-widest mb-1">Specialization Required</div>
+                    <div class="flex items-center gap-2 text-[15px] font-semibold">
+                        <i class="ri-tools-line text-primary"></i>
+                        <span id="modal-specialization">—</span>
+                    </div>
+                </div>
+
+                <!-- Location -->
+                <div>
+                    <div class="text-[11px] font-bold text-muted uppercase tracking-widest mb-1">Location</div>
+                    <div class="flex items-center gap-2 text-[15px] font-semibold">
+                        <i class="ri-map-pin-2-line text-primary"></i>
+                        <span id="modal-location">—</span>
+                    </div>
+                </div>
+
+                <!-- Budget -->
+                <div>
+                    <div class="text-[11px] font-bold text-muted uppercase tracking-widest mb-1">Budget</div>
+                    <div class="flex items-center gap-2 text-[15px] font-extrabold text-primary">
+                        <i class="ri-money-dollar-circle-line"></i>
+                        <span id="modal-budget">—</span>
+                    </div>
+                </div>
+
+                <!-- Preferred Date -->
+                <div>
+                    <div class="text-[11px] font-bold text-muted uppercase tracking-widest mb-1">Preferred Date</div>
+                    <div class="flex items-center gap-2 text-[15px] font-semibold">
+                        <i class="ri-calendar-event-line text-primary"></i>
+                        <span id="modal-date">—</span>
+                    </div>
+                </div>
+
+                <!-- Assigned Engineer -->
+                <div class="col-span-2">
+                    <div class="text-[11px] font-bold text-muted uppercase tracking-widest mb-1">Assigned Engineer</div>
+                    <div class="flex items-center gap-2 text-[15px] font-semibold">
+                        <i class="ri-user-smile-line text-primary"></i>
+                        <span id="modal-engineer">—</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer actions -->
+            <div class="px-8 py-5 border-t border-black/5 dark:border-white/5 flex items-center justify-between bg-black/2">
+                <a id="modal-engineers-link" href="#"
+                   class="flex items-center gap-2 text-sm font-bold text-primary hover:text-accent underline-offset-4 hover:underline transition-all">
+                    <i class="ri-user-settings-line"></i> View Engineers
+                </a>
+                <button onclick="closeModal()"
+                        class="px-6 py-2.5 bg-primary text-white text-sm font-bold rounded-lg shadow hover:bg-accent hover:-translate-y-0.5 hover:shadow-md transition-all">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- =====================  END MODAL  ===================== -->
+
     <!-- Main Content Area -->
     <main class="ml-72 flex-1 p-12 flex flex-col animate-fade-in relative z-0">
-        
+
         <!-- Header -->
         <header class="mb-10">
             <h1 class="text-3xl font-extrabold mb-2 tracking-tight" th:text="#{nav.my_jobs}">My jobs</h1>
@@ -26,7 +121,7 @@
 
         <!-- Jobs List -->
         <div class="flex flex-col gap-6 max-w-5xl animate-slide-up" style="animation-delay: 0.1s;">
-            
+
             <div th:each="job : ${jobs}" class="glass-card rounded-2xl p-7 flex flex-col gap-5 group">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center gap-4">
@@ -37,19 +132,21 @@
                     </div>
                     <div class="text-[11px] font-bold text-muted uppercase tracking-wider" th:text="#{label.budget}">TOTAL BUDGET</div>
                 </div>
-                
+
                 <div class="flex justify-between items-center">
                     <h3 class="text-2xl font-extrabold group-hover:text-accent transition-colors" th:text="${job.title}">Job Title</h3>
                     <div class="text-2xl font-black text-primary" th:text="${job.budget} != null ? ${job.budget} + ' FRW' : 'TBD'">1,200,000 FRW</div>
                 </div>
-                
+
                 <div class="flex justify-between items-center pt-2">
                     <div class="flex items-center gap-6">
                         <div class="flex items-center gap-2 text-sm text-muted font-medium">
-                            <i class="ri-map-pin-2-line text-lg"></i> <span th:text="${job.location}">kicukiro, Kigali</span>
+                            <i class="ri-map-pin-2-line text-lg"></i>
+                            <span th:text="${job.location}">kicukiro, Kigali</span>
                         </div>
                         <div class="flex items-center gap-2 text-sm text-muted font-medium" th:if="${job.assignment != null}">
-                            <i class="ri-user-smile-line text-lg"></i> <span th:text="${job.assignment.engineer.user.fullName}">eng. raul</span>
+                            <i class="ri-user-smile-line text-lg"></i>
+                            <span th:text="${job.assignment.engineer.user.fullName}">eng. raul</span>
                         </div>
                         <div class="flex items-center gap-2 text-sm text-muted font-medium" th:unless="${job.assignment != null}">
                             Awaiting Contractor
@@ -57,7 +154,25 @@
                     </div>
                     <div class="flex items-center gap-6">
                         <a th:href="@{/customer/engineers(jobId=${job.id})}" class="text-sm font-bold text-primary hover:text-accent underline-offset-4 hover:underline transition-all" th:text="#{button.view_engineers}">View engineers</a>
-                        <button class="px-6 py-2.5 bg-primary text-white text-sm font-bold rounded-lg shadow-md hover:bg-accent hover:-translate-y-0.5 hover:shadow-lg transition-all" th:text="#{button.view_details}">View Details</button>
+
+                        <!-- View Details button — passes all job data via data-* attributes -->
+                        <button
+                            type="button"
+                            class="px-6 py-2.5 bg-primary text-white text-sm font-bold rounded-lg shadow-md hover:bg-accent hover:-translate-y-0.5 hover:shadow-lg transition-all"
+                            th:attr="
+                                data-id=${job.id},
+                                data-title=${job.title},
+                                data-description=${job.description},
+                                data-status=${job.status.name()},
+                                data-location=${job.location != null ? job.location : 'N/A'},
+                                data-budget=${job.budget != null ? job.budget + ' FRW' : 'TBD'},
+                                data-specialization=${job.specializationRequired},
+                                data-preferred-date=${job.preferredDate != null ? #temporals.format(job.preferredDate, 'dd/MM/yyyy') : 'Not specified'},
+                                data-created=${#temporals.format(job.createdAt, 'dd/MM/yyyy')},
+                                data-engineer=${job.assignment != null ? job.assignment.engineer.user.fullName : 'Awaiting Contractor'},
+                                data-engineers-url=@{/customer/engineers(jobId=${job.id})}"
+                            onclick="openModal(this)"
+                            th:text="#{button.view_details}">View Details</button>
                     </div>
                 </div>
             </div>
@@ -66,6 +181,61 @@
         </div>
 
     </main>
+
+    <!-- =====================  MODAL SCRIPT  ===================== -->
+    <script>
+        const statusStyles = {
+            'OPEN':        'bg-[#CFD1D4] text-[#5c6269]',
+            'IN_PROGRESS': 'bg-[#C0D1FF] text-[#2f54eb]',
+            'COMPLETED':   'bg-[#A2E4B8] text-[#13773b]',
+            'ASSIGNED':    'bg-[#FFE5B4] text-[#b86e00]',
+            'CANCELLED':   'bg-[#FFD6D6] text-[#b80000]',
+            'MATCHED':     'bg-[#E0D6FF] text-[#5b21b6]',
+        };
+
+        function openModal(btn) {
+            const modal   = document.getElementById('jobModal');
+            const card    = document.getElementById('modalCard');
+
+            document.getElementById('modal-title').textContent         = btn.dataset.title        || '—';
+            document.getElementById('modal-description').textContent   = btn.dataset.description  || '—';
+            document.getElementById('modal-specialization').textContent = btn.dataset.specialization || '—';
+            document.getElementById('modal-location').textContent      = btn.dataset.location     || '—';
+            document.getElementById('modal-budget').textContent        = btn.dataset.budget       || '—';
+            document.getElementById('modal-date').textContent          = btn.dataset.preferredDate || '—';
+            document.getElementById('modal-created').textContent       = 'Created on ' + (btn.dataset.created || '—');
+            document.getElementById('modal-engineer').textContent      = btn.dataset.engineer     || '—';
+            document.getElementById('modal-engineers-link').href       = btn.dataset.engineersUrl || '#';
+
+            const badge = document.getElementById('modal-status-badge');
+            const status = btn.dataset.status || '';
+            badge.textContent = status.replace('_', ' ');
+            badge.className = 'px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wide ' + (statusStyles[status] || 'bg-[#CFD1D4] text-[#5c6269]');
+
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.classList.add('opacity-100');
+            card.classList.remove('scale-95');
+            card.classList.add('scale-100');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(event) {
+            // If called from backdrop click, only close if clicking the backdrop itself
+            if (event && event.target !== document.getElementById('jobModal')) return;
+            const modal = document.getElementById('jobModal');
+            const card  = document.getElementById('modalCard');
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            card.classList.remove('scale-100');
+            card.classList.add('scale-95');
+            document.body.style.overflow = '';
+        }
+
+        // Close on Escape key
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
 
 </body>
 </html>

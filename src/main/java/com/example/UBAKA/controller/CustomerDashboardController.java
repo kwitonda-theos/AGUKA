@@ -4,12 +4,15 @@ import com.example.UBAKA.model.Customer;
 import com.example.UBAKA.model.Job;
 import com.example.UBAKA.model.JobApplication;
 import com.example.UBAKA.model.Notification;
+import com.example.UBAKA.model.User;
 import com.example.UBAKA.model.enums.JobStatus;
 import com.example.UBAKA.repository.CustomerRepository;
+import com.example.UBAKA.repository.UserRepository;
 import com.example.UBAKA.service.ApplicationService;
 import com.example.UBAKA.service.JobService;
 import com.example.UBAKA.service.MatchingService;
 import com.example.UBAKA.service.NotificationService;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,41 +29,50 @@ public class CustomerDashboardController {
     private final NotificationService notificationService;
     private final MatchingService matchingService;
     private final CustomerRepository customerRepository;
-
-    // Hardcoded for now, would typically come from Spring Security Context
-    private final Long CURRENT_CUSTOMER_ID = 1L;
+    private final UserRepository userRepository;
 
     public CustomerDashboardController(JobService jobService,
                                        ApplicationService applicationService,
                                        NotificationService notificationService,
                                        MatchingService matchingService,
-                                       CustomerRepository customerRepository) {
+                                       CustomerRepository customerRepository,
+                                       UserRepository userRepository) {
         this.jobService = jobService;
         this.applicationService = applicationService;
         this.notificationService = notificationService;
         this.matchingService = matchingService;
         this.customerRepository = customerRepository;
+        this.userRepository = userRepository;
+    }
+
+    /** Resolves the logged-in user's Customer record from the security context. */
+    private Customer getCustomer(Authentication auth) {
+        String email = auth.getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found: " + email));
+        return user.getCustomer();
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(Model model) {
-        Customer customer = customerRepository.findById(CURRENT_CUSTOMER_ID).orElse(null);
-        if (customer != null && customer.getUser() != null) {
-            model.addAttribute("customerName", customer.getUser().getFullName());
-        } else {
-            model.addAttribute("customerName", "Customer");
-        }
+    public String dashboard(Authentication auth, Model model) {
+        Customer customer = getCustomer(auth);
+        if (customer == null) return "redirect:/auth/login";
 
-        List<Job> jobs = jobService.getJobsByCustomer(CURRENT_CUSTOMER_ID);
-        
+        model.addAttribute("customerName", customer.getUser().getFullName());
+
+        List<Job> jobs = jobService.getJobsByCustomer(customer.getId());
+
         long totalJobs = jobs.size();
         long activeJobs = jobs.stream()
-                .filter(j -> j.getStatus() == JobStatus.OPEN || j.getStatus() == JobStatus.MATCHED || j.getStatus() == JobStatus.IN_PROGRESS || j.getStatus() == JobStatus.ASSIGNED)
+                .filter(j -> j.getStatus() == JobStatus.OPEN
+                        || j.getStatus() == JobStatus.MATCHED
+                        || j.getStatus() == JobStatus.IN_PROGRESS
+                        || j.getStatus() == JobStatus.ASSIGNED)
                 .count();
         long completedJobs = jobs.stream()
                 .filter(j -> j.getStatus() == JobStatus.COMPLETED)
                 .count();
-                
+
         List<Job> recentJobs = jobs.stream()
                 .sorted((j1, j2) -> j2.getCreatedAt().compareTo(j1.getCreatedAt()))
                 .limit(5)
@@ -75,8 +87,11 @@ public class CustomerDashboardController {
     }
 
     @GetMapping("/my-jobs")
-    public String myJobs(Model model) {
-        List<Job> jobs = jobService.getJobsByCustomer(CURRENT_CUSTOMER_ID);
+    public String myJobs(Authentication auth, Model model) {
+        Customer customer = getCustomer(auth);
+        if (customer == null) return "redirect:/auth/login";
+
+        List<Job> jobs = jobService.getJobsByCustomer(customer.getId());
         model.addAttribute("jobs", jobs);
         return "customer/my-jobs";
     }
@@ -88,13 +103,19 @@ public class CustomerDashboardController {
     }
 
     @PostMapping("/post-job")
-    public String submitPostJob(@ModelAttribute Job job) {
-        jobService.createJob(job, CURRENT_CUSTOMER_ID);
+    public String submitPostJob(@ModelAttribute Job job, Authentication auth) {
+        Customer customer = getCustomer(auth);
+        if (customer == null) return "redirect:/auth/login";
+
+        jobService.createJob(job, customer.getId());
         return "redirect:/customer/my-jobs";
     }
 
     @GetMapping("/engineers")
-    public String engineers(@RequestParam(required = false) Long jobId, Model model) {
+    public String engineers(@RequestParam(required = false) Long jobId, Authentication auth, Model model) {
+        Customer customer = getCustomer(auth);
+        if (customer == null) return "redirect:/auth/login";
+
         if (jobId != null) {
             Job job = jobService.getJobById(jobId).orElse(null);
             if (job != null) {
@@ -103,17 +124,21 @@ public class CustomerDashboardController {
                 model.addAttribute("applications", applications);
             }
         }
-        
-        // Also add list of customer's jobs so they can select one to see matched engineers
-        List<Job> customerJobs = jobService.getJobsByCustomer(CURRENT_CUSTOMER_ID);
+
+        List<Job> customerJobs = jobService.getJobsByCustomer(customer.getId());
         model.addAttribute("customerJobs", customerJobs);
-        
+
         return "customer/engineers";
     }
 
     @GetMapping("/notifications")
-    public String notifications(Model model) {
-        List<Notification> notifications = notificationService.getUserNotifications(CURRENT_CUSTOMER_ID);
+    public String notifications(Authentication auth, Model model) {
+        Customer customer = getCustomer(auth);
+        if (customer == null) return "redirect:/auth/login";
+
+        // Notifications are linked to User, not Customer — use user ID
+        Long userId = customer.getUser().getId();
+        List<Notification> notifications = notificationService.getUserNotifications(userId);
         model.addAttribute("notifications", notifications);
         return "customer/notifications";
     }
@@ -121,13 +146,13 @@ public class CustomerDashboardController {
     @PostMapping("/applications/{applicationId}/accept")
     public String acceptApplication(@PathVariable Long applicationId) {
         applicationService.acceptApplication(applicationId);
-        return "redirect:/customer/my-jobs"; // Or another appropriate redirect
+        return "redirect:/customer/my-jobs";
     }
 
     @PostMapping("/applications/{applicationId}/decline")
     public String declineApplication(@PathVariable Long applicationId) {
         applicationService.declineApplication(applicationId);
-        return "redirect:/customer/my-jobs"; // Or another appropriate redirect
+        return "redirect:/customer/my-jobs";
     }
 
     @PostMapping("/jobs/{jobId}/status")
