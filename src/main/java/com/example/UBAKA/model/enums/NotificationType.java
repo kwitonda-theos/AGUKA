@@ -7,5 +7,7 @@ public enum NotificationType {
     JOB_STARTED,
     JOB_COMPLETED,
     JOB_UPDATE,
-    REVIEW_REQUEST
+    REVIEW_REQUEST,
+    ACCOUNT_VERIFIED,
+    ACCOUNT_REJECTED
 }

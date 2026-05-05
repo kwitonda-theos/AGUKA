@@ -57,7 +57,7 @@
                         <div class="flex-1 flex flex-col gap-1.5">
                             <div class="flex items-center gap-4">
                                 <h3 class="text-[20px] font-bold" th:text="${app.engineer.user.fullName}">Eng. kwitonda</h3>
-                                <span th:if="${app.engineer.verificationStatus.name() == 'VERIFIED' or app.engineer.verificationStatus.name() == 'APPROVED'}"
+                                <span th:if="${app.engineer.verificationStatus.name() == 'VERIFIED'}"
                                       class="bg-[#A2E4B8] text-[#13773b] px-3.5 py-1 rounded-full text-xs font-bold tracking-wide"
                                       th:text="#{label.verified}">verified</span>
                             </div>

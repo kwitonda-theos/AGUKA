@@ -16,7 +16,7 @@ public interface MatchingService {
      * Matching criteria:
      * <ul>
      *   <li>Engineer specialization matches job's required specialization</li>
-     *   <li>Engineer verification status is APPROVED</li>
+     *   <li>Engineer verification status is VERIFIED</li>
      *   <li>Engineers in the same location are prioritized</li>
      *   <li>Results sorted by highest average rating first</li>
      * </ul>

@@ -40,7 +40,7 @@ public class MatchingServiceImpl implements MatchingService {
      * Algorithm:
      * <ol>
      *   <li>Fetch job by ID (throw if not found)</li>
-     *   <li>Query all APPROVED engineers with the matching specialization</li>
+     *   <li>Query all VERIFIED engineers with the matching specialization</li>
      *   <li>Sort results: same-location engineers first, then by highest rating</li>
      * </ol>
      */
@@ -56,7 +56,7 @@ public class MatchingServiceImpl implements MatchingService {
 
         // 2. Fetch verified engineers with matching specialization
         List<Engineer> candidates = engineerRepository
-                .findBySpecializationAndVerificationStatus(requiredSpecialization, VerificationStatus.APPROVED);
+                .findBySpecializationAndVerificationStatus(requiredSpecialization, VerificationStatus.VERIFIED);
 
         // 3. Sort: same-location first, then by highest average rating
         return candidates.stream()

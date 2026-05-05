@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/customer-head :: head('All Jobs - UBAKA Admin')}"></head>
+<body class="bg-surface dark:bg-darkbg text-primary dark:text-[#EAE3D3] flex min-h-screen overflow-x-hidden antialiased">
+
+    <th:block th:replace="~{fragments/admin-sidebar :: sidebar('jobs')}"></th:block>
+
+    <main class="ml-72 flex-1 p-12 flex flex-col animate-fade-in relative z-0">
+        <div class="fixed top-[-10%] right-[-5%] w-[40rem] h-[40rem] bg-white/40 blur-3xl rounded-full -z-10 pointer-events-none"></div>
+
+        <header class="mb-10">
+            <h1 class="text-3xl font-extrabold mb-2 tracking-tight">Job Oversight</h1>
+            <p class="text-muted text-base font-medium">Monitor all job postings and their current status.</p>
+        </header>
+
+        <section class="animate-slide-up">
+            <div class="glass-card rounded-2xl overflow-hidden">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-primary/5 dark:bg-white/5 border-b border-borderline/20">
+                            <th class="px-6 py-4 font-bold uppercase text-[12px] tracking-wider text-muted">Job Title</th>
+                            <th class="px-6 py-4 font-bold uppercase text-[12px] tracking-wider text-muted">Customer</th>
+                            <th class="px-6 py-4 font-bold uppercase text-[12px] tracking-wider text-muted">Specialization</th>
+                            <th class="px-6 py-4 font-bold uppercase text-[12px] tracking-wider text-muted">Status</th>
+                            <th class="px-6 py-4 font-bold uppercase text-[12px] tracking-wider text-muted">Created</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-borderline/10">
+                        <tr th:each="j : ${jobs}" class="hover:bg-primary/5 dark:hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-5 font-bold" th:text="${j.title}">Title</td>
+                            <td class="px-6 py-5 font-medium" th:text="${j.customer.user.fullName}">Customer</td>
+                            <td class="px-6 py-5 font-medium text-muted" th:text="${j.specializationRequired}">Specialization</td>
+                            <td class="px-6 py-5">
+                                <span th:if="${j.status.name() == 'OPEN'}" class="px-3 py-1 bg-green-500/10 text-green-600 rounded-full text-xs font-bold uppercase tracking-wider">Open</span>
+                                <span th:if="${j.status.name() == 'IN_PROGRESS'}" class="px-3 py-1 bg-blue-500/10 text-blue-600 rounded-full text-xs font-bold uppercase tracking-wider">In Progress</span>
+                                <span th:if="${j.status.name() == 'COMPLETED'}" class="px-3 py-1 bg-gray-500/10 text-gray-600 rounded-full text-xs font-bold uppercase tracking-wider">Completed</span>
+                                <span th:unless="${j.status.name() == 'OPEN' or j.status.name() == 'IN_PROGRESS' or j.status.name() == 'COMPLETED'}" 
+                                      class="px-3 py-1 bg-accent/10 text-accent rounded-full text-xs font-bold uppercase tracking-wider" th:text="${j.status}">Status</span>
+                            </td>
+                            <td class="px-6 py-5 text-xs font-bold text-muted uppercase tracking-widest" th:text="${#temporals.format(j.createdAt, 'dd MMM yyyy')}">Date</td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(jobs)}">
+                            <td colspan="5" class="px-6 py-12 text-center text-muted italic font-medium">No jobs posted yet.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/customer-head :: head('All Users - UBAKA Admin')}"></head>
+<body class="bg-surface dark:bg-darkbg text-primary dark:text-[#EAE3D3] flex min-h-screen overflow-x-hidden antialiased">
+
+    <th:block th:replace="~{fragments/admin-sidebar :: sidebar('users')}"></th:block>
+
+    <main class="ml-72 flex-1 p-12 flex flex-col animate-fade-in relative z-0">
+        <div class="fixed top-[-10%] right-[-5%] w-[40rem] h-[40rem] bg-white/40 blur-3xl rounded-full -z-10 pointer-events-none"></div>
+
+        <header class="mb-10">
+            <h1 class="text-3xl font-extrabold mb-2 tracking-tight">All Users</h1>
+            <p class="text-muted text-base font-medium">Manage all platform users (Engineers & Customers).</p>
+        </header>
+
+        <section class="animate-slide-up">
+            <div class="glass-card rounded-2xl overflow-hidden">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-primary/5 dark:bg-white/5 border-b border-borderline/20">
+                            <th class="px-6 py-4 font-bold uppercase text-[12px] tracking-wider text-muted">User</th>
+                            <th class="px-6 py-4 font-bold uppercase text-[12px] tracking-wider text-muted">Role</th>
+                            <th class="px-6 py-4 font-bold uppercase text-[12px] tracking-wider text-muted">Email</th>
+                            <th class="px-6 py-4 font-bold uppercase text-[12px] tracking-wider text-muted">Status</th>
+                            <th class="px-6 py-4 font-bold uppercase text-[12px] tracking-wider text-muted text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-borderline/10">
+                        <tr th:each="u : ${users}" class="hover:bg-primary/5 dark:hover:bg-white/5 transition-colors group">
+                            <td class="px-6 py-5 font-bold" th:text="${u.fullName}">Name</td>
+                            <td class="px-6 py-5">
+                                <span th:if="${u.role.name() == 'ADMIN'}" class="px-3 py-1 bg-purple-500/10 text-purple-600 rounded-full text-[10px] font-black uppercase tracking-widest">Admin</span>
+                                <span th:if="${u.role.name() == 'ENGINEER'}" class="px-3 py-1 bg-accent/10 text-accent rounded-full text-[10px] font-black uppercase tracking-widest">Engineer</span>
+                                <span th:if="${u.role.name() == 'CUSTOMER'}" class="px-3 py-1 bg-blue-500/10 text-blue-600 rounded-full text-[10px] font-black uppercase tracking-widest">Customer</span>
+                            </td>
+                            <td class="px-6 py-5 font-medium text-muted" th:text="${u.email}">email@example.com</td>
+                            <td class="px-6 py-5">
+                                <span th:if="${u.accountStatus.name() == 'ACTIVE'}" class="px-3 py-1 bg-green-500/10 text-green-600 rounded-full text-xs font-bold uppercase tracking-wider">Active</span>
+                                <span th:if="${u.accountStatus.name() == 'DISABLED'}" class="px-3 py-1 bg-gray-500/10 text-gray-600 rounded-full text-xs font-bold uppercase tracking-wider">Disabled</span>
+                                <span th:if="${u.accountStatus.name() == 'SUSPENDED'}" class="px-3 py-1 bg-red-500/10 text-red-600 rounded-full text-xs font-bold uppercase tracking-wider">Suspended</span>
+                            </td>
+                            <td class="px-6 py-5 text-right">
+                                <div th:if="${u.accountStatus.name() == 'ACTIVE' and u.role.name() != 'ADMIN'}">
+                                    <form th:action="@{/admin/users/disable}" method="post">
+                                        <input type="hidden" name="userId" th:value="${u.id}" />
+                                        <button type="submit" class="text-xs font-black text-red-500 hover:underline uppercase tracking-widest">Disable User</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>

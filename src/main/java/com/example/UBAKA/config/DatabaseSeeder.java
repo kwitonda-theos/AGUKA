@@ -10,9 +10,11 @@ import com.example.UBAKA.model.enums.VerificationStatus;
 import com.example.UBAKA.repository.CustomerRepository;
 import com.example.UBAKA.repository.EngineerRepository;
 import com.example.UBAKA.repository.UserRepository;
+import jakarta.persistence.EntityManager;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -20,10 +22,22 @@ import java.time.LocalDateTime;
 public class DatabaseSeeder {
 
     @Bean
+    @Transactional
     CommandLineRunner initDatabase(UserRepository userRepository,
                                    CustomerRepository customerRepository,
-                                   EngineerRepository engineerRepository) {
+                                   EngineerRepository engineerRepository,
+                                   EntityManager entityManager) {
         return args -> {
+            // Data Migration: Fix old 'APPROVED' status to 'VERIFIED'
+            try {
+                entityManager.createNativeQuery(
+                        "UPDATE engineers SET verification_status = 'VERIFIED' WHERE verification_status = 'APPROVED'"
+                ).executeUpdate();
+                System.out.println("✅ Data migration: 'APPROVED' statuses updated to 'VERIFIED'.");
+            } catch (Exception e) {
+                System.out.println("ℹ️ No migration needed or table not yet created.");
+            }
+
             // Check if data already exists to avoid duplicate entries on restart
             if (userRepository.count() == 0) {
                 
@@ -60,13 +74,36 @@ public class DatabaseSeeder {
                 engineer.setExperienceYears(5);
                 engineer.setLocation("Kigali");
                 engineer.setBio("Expert in fixing all kinds of plumbing issues.");
-                engineer.setVerificationStatus(VerificationStatus.APPROVED);
+                engineer.setVerificationStatus(VerificationStatus.VERIFIED);
                 engineer.setAvailabilityStatus(AvailabilityStatus.AVAILABLE);
                 engineerRepository.save(engineer);
 
-                System.out.println("✅ Database seeded with initial Customer and Engineer!");
+                // 5. Create an Admin User
+                User adminUser = new User();
+                adminUser.setFullName("Platform Administrator");
+                adminUser.setEmail("admin@aguka.com");
+                adminUser.setPhone("0780000000");
+                adminUser.setPassword("adminpassword");
+                adminUser.setRole(UserRole.ADMIN);
+                adminUser.setAccountStatus(AccountStatus.ACTIVE);
+                userRepository.save(adminUser);
+
+                System.out.println("✅ Database seeded with initial Customer, Engineer, and Admin!");
             } else {
                 System.out.println("✅ Database already contains data. Skipping initial seeding.");
+            }
+
+            // Ensure at least one Admin exists
+            if (userRepository.findByEmail("admin@aguka.com").isEmpty()) {
+                User adminUser = new User();
+                adminUser.setFullName("Platform Administrator");
+                adminUser.setEmail("admin@aguka.com");
+                adminUser.setPhone("0780000000");
+                adminUser.setPassword("adminpassword");
+                adminUser.setRole(UserRole.ADMIN);
+                adminUser.setAccountStatus(AccountStatus.ACTIVE);
+                userRepository.save(adminUser);
+                System.out.println("✅ Default Admin user created!");
             }
         };
     }

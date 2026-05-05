@@ -2,6 +2,7 @@ package com.example.UBAKA.model.enums;
 
 public enum VerificationStatus {
     PENDING,
-    APPROVED,
-    REJECTED
+    VERIFIED,
+    REJECTED,
+    APPROVED  // Legacy value - maps to VERIFIED, will be migrated away
 }

@@ -14,4 +14,6 @@ public interface EngineerRepository extends JpaRepository<Engineer, Long> {
     List<Engineer> findByAvailabilityStatus(AvailabilityStatus status);
 
     List<Engineer> findBySpecializationAndVerificationStatus(String specialization, VerificationStatus status);
+
+    long countByVerificationStatus(VerificationStatus status);
 }

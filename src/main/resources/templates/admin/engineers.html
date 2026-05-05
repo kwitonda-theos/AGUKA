@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/customer-head :: head('Engineers - UBAKA Admin')}"></head>
+<body class="bg-surface dark:bg-darkbg text-primary dark:text-[#EAE3D3] flex min-h-screen overflow-x-hidden antialiased">
+
+    <th:block th:replace="~{fragments/admin-sidebar :: sidebar('engineers')}"></th:block>
+
+    <main class="ml-72 flex-1 p-12 flex flex-col animate-fade-in relative z-0">
+        <div class="fixed top-[-10%] right-[-5%] w-[40rem] h-[40rem] bg-white/40 blur-3xl rounded-full -z-10 pointer-events-none"></div>
+
+        <header class="mb-10 flex justify-between items-end">
+            <div>
+                <h1 class="text-3xl font-extrabold mb-2 tracking-tight">Engineer Verification</h1>
+                <p class="text-muted text-base font-medium">Review and manage engineer credentials.</p>
+            </div>
+        </header>
+
+        <section class="animate-slide-up">
+            <div class="glass-card rounded-2xl overflow-hidden">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-primary/5 dark:bg-white/5 border-b border-borderline/20">
+                            <th class="px-6 py-4 font-bold uppercase text-[12px] tracking-wider text-muted">Engineer</th>
+                            <th class="px-6 py-4 font-bold uppercase text-[12px] tracking-wider text-muted">Specialization</th>
+                            <th class="px-6 py-4 font-bold uppercase text-[12px] tracking-wider text-muted">Experience</th>
+                            <th class="px-6 py-4 font-bold uppercase text-[12px] tracking-wider text-muted">Status</th>
+                            <th class="px-6 py-4 font-bold uppercase text-[12px] tracking-wider text-muted text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-borderline/10">
+                        <tr th:each="eng : ${engineers}" class="hover:bg-primary/5 dark:hover:bg-white/5 transition-colors group">
+                            <td class="px-6 py-5">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center font-bold text-accent" th:text="${#strings.substring(eng.user.fullName,0,1)}">J</div>
+                                    <div>
+                                        <div class="font-bold" th:text="${eng.user.fullName}">Name</div>
+                                        <div class="text-xs text-muted" th:text="${eng.user.email}">email@example.com</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-5 font-medium" th:text="${eng.specialization}">Plumbing</td>
+                            <td class="px-6 py-5 font-medium" th:text="${eng.experienceYears} + ' years'">5 years</td>
+                            <td class="px-6 py-5">
+                                <span th:if="${eng.verificationStatus.name() == 'VERIFIED'}" class="px-3 py-1 bg-green-500/10 text-green-600 rounded-full text-xs font-bold uppercase tracking-wider">Verified</span>
+                                <span th:if="${eng.verificationStatus.name() == 'APPROVED'}" class="px-3 py-1 bg-green-500/10 text-green-600 rounded-full text-xs font-bold uppercase tracking-wider">Verified</span>
+                                <span th:if="${eng.verificationStatus.name() == 'PENDING'}" class="px-3 py-1 bg-yellow-500/10 text-yellow-600 rounded-full text-xs font-bold uppercase tracking-wider animate-pulse">Pending</span>
+                                <span th:if="${eng.verificationStatus.name() == 'REJECTED'}" class="px-3 py-1 bg-red-500/10 text-red-600 rounded-full text-xs font-bold uppercase tracking-wider">Rejected</span>
+                            </td>
+                            <td class="px-6 py-5 text-right">
+                                <div th:if="${eng.verificationStatus.name() == 'PENDING'}" class="flex justify-end gap-2">
+                                    <form th:action="@{/admin/engineers/approve}" method="post">
+                                        <input type="hidden" name="engineerId" th:value="${eng.id}" />
+                                        <button type="submit" class="px-4 py-2 bg-accent text-white rounded-lg text-xs font-bold hover:bg-primary transition-all">Approve</button>
+                                    </form>
+                                    <form th:action="@{/admin/engineers/reject}" method="post">
+                                        <input type="hidden" name="engineerId" th:value="${eng.id}" />
+                                        <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-lg text-xs font-bold hover:bg-red-600 transition-all">Reject</button>
+                                    </form>
+                                </div>
+                                <div th:unless="${eng.verificationStatus.name() == 'PENDING'}" class="text-muted text-xs font-bold italic">No actions needed</div>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(engineers)}">
+                            <td colspan="5" class="px-6 py-12 text-center text-muted italic font-medium">No engineers found in the system.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>
