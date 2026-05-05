@@ -17,7 +17,7 @@
 
     const dashboard = {
         title: "Engineer Dashboard - AGUKA",
-        nav: ["Dashboard", "Browse jobs", "Projects", "Notifications"],
+        nav: ["Dashboard", "Browse jobs", "Projects", "Notifications", "Get Verified"],
         profile: "Profile",
         welcome: "Welcome back, Engineer's name",
         subtitle: "Here's what's happening with your account",
@@ -40,7 +40,7 @@
 
     const projects = {
         title: "Engineer Projects - AGUKA",
-        nav: ["Dashboard", "Browse jobs", "Projects", "Notifications"],
+        nav: ["Dashboard", "Browse jobs", "Projects", "Notifications", "Get Verified"],
         profile: "Profile",
         heading: "Browse jobs",
         subtitle: "Find and search for posted jobs tailored to you.",
@@ -67,7 +67,7 @@
 
     const notifications = {
         title: "Engineer Notifications - AGUKA",
-        nav: ["Dashboard", "Browse jobs", "Projects", "Notifications"],
+        nav: ["Dashboard", "Browse jobs", "Projects", "Notifications", "Get Verified"],
         profile: "Profile",
         heading: "Notifications",
         subtitle: "See who contacted you or responses from the jobs you applied to.",
@@ -87,6 +87,8 @@
 
     const verification = {
         title: "Engineer Verification - AGUKA",
+        nav: ["Dashboard", "Browse jobs", "Projects", "Notifications", "Get Verified"],
+        profile: "Profile",
         heading: "Engineer Profile",
         subtitle: "Complete your profile to get matched with construction jobs.",
         status: "verified / under preview / unverified",
@@ -188,7 +190,7 @@
         const copy = { en: dashboard, fr: {
             ...dashboard,
             title: "Tableau de bord de l'ingénieur - AGUKA",
-            nav: ["Tableau de bord", "Parcourir les offres", "Projets", "Notifications"],
+            nav: ["Tableau de bord", "Parcourir les offres", "Projets", "Notifications", "Se faire vérifier"],
             profile: "Profil",
             welcome: "Bon retour, nom de l'ingénieur",
             subtitle: "Voici ce qui se passe sur votre compte",
@@ -210,7 +212,7 @@
         }, rw: {
             ...dashboard,
             title: "Ikibaho cy'umuhanga - AGUKA",
-            nav: ["Ahabanza", "Sura imirimo", "Imishinga", "Amatangazo"],
+            nav: ["Ahabanza", "Sura imirimo", "Imishinga", "Amatangazo", "Emezwa"],
             profile: "Umwirondoro",
             welcome: "Mwakire neza, izina ry'umuhanga",
             subtitle: "Dore ibibera kuri konte yawe",
@@ -265,7 +267,7 @@
         const copy = { en: projects, fr: {
             ...projects,
             title: "Projets de l'ingénieur - AGUKA",
-            nav: ["Tableau de bord", "Parcourir les offres", "Projets", "Notifications"],
+            nav: ["Tableau de bord", "Parcourir les offres", "Projets", "Notifications", "Se faire vérifier"],
             profile: "Profil",
             heading: "Parcourir les offres",
             subtitle: "Trouvez et recherchez des emplois publiés qui vous correspondent.",
@@ -291,7 +293,7 @@
         }, rw: {
             ...projects,
             title: "Imishinga y'umuhanga - AGUKA",
-            nav: ["Ahabanza", "Sura imirimo", "Imishinga", "Amatangazo"],
+            nav: ["Ahabanza", "Sura imirimo", "Imishinga", "Amatangazo", "Emezwa"],
             profile: "Umwirondoro",
             heading: "Sura imirimo",
             subtitle: "Shaka kandi ushakishe imirimo yashyizweho ihuye nawe.",
@@ -361,7 +363,7 @@
         const copy = { en: notifications, fr: {
             ...notifications,
             title: "Notifications de l'ingénieur - AGUKA",
-            nav: ["Tableau de bord", "Parcourir les offres", "Projets", "Notifications"],
+            nav: ["Tableau de bord", "Parcourir les offres", "Projets", "Notifications", "Se faire vérifier"],
             profile: "Profil",
             heading: "Notifications",
             subtitle: "Voyez qui vous a contacté ou les réponses aux emplois auxquels vous avez postulé.",
@@ -380,7 +382,7 @@
         }, rw: {
             ...notifications,
             title: "Amatangazo y'umuhanga - AGUKA",
-            nav: ["Ahabanza", "Sura imirimo", "Imishinga", "Amatangazo"],
+            nav: ["Ahabanza", "Sura imirimo", "Imishinga", "Amatangazo", "Emezwa"],
             profile: "Umwirondoro",
             heading: "Amatangazo",
             subtitle: "Reba uwakuvugishije cyangwa ibisubizo by'imirimo wasabye.",
@@ -429,6 +431,8 @@
         const copy = { en: verification, fr: {
             ...verification,
             title: "Vérification de l'ingénieur - AGUKA",
+            nav: ["Tableau de bord", "Parcourir les offres", "Projets", "Notifications", "Se faire vérifier"],
+            profile: "Profil",
             heading: "Profil de l'ingénieur",
             subtitle: "Complétez votre profil pour être mis en relation avec des emplois de construction.",
             status: "vérifié / en aperçu / non vérifié",
@@ -486,6 +490,8 @@
         }, rw: {
             ...verification,
             title: "Igenzura ry'umuhanga - AGUKA",
+            nav: ["Ahabanza", "Sura imirimo", "Imishinga", "Amatangazo", "Emezwa"],
+            profile: "Umwirondoro",
             heading: "Umwirondoro w'umuhanga",
             subtitle: "Uzuza umwirondoro wawe kugira ngo uhuze n'imirimo y'ubwubatsi.",
             status: "byemejwe / biri gusuzumwa / bitaremezwa",
@@ -542,6 +548,8 @@
             submit: "ohereza kugira ngo igenzurwe",
         } }[language] || verification;
 
+        const navLabels = document.querySelectorAll(".nav-item span");
+        const profileLabel = document.querySelector(".profile-cta span");
         const heading = document.querySelector(".hero h1");
         const subtitle = document.querySelector(".hero p");
         const status = document.querySelector(".status");
@@ -556,6 +564,8 @@
 
         document.documentElement.lang = language;
         document.title = copy.title;
+        if (navLabels) navLabels.forEach((label, index) => { if (copy.nav && copy.nav[index]) label.textContent = copy.nav[index]; });
+        if (profileLabel && copy.profile) profileLabel.textContent = copy.profile;
         if (heading) heading.textContent = copy.heading;
         if (subtitle) subtitle.textContent = copy.subtitle;
         if (status) status.textContent = copy.status;
