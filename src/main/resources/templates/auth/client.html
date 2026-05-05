@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -227,6 +227,8 @@
                 </div>
 
                 <!-- Form -->
+                <div th:if="${error}" class="form-field mb-4 px-4 py-3 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm font-semibold" th:text="${error}">
+                </div>
                 <form action="/register/client" method="post" class="space-y-4">
 
                     <!-- Email -->
