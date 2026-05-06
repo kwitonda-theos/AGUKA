@@ -45,6 +45,21 @@ public class CustomerDashboardController {
         return user.getCustomer();
     }
 
+    @ModelAttribute("unreadNotificationsCount")
+    public long unreadNotificationsCount(Authentication auth) {
+        if (auth == null || !auth.isAuthenticated()) return 0;
+        try {
+            Customer customer = getCustomer(auth);
+            if (customer != null && customer.getUser() != null) {
+                return notificationService.getUserNotifications(customer.getUser().getId())
+                        .stream().filter(n -> Boolean.FALSE.equals(n.getIsRead())).count();
+            }
+        } catch (Exception e) {
+            return 0;
+        }
+        return 0;
+    }
+
     @GetMapping("/dashboard")
     public String dashboard(Authentication auth, Model model) {
         Customer customer = getCustomer(auth);
@@ -133,6 +148,15 @@ public class CustomerDashboardController {
         List<Notification> notifications = notificationService.getUserNotifications(userId);
         model.addAttribute("notifications", notifications);
         return "customer/notifications";
+    }
+
+    @PostMapping("/notifications/{id}/read")
+    public String markNotificationAsRead(@PathVariable Long id, Authentication auth) {
+        Customer customer = getCustomer(auth);
+        if (customer == null) return "redirect:/auth/login";
+
+        notificationService.markAsRead(id);
+        return "redirect:/customer/notifications";
     }
 
     @PostMapping("/applications/{applicationId}/accept")
