@@ -862,38 +862,49 @@
             <h2 class="title">Browse jobs</h2>
             <p class="subtitle">Find and search for posted jobs tailored to you.</p>
 
-            <section class="filters animate-slide-up" aria-label="Job filters">
+            <section class="filters animate-slide-up" aria-label="Job filters" id="select-filters">
                 <div class="filter">
                     <label for="location">Location</label>
                     <div class="select-wrap">
-                        <select id="location">
-                            <option>kicukiro</option>
-                            <option>nyarugenge</option>
-                            <option>gasabo</option>
+                        <select id="location" class="job-filter">
+                            <option value="ALL">All</option>
+                            <option value="kicukiro">kicukiro</option>
+                            <option value="nyarugenge">nyarugenge</option>
+                            <option value="gasabo">gasabo</option>
                         </select>
                     </div>
                 </div>
                 <div class="filter">
                     <label for="budget">Budget</label>
                     <div class="select-wrap">
-                        <select id="budget">
-                            <option>10,000,000 - 20,000,000</option>
-                            <option>20,000,000 - 50,000,000</option>
-                            <option>50,000,000+</option>
+                        <select id="budget" class="job-filter">
+                            <option value="ALL">All</option>
+                            <option value="10000000-20000000">10,000,000 - 20,000,000</option>
+                            <option value="20000000-50000000">20,000,000 - 50,000,000</option>
+                            <option value="50000000-">50,000,000+</option>
                         </select>
                     </div>
                 </div>
                 <div class="filter">
                     <label for="specialization">Specialization</label>
                     <div class="select-wrap">
-                        <select id="specialization">
-                            <option>civil engineer</option>
-                            <option>architect</option>
-                            <option>structural engineer</option>
+                        <select id="specialization" class="job-filter">
+                            <option value="ALL">All</option>
+                            <option value="civil engineer">civil engineer</option>
+                            <option value="architect">architect</option>
+                            <option value="structural engineer">structural engineer</option>
                         </select>
                     </div>
                 </div>
             </section>
+
+            <div class="inline-flex bg-[#e2d9cd] p-1.5 rounded-xl mt-4 mb-8 shadow-inner self-start animate-slide-up" id="status-filter-bar">
+                <button class="status-btn active px-6 py-2.5 rounded-lg text-sm font-bold text-primary bg-white shadow-sm hover:shadow-md transition-all" data-status-filter="ALL">ALL</button>
+                <button class="status-btn px-6 py-2.5 rounded-lg text-sm font-bold text-muted hover:text-primary hover:bg-white/40 transition-colors" data-status-filter="OPEN">Open</button>
+                <button class="status-btn px-6 py-2.5 rounded-lg text-sm font-bold text-muted hover:text-primary hover:bg-white/40 transition-colors" data-status-filter="APPLIED">Applied</button>
+                <button class="status-btn px-6 py-2.5 rounded-lg text-sm font-bold text-muted hover:text-primary hover:bg-white/40 transition-colors" data-status-filter="IN_PROGRESS">In progress</button>
+                <button class="status-btn px-6 py-2.5 rounded-lg text-sm font-bold text-muted hover:text-primary hover:bg-white/40 transition-colors" data-status-filter="COMPLETED">Completed</button>
+            </div>
 
             <h3 class="section-title animate-slide-up" style="animation-delay: 0.1s;">jobs</h3>
 
@@ -901,38 +912,73 @@
                 <p class="animate-slide-up" style="animation-delay: 0.15s; margin-top: 1rem;">No active jobs available at the moment.</p>
             </th:block>
 
-            <article class="job-card animate-slide-up" th:each="job, iterStat : ${openJobs}" th:style="|animation-delay: ${0.15 + iterStat.index * 0.05}s;|">
-                <div class="card-header">
-                    <div class="card-header-left">
-                        <span class="badge-open" th:text="${job.status.name()}">Open</span>
-                        <span class="card-date" th:text="'Created on ' + ${#temporals.format(job.createdAt, 'dd/MM/yyyy')}">Created on --</span>
+            <div id="jobs-list">
+                <!-- Open Jobs -->
+                <article class="job-item job-card animate-slide-up" th:each="job, iterStat : ${openJobs}" th:style="|animation-delay: ${0.15 + iterStat.index * 0.05}s;|" 
+                         th:attr="data-status=${job.status.name()}, data-location=${job.location}, data-budget=${job.budget}, data-specialization=${job.specializationRequired}">
+                    <div class="card-header">
+                        <div class="card-header-left">
+                            <span class="badge-open" th:text="${job.status.name()}">Open</span>
+                            <span class="card-date" th:text="'Created on ' + ${#temporals.format(job.createdAt, 'dd/MM/yyyy')}">Created on --</span>
+                        </div>
+                        <span class="budget-label">Budget</span>
                     </div>
-                    <span class="budget-label">Budget</span>
-                </div>
-                <div class="card-middle">
-                    <p class="job-name" th:text="${job.title}">Job Name</p>
-                    <p class="job-price" th:text="${#numbers.formatDecimal(job.budget, 0, 'COMMA', 0, 'POINT')} + ' FRW'">0 FRW</p>
-                </div>
-                <div class="card-footer">
-                    <div class="card-meta">
-                        <span class="meta-loc">
-                            <svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
-                            <span th:text="${job.location}">Location</span>
-                        </span>
-                        <span th:text="${job.status.name()}">Status</span>
+                    <div class="card-middle">
+                        <p class="job-name" th:text="${job.title}">Job Name</p>
+                        <p class="job-price" th:text="${#numbers.formatDecimal(job.budget, 0, 'COMMA', 0, 'POINT')} + ' FRW'">0 FRW</p>
                     </div>
-                    <div class="card-actions">
-                        <form th:action="@{/engineer/applications}" method="post">
-                            <input type="hidden" name="jobId" th:value="${job.id}" />
-                            <button class="btn btn-primary" type="submit">Apply now</button>
-                        </form>
-                        <button class="btn-ghost" type="button" 
-                                th:attr="onclick=|openModal('${#strings.escapeJavaScript(job.title)}', '${#temporals.format(job.createdAt, 'dd/MM/yyyy')}', '${#strings.escapeJavaScript(job.description)}', '${#strings.escapeJavaScript(job.specializationRequired)}', '${#strings.escapeJavaScript(job.location)}', '${#numbers.formatDecimal(job.budget, 0, 'COMMA', 0, 'POINT')} FRW', '${job.preferredDate != null ? #temporals.format(job.preferredDate, 'dd/MM/yyyy') : 'N/A'}', '${job.assignment != null ? #strings.escapeJavaScript(job.assignment.engineer.user.fullName) : 'Not Assigned'}')|">
-                            View Details
-                        </button>
+                    <div class="card-footer">
+                        <div class="card-meta">
+                            <span class="meta-loc">
+                                <svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+                                <span th:text="${job.location}">Location</span>
+                            </span>
+                            <span th:text="${job.status.name()}">Status</span>
+                        </div>
+                        <div class="card-actions">
+                            <form th:action="@{/engineer/applications}" method="post">
+                                <input type="hidden" name="jobId" th:value="${job.id}" />
+                                <button class="btn btn-primary" type="submit">Apply now</button>
+                            </form>
+                            <button class="btn-ghost" type="button" 
+                                    th:attr="onclick=|openModal('${#strings.escapeJavaScript(job.title)}', '${#temporals.format(job.createdAt, 'dd/MM/yyyy')}', '${#strings.escapeJavaScript(job.description)}', '${#strings.escapeJavaScript(job.specializationRequired)}', '${#strings.escapeJavaScript(job.location)}', '${#numbers.formatDecimal(job.budget, 0, 'COMMA', 0, 'POINT')} FRW', '${job.preferredDate != null ? #temporals.format(job.preferredDate, 'dd/MM/yyyy') : 'N/A'}', '${job.assignment != null ? #strings.escapeJavaScript(job.assignment.engineer.user.fullName) : 'Not Assigned'}', '${job.id}', '${job.status.name()}', ${job.customerAgreedToFinish}, ${job.engineerAgreedToFinish})|">
+                                View Details
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </article>
+                </article>
+
+                <!-- Applied/Assigned Jobs -->
+                <article class="job-item job-card animate-slide-up" th:each="app, iterStat : ${applications}" th:style="|animation-delay: ${0.15 + (iterStat.index + openJobs.size()) * 0.05}s;|" 
+                         th:attr="data-status=${app.job.status.name() == 'OPEN' ? 'APPLIED' : app.job.status.name()}, data-location=${app.job.location}, data-budget=${app.job.budget}, data-specialization=${app.job.specializationRequired}">
+                    <div class="card-header">
+                        <div class="card-header-left">
+                            <span class="badge-open" th:style="${app.job.status.name() == 'OPEN' ? 'background: #C0D1FF; border-color: #2f54eb; color: #2f54eb;' : ''}" th:text="${app.job.status.name() == 'OPEN' ? 'Applied' : app.job.status.name()}">Status</span>
+                            <span class="card-date" th:text="'Created on ' + ${#temporals.format(app.job.createdAt, 'dd/MM/yyyy')}">Created on --</span>
+                        </div>
+                        <span class="budget-label">Budget</span>
+                    </div>
+                    <div class="card-middle">
+                        <p class="job-name" th:text="${app.job.title}">Job Name</p>
+                        <p class="job-price" th:text="${#numbers.formatDecimal(app.job.budget, 0, 'COMMA', 0, 'POINT')} + ' FRW'">0 FRW</p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-meta">
+                            <span class="meta-loc">
+                                <svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+                                <span th:text="${app.job.location}">Location</span>
+                            </span>
+                            <span th:text="${app.job.status.name()}">Status</span>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-ghost" type="button" 
+                                    th:attr="onclick=|openModal('${#strings.escapeJavaScript(app.job.title)}', '${#temporals.format(app.job.createdAt, 'dd/MM/yyyy')}', '${#strings.escapeJavaScript(app.job.description)}', '${#strings.escapeJavaScript(app.job.specializationRequired)}', '${#strings.escapeJavaScript(app.job.location)}', '${#numbers.formatDecimal(app.job.budget, 0, 'COMMA', 0, 'POINT')} FRW', '${app.job.preferredDate != null ? #temporals.format(app.job.preferredDate, 'dd/MM/yyyy') : 'N/A'}', '${app.job.assignment != null ? #strings.escapeJavaScript(app.job.assignment.engineer.user.fullName) : 'Not Assigned'}', '${app.job.id}', '${app.job.status.name()}', ${app.job.customerAgreedToFinish}, ${app.job.engineerAgreedToFinish})|">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                </article>
+            </div>
 
         </section>
     </main>
@@ -995,9 +1041,15 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <div class="modal-footer-left">
-                    <svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M3 20a5 5 0 0 1 10 0"/><path d="M11 20a5 5 0 0 1 10 0"/></svg>
-                    View Engineers
+                <div class="flex items-center gap-4">
+                    <form id="modal-agree-form" method="post" action="#" style="display: none;">
+                        <button type="submit" class="btn btn-primary" style="background: #13773b; border-color: #13773b;">
+                            Agree to Finish
+                        </button>
+                    </form>
+                    <span id="modal-waiting-text" style="display: none; font-size: 0.85rem; font-weight: 700; color: #b86e00;">
+                        Waiting for Customer to agree...
+                    </span>
                 </div>
                 <button class="btn-close-modal" onclick="closeModal()">Close</button>
             </div>
@@ -1007,7 +1059,7 @@
 <script>
     (function () {
         // Modal Logic
-        window.openModal = function(title, date, desc, spec, loc, budget, prefDate, engineer) {
+        window.openModal = function(title, date, desc, spec, loc, budget, prefDate, engineer, jobId, status, custAgreed, engAgreed) {
             document.getElementById('modalTitle').textContent = title;
             document.getElementById('modalDate').textContent = 'Created on ' + date;
             document.getElementById('modalDesc').textContent = desc;
@@ -1016,6 +1068,21 @@
             document.getElementById('modalBudget').textContent = budget;
             document.getElementById('modalPrefDate').textContent = prefDate;
             document.getElementById('modalEngineer').textContent = engineer;
+
+            const agreeForm = document.getElementById('modal-agree-form');
+            const waitingText = document.getElementById('modal-waiting-text');
+            agreeForm.style.display = 'none';
+            waitingText.style.display = 'none';
+
+            if (status === 'IN_PROGRESS') {
+                if (!engAgreed) {
+                    agreeForm.action = '/engineer/jobs/' + jobId + '/agree-finish';
+                    agreeForm.style.display = 'block';
+                } else {
+                    waitingText.style.display = 'block';
+                }
+            }
+
             document.getElementById('jobModal').classList.add('open');
         };
         window.closeModal = function() {
@@ -1027,6 +1094,68 @@
                 if (e.target === this) closeModal();
             });
         }
+
+        // Filtering Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const statusBtns = document.querySelectorAll('.status-btn');
+            const selects = document.querySelectorAll('.job-filter');
+            const jobs = document.querySelectorAll('.job-item');
+
+            let currentStatus = 'ALL';
+
+            function applyFilters() {
+                const locFilter = document.getElementById('location').value.toLowerCase();
+                const specFilter = document.getElementById('specialization').value.toLowerCase();
+                const budgetFilter = document.getElementById('budget').value;
+
+                jobs.forEach(job => {
+                    const status = job.dataset.status;
+                    const loc = job.dataset.location ? job.dataset.location.toLowerCase() : '';
+                    const spec = job.dataset.specialization ? job.dataset.specialization.toLowerCase() : '';
+                    const budget = parseFloat(job.dataset.budget) || 0;
+
+                    let statusMatch = (currentStatus === 'ALL' || status === currentStatus);
+                    let locMatch = (locFilter === 'all' || loc.includes(locFilter));
+                    let specMatch = (specFilter === 'all' || spec.includes(specFilter));
+                    
+                    let budgetMatch = true;
+                    if (budgetFilter !== 'ALL') {
+                        const parts = budgetFilter.split('-');
+                        const min = parseFloat(parts[0]);
+                        if (parts.length > 1 && parts[1]) {
+                            const max = parseFloat(parts[1]);
+                            budgetMatch = budget >= min && budget <= max;
+                        } else {
+                            budgetMatch = budget >= min;
+                        }
+                    }
+
+                    if (statusMatch && locMatch && specMatch && budgetMatch) {
+                        job.style.display = 'block';
+                    } else {
+                        job.style.display = 'none';
+                    }
+                });
+            }
+
+            statusBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    statusBtns.forEach(b => {
+                        b.classList.remove('text-primary', 'bg-white', 'shadow-sm', 'active');
+                        b.classList.add('text-muted', 'hover:text-primary', 'hover:bg-white/40');
+                    });
+                    btn.classList.add('text-primary', 'bg-white', 'shadow-sm', 'active');
+                    btn.classList.remove('text-muted', 'hover:text-primary', 'hover:bg-white/40');
+                    
+                    currentStatus = btn.dataset.statusFilter;
+                    applyFilters();
+                });
+            });
+
+            selects.forEach(sel => {
+                sel.addEventListener('change', applyFilters);
+            });
+        });
     })();
 </script>
 <script src="/assets/engineer-language.js"></script>

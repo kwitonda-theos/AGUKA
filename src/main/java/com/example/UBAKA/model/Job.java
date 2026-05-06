@@ -50,6 +50,12 @@ public class Job {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "customer_agreed_to_finish", nullable = false)
+    private boolean customerAgreedToFinish = false;
+
+    @Column(name = "engineer_agreed_to_finish", nullable = false)
+    private boolean engineerAgreedToFinish = false;
+
     @OneToMany(mappedBy = "job", cascade = CascadeType.ALL)
     @JsonIgnoreProperties({"job"})
     private List<JobApplication> jobApplications = new ArrayList<>();
@@ -232,5 +238,21 @@ public class Job {
 
     public void setDispute(Dispute dispute) {
         this.dispute = dispute;
+    }
+
+    public boolean isCustomerAgreedToFinish() {
+        return customerAgreedToFinish;
+    }
+
+    public void setCustomerAgreedToFinish(boolean customerAgreedToFinish) {
+        this.customerAgreedToFinish = customerAgreedToFinish;
+    }
+
+    public boolean isEngineerAgreedToFinish() {
+        return engineerAgreedToFinish;
+    }
+
+    public void setEngineerAgreedToFinish(boolean engineerAgreedToFinish) {
+        this.engineerAgreedToFinish = engineerAgreedToFinish;
     }
 }

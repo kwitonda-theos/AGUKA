@@ -190,4 +190,13 @@ public class EngineerDashboardController {
         applicationService.applyToJob(jobId, engineer.getId());
         return "redirect:/engineer/projects";
     }
+
+    @PostMapping("/jobs/{jobId}/agree-finish")
+    public String agreeToFinishJob(@PathVariable Long jobId, Authentication auth) {
+        Engineer engineer = resolveEngineer(auth);
+        if (engineer == null) return "redirect:/auth/login";
+
+        jobService.markJobAsAgreedToFinish(jobId, false);
+        return "redirect:/engineer/projects";
+    }
 }
