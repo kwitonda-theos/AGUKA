@@ -61,18 +61,7 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutUrl("/auth/logout")
                         .logoutSuccessUrl("/auth/login?logout")
-                        .permitAll()
-                // )
-                // .exceptionHandling(ex -> ex
-                // .accessDeniedHandler((request, response, accessDeniedException) -> {
-                // // Invalidates corrupted sessions caused by DevTools hot-reloads
-                // // and forces the user back to the login page instead of throwing a 403.
-                // if (request.getSession(false) != null) {
-                // request.getSession().invalidate();
-                // }
-                // response.sendRedirect("/auth/login?expired");
-                // })
-                );
+                        .permitAll());
 
         return http.build();
     }
