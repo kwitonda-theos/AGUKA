@@ -64,6 +64,15 @@ public class EngineerDashboardController {
             model.addAttribute("engineer", engineer);
             model.addAttribute("engineerName", engineer.getUser().getFullName());
             model.addAttribute("profileStatus", engineer.getVerificationStatus().name());
+            // add unread notifications count for sidebar badge
+            try {
+                Long userId = engineer.getUser().getId();
+                List<Notification> notifs = notificationService.getUserNotifications(userId);
+                long unread = notifs.stream().filter(n -> n.getIsRead() == null || !n.getIsRead()).count();
+                model.addAttribute("unreadCount", unread);
+            } catch (Exception ignored) {
+                model.addAttribute("unreadCount", 0);
+            }
         }
     }
 
@@ -175,6 +184,18 @@ public class EngineerDashboardController {
         List<Notification> notifications = notificationService.getUserNotifications(userId);
         model.addAttribute("notifications", notifications);
         return "Engineer/notifications";
+    }
+
+    @PostMapping("/notifications/{id}/read")
+    public String markNotificationRead(@PathVariable("id") Long id, Authentication auth) {
+        Engineer engineer = resolveEngineer(auth);
+        Long userId = engineer.getUser().getId();
+        Notification notification = notificationService.getNotificationById(id);
+        if (!notification.getUser().getId().equals(userId)) {
+            return "redirect:/engineer/notifications";
+        }
+        notificationService.markAsRead(id);
+        return "redirect:/engineer/notifications";
     }
 
     @GetMapping("/settings")
