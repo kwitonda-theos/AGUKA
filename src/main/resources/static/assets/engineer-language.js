@@ -147,7 +147,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.documentElement.lang = language;
 
                 // Nav
-                const navLabels = document.querySelectorAll(".nav-item span");
+                const navLabels = Array.from(document.querySelectorAll(".nav-item > span"))
+                    .filter((label) => !label.classList.contains("notif-badge"));
                 navLabels.forEach((label, index) => {
                     if (copy.nav[index]) label.textContent = copy.nav[index];
                 });

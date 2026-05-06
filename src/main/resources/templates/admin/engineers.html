@@ -68,10 +68,11 @@
                                         <input type="hidden" name="engineerId" th:value="${eng.id}" />
                                         <button type="submit" class="px-4 py-2 bg-accent text-white rounded-lg text-xs font-bold hover:bg-primary transition-all">Approve</button>
                                     </form>
-                                    <form th:action="@{/admin/engineers/reject}" method="post">
-                                        <input type="hidden" name="engineerId" th:value="${eng.id}" />
-                                        <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-lg text-xs font-bold hover:bg-red-600 transition-all">Reject</button>
-                                    </form>
+                                    <button type="button"
+                                            th:attr="onclick=|openRejectModal('${eng.id}', '${#strings.escapeJavaScript(eng.user.fullName)}')|"
+                                            class="px-4 py-2 bg-red-500 text-white rounded-lg text-xs font-bold hover:bg-red-600 transition-all">
+                                        Reject
+                                    </button>
                                 </div>
                                 <div th:unless="${eng.verificationStatus.name() == 'PENDING'}" class="text-muted text-xs font-bold italic">No actions needed</div>
                             </td>
@@ -84,6 +85,62 @@
             </div>
         </section>
     </main>
+
+    <dialog id="rejectModal" class="rounded-2xl p-0 w-full max-w-lg bg-white dark:bg-darkcard text-primary dark:text-[#EAE3D3] shadow-2xl backdrop:bg-black/50">
+        <form th:action="@{/admin/engineers/reject}" method="post" class="p-6 flex flex-col gap-4">
+            <input type="hidden" name="engineerId" id="rejectEngineerId" />
+            <div>
+                <h2 class="text-xl font-extrabold tracking-tight mb-1">Reject engineer</h2>
+                <p class="text-sm text-muted">Add the reason you are rejecting <span id="rejectEngineerName" class="font-semibold text-primary dark:text-[#EAE3D3]"></span>.</p>
+            </div>
+
+            <label class="flex flex-col gap-2 text-sm font-semibold text-muted">
+                Reason for rejection
+                <textarea name="rejectionReason"
+                          rows="4"
+                          required
+                          placeholder="For example: missing documents, invalid documents, or incomplete verification details"
+                          class="w-full px-4 py-3 rounded-xl border border-borderline/20 bg-white dark:bg-white/5 text-sm text-primary dark:text-[#EAE3D3] placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-red-500/40 resize-none"></textarea>
+            </label>
+
+            <div class="flex justify-end gap-3 pt-2">
+                <button type="button" onclick="closeRejectModal()" class="px-4 py-2 rounded-lg border border-borderline/20 text-sm font-bold hover:bg-primary/5 dark:hover:bg-white/5 transition-all">Cancel</button>
+                <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-lg text-sm font-bold hover:bg-red-600 transition-all">Send rejection</button>
+            </div>
+        </form>
+    </dialog>
+
+    <script>
+        function openRejectModal(engineerId, engineerName) {
+            const modal = document.getElementById('rejectModal');
+            const engineerIdInput = document.getElementById('rejectEngineerId');
+            const engineerNameLabel = document.getElementById('rejectEngineerName');
+
+            if (engineerIdInput) engineerIdInput.value = engineerId;
+            if (engineerNameLabel) engineerNameLabel.textContent = engineerName;
+            if (modal && typeof modal.showModal === 'function') {
+                modal.showModal();
+            }
+        }
+
+        function closeRejectModal() {
+            const modal = document.getElementById('rejectModal');
+            if (modal && typeof modal.close === 'function') {
+                modal.close();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('rejectModal');
+            if (modal) {
+                modal.addEventListener('click', (event) => {
+                    if (event.target === modal) {
+                        closeRejectModal();
+                    }
+                });
+            }
+        });
+    </script>
 
 </body>
 </html>
