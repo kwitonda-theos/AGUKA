@@ -51,4 +51,14 @@ public interface JobService {
      * @return an Optional containing the job if found
      */
     Optional<Job> getJobById(Long jobId);
+
+    /**
+     * Marks a job as agreed to finish by either the customer or the engineer.
+     * If both have agreed, the status automatically updates to COMPLETED.
+     *
+     * @param jobId      the ID of the job
+     * @param isCustomer true if the customer is agreeing, false if the engineer is agreeing
+     * @return the updated job
+     */
+    Job markJobAsAgreedToFinish(Long jobId, boolean isCustomer);
 }

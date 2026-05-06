@@ -152,4 +152,13 @@ public class CustomerDashboardController {
         jobService.updateJobStatus(jobId, status);
         return "redirect:/customer/my-jobs";
     }
+
+    @PostMapping("/jobs/{jobId}/agree-finish")
+    public String agreeToFinishJob(@PathVariable Long jobId, Authentication auth) {
+        Customer customer = getCustomer(auth);
+        if (customer == null) return "redirect:/auth/login";
+
+        jobService.markJobAsAgreedToFinish(jobId, true);
+        return "redirect:/customer/my-jobs";
+    }
 }

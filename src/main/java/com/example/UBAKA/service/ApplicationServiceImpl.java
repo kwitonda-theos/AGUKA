@@ -10,6 +10,10 @@ import com.example.UBAKA.model.enums.NotificationType;
 import com.example.UBAKA.repository.EngineerRepository;
 import com.example.UBAKA.repository.JobApplicationRepository;
 import com.example.UBAKA.repository.JobRepository;
+import com.example.UBAKA.repository.AssignmentRepository;
+import com.example.UBAKA.model.Assignment;
+import com.example.UBAKA.model.enums.AssignmentStatus;
+import com.example.UBAKA.model.enums.JobStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,15 +31,18 @@ public class ApplicationServiceImpl implements ApplicationService {
     private final EngineerRepository engineerRepository;
     private final JobApplicationRepository jobApplicationRepository;
     private final NotificationService notificationService;
+    private final AssignmentRepository assignmentRepository;
 
     public ApplicationServiceImpl(JobRepository jobRepository,
                                   EngineerRepository engineerRepository,
                                   JobApplicationRepository jobApplicationRepository,
-                                  NotificationService notificationService) {
+                                  NotificationService notificationService,
+                                  AssignmentRepository assignmentRepository) {
         this.jobRepository = jobRepository;
         this.engineerRepository = engineerRepository;
         this.jobApplicationRepository = jobApplicationRepository;
         this.notificationService = notificationService;
+        this.assignmentRepository = assignmentRepository;
     }
 
     /**
@@ -101,11 +108,34 @@ public class ApplicationServiceImpl implements ApplicationService {
         // 3. Save
         JobApplication updatedApplication = jobApplicationRepository.save(application);
 
-        // 4. Notify engineer
+        // 4. Decline other pending applications
+        Job job = application.getJob();
+        List<JobApplication> otherApps = jobApplicationRepository.findByJobId(job.getId());
+        for (JobApplication other : otherApps) {
+            if (!other.getId().equals(applicationId) && other.getApplicationStatus() == ApplicationStatus.PENDING) {
+                other.setApplicationStatus(ApplicationStatus.DECLINED);
+                jobApplicationRepository.save(other);
+            }
+        }
+
+        // 5. Update Job status to IN_PROGRESS
+        job.setStatus(JobStatus.IN_PROGRESS);
+        jobRepository.save(job);
+
+        // 6. Create Assignment in IN_PROGRESS status
+        Assignment assignment = new Assignment();
+        assignment.setJob(job);
+        assignment.setEngineer(application.getEngineer());
+        assignment.setStatus(AssignmentStatus.IN_PROGRESS);
+        assignment.setAssignedAt(LocalDateTime.now());
+        assignment.setStartedAt(LocalDateTime.now());
+        assignmentRepository.save(assignment);
+
+        // 7. Notify engineer
         notificationService.createNotification(
                 application.getEngineer().getUser().getId(),
-                "Application Accepted",
-                "Your application for \"" + application.getJob().getTitle() + "\" has been accepted.",
+                "Application Accepted & Job Started",
+                "Your application for \"" + application.getJob().getTitle() + "\" has been accepted and the job is now in progress.",
                 NotificationType.ENGINEER_SELECTED
         );
 

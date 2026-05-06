@@ -97,4 +97,26 @@ public class JobServiceImpl implements JobService {
     public Optional<Job> getJobById(Long jobId) {
         return jobRepository.findById(jobId);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Transactional
+    public Job markJobAsAgreedToFinish(Long jobId, boolean isCustomer) {
+        Job job = jobRepository.findById(jobId)
+                .orElseThrow(() -> new ResourceNotFoundException("Job", jobId));
+
+        if (isCustomer) {
+            job.setCustomerAgreedToFinish(true);
+        } else {
+            job.setEngineerAgreedToFinish(true);
+        }
+
+        if (job.isCustomerAgreedToFinish() && job.isEngineerAgreedToFinish()) {
+            job.setStatus(JobStatus.COMPLETED);
+        }
+
+        return jobRepository.save(job);
+    }
 }

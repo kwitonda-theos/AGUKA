@@ -92,10 +92,20 @@
                    class="flex items-center gap-2 text-sm font-bold text-primary hover:text-accent underline-offset-4 hover:underline transition-all">
                     <i class="ri-user-settings-line"></i> View Engineers
                 </a>
-                <button onclick="closeModal()"
-                        class="px-6 py-2.5 bg-primary text-white text-sm font-bold rounded-lg shadow hover:bg-accent hover:-translate-y-0.5 hover:shadow-md transition-all">
-                    Close
-                </button>
+                <div class="flex items-center gap-4">
+                    <form id="modal-agree-form" method="post" action="#" class="hidden">
+                        <button type="submit" class="px-6 py-2.5 bg-[#13773b] text-white text-sm font-bold rounded-lg shadow hover:bg-[#0f602f] transition-all">
+                            Agree to Finish
+                        </button>
+                    </form>
+                    <span id="modal-waiting-text" class="hidden text-sm font-bold text-[#b86e00]">
+                        Waiting for Engineer to agree...
+                    </span>
+                    <button onclick="closeModal()"
+                            class="px-6 py-2.5 bg-primary text-white text-sm font-bold rounded-lg shadow hover:bg-accent hover:-translate-y-0.5 hover:shadow-md transition-all">
+                        Close
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -111,18 +121,18 @@
         </header>
 
         <!-- Filters Section -->
-        <div class="inline-flex bg-[#e2d9cd] p-1.5 rounded-xl mb-12 shadow-inner self-start animate-slide-up">
-            <button class="px-6 py-2.5 rounded-lg text-sm font-bold text-primary bg-white shadow-sm hover:shadow-md transition-all" th:text="#{my_jobs.filters.all}">ALL</button>
-            <button class="px-6 py-2.5 rounded-lg text-sm font-bold text-muted hover:text-primary hover:bg-white/40 transition-colors" th:text="#{my_jobs.filters.open}">Open</button>
-            <button class="px-6 py-2.5 rounded-lg text-sm font-bold text-muted hover:text-primary hover:bg-white/40 transition-colors" th:text="#{my_jobs.filters.in_progress}">In progress</button>
-            <button class="px-6 py-2.5 rounded-lg text-sm font-bold text-muted hover:text-primary hover:bg-white/40 transition-colors" th:text="#{my_jobs.filters.completed}">Completed</button>
-            <button class="px-6 py-2.5 rounded-lg text-sm font-bold text-muted hover:text-primary hover:bg-white/40 transition-colors" th:text="#{my_jobs.filters.cancelled}">Cancelled</button>
+        <div class="inline-flex bg-[#e2d9cd] p-1.5 rounded-xl mb-12 shadow-inner self-start animate-slide-up" id="filter-bar">
+            <button class="filter-btn active px-6 py-2.5 rounded-lg text-sm font-bold text-primary bg-white shadow-sm hover:shadow-md transition-all" data-filter="ALL" th:text="#{my_jobs.filters.all}">ALL</button>
+            <button class="filter-btn px-6 py-2.5 rounded-lg text-sm font-bold text-muted hover:text-primary hover:bg-white/40 transition-colors" data-filter="OPEN" th:text="#{my_jobs.filters.open}">Open</button>
+            <button class="filter-btn px-6 py-2.5 rounded-lg text-sm font-bold text-muted hover:text-primary hover:bg-white/40 transition-colors" data-filter="IN_PROGRESS" th:text="#{my_jobs.filters.in_progress}">In progress</button>
+            <button class="filter-btn px-6 py-2.5 rounded-lg text-sm font-bold text-muted hover:text-primary hover:bg-white/40 transition-colors" data-filter="COMPLETED" th:text="#{my_jobs.filters.completed}">Completed</button>
+            <button class="filter-btn px-6 py-2.5 rounded-lg text-sm font-bold text-muted hover:text-primary hover:bg-white/40 transition-colors" data-filter="CANCELLED" th:text="#{my_jobs.filters.cancelled}">Cancelled</button>
         </div>
 
         <!-- Jobs List -->
-        <div class="flex flex-col gap-6 max-w-5xl animate-slide-up" style="animation-delay: 0.1s;">
+        <div class="flex flex-col gap-6 max-w-5xl animate-slide-up" style="animation-delay: 0.1s;" id="jobs-list">
 
-            <div th:each="job : ${jobs}" class="glass-card rounded-2xl p-7 flex flex-col gap-5 group">
+            <div th:each="job : ${jobs}" class="job-item glass-card rounded-2xl p-7 flex flex-col gap-5 group" th:attr="data-status=${job.status.name()}">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center gap-4">
                         <span th:if="${job.status.name() == 'IN_PROGRESS'}" class="px-3 py-1 bg-[#C0D1FF] text-[#2f54eb] rounded-md text-xs font-bold uppercase tracking-wide">In progress</span>
@@ -170,7 +180,10 @@
                                 data-preferred-date=${job.preferredDate != null ? #temporals.format(job.preferredDate, 'dd/MM/yyyy') : 'Not specified'},
                                 data-created=${#temporals.format(job.createdAt, 'dd/MM/yyyy')},
                                 data-engineer=${job.assignment != null ? job.assignment.engineer.user.fullName : 'Awaiting Contractor'},
-                                data-engineers-url=@{/customer/engineers(jobId=${job.id})}"
+                                data-engineers-url=@{/customer/engineers(jobId=${job.id})},
+                                data-customer-agreed=${job.customerAgreedToFinish},
+                                data-engineer-agreed=${job.engineerAgreedToFinish},
+                                data-agree-url=@{/customer/jobs/{id}/agree-finish(id=${job.id})}"
                             onclick="openModal(this)"
                             th:text="#{button.view_details}">View Details</button>
                     </div>
@@ -212,6 +225,21 @@
             badge.textContent = status.replace('_', ' ');
             badge.className = 'px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wide ' + (statusStyles[status] || 'bg-[#CFD1D4] text-[#5c6269]');
 
+            const agreeForm = document.getElementById('modal-agree-form');
+            const waitingText = document.getElementById('modal-waiting-text');
+            agreeForm.classList.add('hidden');
+            waitingText.classList.add('hidden');
+
+            if (status === 'IN_PROGRESS') {
+                const customerAgreed = btn.dataset.customerAgreed === 'true';
+                if (!customerAgreed) {
+                    agreeForm.action = btn.dataset.agreeUrl;
+                    agreeForm.classList.remove('hidden');
+                } else {
+                    waitingText.classList.remove('hidden');
+                }
+            }
+
             modal.classList.remove('opacity-0', 'pointer-events-none');
             modal.classList.add('opacity-100');
             card.classList.remove('scale-95');
@@ -230,6 +258,33 @@
             card.classList.add('scale-95');
             document.body.style.overflow = '';
         }
+
+        // Filter Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const jobs = document.querySelectorAll('.job-item');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Update active styles
+                    filterBtns.forEach(b => {
+                        b.classList.remove('text-primary', 'bg-white', 'shadow-sm', 'active');
+                        b.classList.add('text-muted', 'hover:text-primary', 'hover:bg-white/40');
+                    });
+                    btn.classList.add('text-primary', 'bg-white', 'shadow-sm', 'active');
+                    btn.classList.remove('text-muted', 'hover:text-primary', 'hover:bg-white/40');
+
+                    const filter = btn.dataset.filter;
+                    jobs.forEach(job => {
+                        if (filter === 'ALL' || job.dataset.status === filter) {
+                            job.style.display = 'flex';
+                        } else {
+                            job.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
 
         // Close on Escape key
         document.addEventListener('keydown', e => {
