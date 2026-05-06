@@ -1,7 +1,6 @@
 package com.example.UBAKA.service;
 
 import com.example.UBAKA.model.Notification;
-import com.example.UBAKA.model.User;
 import com.example.UBAKA.model.enums.NotificationType;
 
 import java.util.List;

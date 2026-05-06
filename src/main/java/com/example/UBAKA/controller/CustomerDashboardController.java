@@ -6,11 +6,9 @@ import com.example.UBAKA.model.JobApplication;
 import com.example.UBAKA.model.Notification;
 import com.example.UBAKA.model.User;
 import com.example.UBAKA.model.enums.JobStatus;
-import com.example.UBAKA.repository.CustomerRepository;
 import com.example.UBAKA.repository.UserRepository;
 import com.example.UBAKA.service.ApplicationService;
 import com.example.UBAKA.service.JobService;
-import com.example.UBAKA.service.MatchingService;
 import com.example.UBAKA.service.NotificationService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -27,21 +25,15 @@ public class CustomerDashboardController {
     private final JobService jobService;
     private final ApplicationService applicationService;
     private final NotificationService notificationService;
-    private final MatchingService matchingService;
-    private final CustomerRepository customerRepository;
     private final UserRepository userRepository;
 
     public CustomerDashboardController(JobService jobService,
                                        ApplicationService applicationService,
                                        NotificationService notificationService,
-                                       MatchingService matchingService,
-                                       CustomerRepository customerRepository,
                                        UserRepository userRepository) {
         this.jobService = jobService;
         this.applicationService = applicationService;
         this.notificationService = notificationService;
-        this.matchingService = matchingService;
-        this.customerRepository = customerRepository;
         this.userRepository = userRepository;
     }
 
