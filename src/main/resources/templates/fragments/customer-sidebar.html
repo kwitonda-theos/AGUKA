@@ -39,9 +39,14 @@
         </li>
         <li>
             <a href="/customer/notifications" 
-               th:class="'nav-link ' + (${activeTab == 'notifications'} ? 'nav-link-active' : '')">
-                <i class="ri-notification-3-line mr-4 text-xl opacity-90"></i>
-                <span th:text="#{nav.notifications}">Notifications</span>
+               th:class="'nav-link flex items-center justify-between ' + (${activeTab == 'notifications'} ? 'nav-link-active' : '')">
+                <div class="flex items-center">
+                    <i class="ri-notification-3-line mr-4 text-xl opacity-90"></i>
+                    <span th:text="#{nav.notifications}">Notifications</span>
+                </div>
+                <span th:if="${unreadNotificationsCount != null and unreadNotificationsCount > 0}" 
+                      class="bg-accent text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm" 
+                      th:text="${unreadNotificationsCount}">3</span>
             </a>
         </li>
     </ul>

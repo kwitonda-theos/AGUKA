@@ -30,9 +30,14 @@
                     <div class="text-[15px] text-muted italic font-medium" th:text="${notif.message}">
                         Notification message content here.
                     </div>
-                    <button class="text-2xl text-primary opacity-80 hover:opacity-100 hover:text-red-600 transition-colors bg-white/50 hover:bg-red-50 p-2 rounded-full -mr-2 -mb-2" title="Delete notification">
-                        <i class="ri-delete-bin-5-fill"></i>
-                    </button>
+                    <form th:action="@{/customer/notifications/{id}/read(id=${notif.id})}" method="post" class="m-0 p-0" th:if="${!notif.isRead}">
+                        <button type="submit" class="text-2xl text-primary opacity-80 hover:opacity-100 hover:text-[#13773b] transition-colors bg-white/50 hover:bg-[#A2E4B8]/50 p-2 rounded-full -mr-2 -mb-2 cursor-pointer" title="Mark as read">
+                            <i class="ri-check-line font-bold"></i>
+                        </button>
+                    </form>
+                    <div th:if="${notif.isRead}" class="text-2xl text-[#13773b] opacity-50 p-2 rounded-full -mr-2 -mb-2 cursor-default" title="Read">
+                        <i class="ri-check-double-line font-bold"></i>
+                    </div>
                 </div>
             </div>
 
