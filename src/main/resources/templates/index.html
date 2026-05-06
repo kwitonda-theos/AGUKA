@@ -26,15 +26,195 @@
             --border:  #06392F;
         }
 
+        body[data-theme="dark"] {
+            --green:   #0f6654;
+            --green-d: #042a22;
+            --beige:   #202328;
+            --beige-d: #e1dac9;
+            --white:   #ffffff;
+            --text:    #e8f1ed;
+            --muted:   #a7b8b3;
+            --border:  #2b6f61;
+        }
+
         body {
             font-family: 'Inter', system-ui, sans-serif;
             background: var(--beige);
             color: var(--text);
             -webkit-font-smoothing: antialiased;
+            transition: background-color 200ms ease, color 200ms ease;
         }
 
         a { text-decoration: none; color: inherit; }
         img { display: block; max-width: 100%; }
+
+        /* ── PAGE CONTROLS ── */
+        .page-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-right: 1rem;
+        }
+
+        .control {
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            border-radius: 999px;
+            height: 2.4rem;
+            padding: 0 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: transform 150ms ease;
+        }
+
+        .control:hover {
+            transform: translateY(-1px);
+        }
+
+        .control svg {
+            width: 1.2rem;
+            height: 1.2rem;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            flex-shrink: 0;
+        }
+
+        .control-theme {
+            width: 2.8rem;
+            justify-content: center;
+            padding: 0;
+        }
+
+        .control-theme svg {
+            color: var(--white);
+            stroke: var(--white);
+        }
+
+        body[data-theme="dark"] .control-theme svg {
+            color: var(--white);
+            stroke: var(--white);
+        }
+
+        .control-language {
+            padding-right: 0.55rem;
+            position: relative;
+        }
+
+        .control-language svg {
+            color: var(--white);
+            stroke: var(--white);
+        }
+
+        .language-initials {
+            margin-left: 0.3rem;
+            font-weight: 800;
+            color: var(--white);
+            font-size: 0.85rem;
+            letter-spacing: 0.02em;
+        }
+
+        body[data-theme="dark"] .control-language svg {
+            color: var(--white);
+            stroke: var(--white);
+        }
+
+        .language-select {
+            border: none;
+            background: transparent;
+            color: inherit;
+            font: inherit;
+            font-weight: 700;
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+            padding-right: 0.2rem;
+            display: none;
+        }
+
+        .control-language:hover .language-menu {
+            display: block;
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .language-menu {
+            position: absolute;
+            top: 3.4rem;
+            right: 0;
+            min-width: 170px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(10,10,10,0.12);
+            overflow: hidden;
+            display: none;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 40;
+        }
+
+        .control-language::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            height: 1rem;
+        }
+
+        .language-menu .language-selected {
+            padding: 12px 14px;
+            color: var(--green);
+            font-weight: 800;
+            background: transparent;
+        }
+
+        .language-menu ul {
+            list-style: none;
+            margin: 0;
+            padding: 6px 0;
+        }
+
+        .language-menu li {
+            padding: 9px 14px;
+            cursor: pointer;
+            color: #4b5560;
+        }
+
+        .language-menu li:hover {
+            background: #f5f5f5;
+        }
+
+        .language-menu li.active {
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        body[data-theme="dark"] .control {
+            background: rgba(16, 18, 20, 0.28);
+            border-color: rgba(232, 241, 237, 0.18);
+            color: #eef4f1;
+        }
+
+        body[data-theme="dark"] .language-menu {
+            background: var(--beige);
+            color: var(--text);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.28);
+        }
+
+        body[data-theme="dark"] .language-menu li:hover {
+            background: rgba(0,0,0,0.03);
+        }
 
         /* ── NAVBAR ── */
         nav {
@@ -47,6 +227,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
+            transition: background-color 200ms ease;
         }
 
         .nav-left {
@@ -83,16 +264,8 @@
         }
 
         .nav-lang {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            color: var(--white);
-            cursor: pointer;
+            display: none;
         }
-
-        .nav-lang svg { width: 20px; height: 20px; fill: var(--white); }
 
         .nav-login {
             font-size: 0.95rem;
@@ -214,6 +387,7 @@
             width: 320px;
             text-align: center;
             background: var(--beige);
+            transition: background-color 200ms ease, border-color 200ms ease;
         }
 
         .role-card h3 {
@@ -336,22 +510,22 @@
         footer {
             background: var(--green);
             color: var(--white);
-            padding: 80px 100px;
+            padding: 48px 80px;
         }
 
         .footer-top {
-            margin-bottom: 60px;
+            margin-bottom: 32px;
         }
 
         .footer-logo {
-            font-size: 1.8rem;
+            font-size: 1.4rem;
             font-weight: 700;
             color: var(--white);
-            margin-bottom: 20px;
+            margin-bottom: 8px;
         }
 
         .footer-contact {
-            font-size: 1rem;
+            font-size: 0.9rem;
             color: var(--white);
             margin-bottom: 0;
         }
@@ -364,23 +538,23 @@
             display: flex;
             justify-content: space-between;
             gap: 60px;
-            margin-bottom: 80px;
+            margin-bottom: 32px;
         }
 
         .footer-col { flex: 1; }
 
         .footer-col h4 {
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             font-weight: 700;
             color: var(--white);
-            margin-bottom: 24px;
+            margin-bottom: 16px;
         }
 
         .footer-col ul { list-style: none; }
         .footer-col ul li {
-            font-size: 1rem;
+            font-size: 0.9rem;
             color: var(--white);
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             opacity: 0.9;
             transition: opacity .15s;
             cursor: pointer;
@@ -389,10 +563,11 @@
 
         .footer-bottom {
             text-align: center;
-            font-size: 1rem;
+            font-size: 0.85rem;
             color: var(--white);
             opacity: 0.8;
-            padding-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         /* ── RESPONSIVE ── */
@@ -404,6 +579,50 @@
             .two-col.reverse { flex-direction: column; }
             .footer-cols { flex-wrap: wrap; }
         }
+
+        /* ── DARK THEME ── */
+        body[data-theme="dark"] .hero-text h1,
+        body[data-theme="dark"] .hero-text p,
+        body[data-theme="dark"] .section-center h2,
+        body[data-theme="dark"] .role-card h3,
+        body[data-theme="dark"] .role-card p,
+        body[data-theme="dark"] .two-col-text h2,
+        body[data-theme="dark"] .two-col-text p,
+        body[data-theme="dark"] .how-section h2,
+        body[data-theme="dark"] .how-step-title,
+        body[data-theme="dark"] .how-step p,
+        body[data-theme="dark"] .trust-section h2,
+        body[data-theme="dark"] .trust-section .stat,
+        body[data-theme="dark"] .link-plain {
+            color: var(--text);
+        }
+
+        body[data-theme="dark"] .role-card {
+            background: #2a2f35;
+            border-color: #3a4048;
+        }
+
+        body[data-theme="dark"] .btn-outline-dark {
+            color: var(--text);
+            border-color: #3a4048;
+        }
+
+        body[data-theme="dark"] .btn-outline-dark:hover {
+            background: var(--green);
+            color: var(--white);
+        }
+
+        body[data-theme="dark"] footer {
+            background: #000000;
+        }
+
+        body[data-theme="dark"] .footer-col ul li {
+            opacity: 1;
+        }
+
+        body[data-theme="dark"] .page-controls {
+            filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.3));
+        }
     </style>
 </head>
 <body>
@@ -413,15 +632,33 @@
     <div class="nav-left">
         <div class="nav-logo">UBAKA</div>
         <ul class="nav-links">
-            <li><a href="/auth/role-confirmation">Hire engieers</a></li>
-            <li><a href="/auth/login">Find jobs</a></li>
-            <li><a href="#how">About AGUKA</a></li>
+            <li><a href="/auth/role-confirmation" data-i18n="nav-hire">Hire engineers</a></li>
+            <li><a href="/auth/login" data-i18n="nav-find">Find jobs</a></li>
+            <li><a href="#how" data-i18n="nav-about">About UBAKA</a></li>
         </ul>
     </div>
     <div class="nav-right">
-        <div class="nav-lang">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm7.931 9h-2.764a14.67 14.67 0 0 0-1.792-6.243A8.013 8.013 0 0 1 19.931 11zM12.53 4.027c1.035 1.364 2.427 3.78 2.627 6.973H9.03c.139-2.596.994-5.028 2.451-6.974.172-.01.344-.026.519-.026.179 0 .354.016.53.027zm-3.842.7C7.704 6.618 7.136 8.761 7.01 11H4.069a8.013 8.013 0 0 1 4.619-6.273zM4.069 13h2.941c.12 2.162.623 4.232 1.598 6.01A8.016 8.016 0 0 1 4.069 13zm7.822 6.967c-1.547-1.971-2.166-4.343-2.263-6.967h4.945c-.085 2.501-.632 4.88-2.152 6.984-.176.012-.35.016-.521.016-.181 0-.361-.007-.009-.033zm3.684-.7c.945-1.725 1.479-3.8 1.608-6.267h2.941a8.016 8.016 0 0 1-4.549 6.267z"/></svg>
-            EN
+        <div class="page-controls" aria-label="Page utilities">
+            <div class="control control-language" aria-label="Translate page">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h8"></path><path d="M8 3v2"></path><path d="M6 5c.8 4 3.3 7 6 9"></path><path d="M10 5c0 3.8-2 7.2-5 10"></path><path d="M14 19h6"></path><path d="M16.5 13l3.5 6"></path><path d="M18.2 16h-3.4"></path></svg>
+                <span class="language-initials">EN</span>
+                <select class="language-select" aria-label="Select language">
+                    <option value="en" selected>EN</option>
+                    <option value="fr">FR</option>
+                    <option value="rw">RW</option>
+                </select>
+                <div class="language-menu" aria-hidden="false">
+                    <div class="language-selected">English</div>
+                    <ul>
+                        <li data-lang="en" class="active">English</li>
+                        <li data-lang="fr">Français</li>
+                        <li data-lang="rw">Kinyarwanda</li>
+                    </ul>
+                </div>
+            </div>
+            <button class="control control-theme" type="button" aria-label="Toggle theme">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.2 8.2 0 0 1 9.5 4a7.7 7.7 0 1 0 10.5 10.5Z"></path></svg>
+            </button>
         </div>
         <a href="/auth/login" class="nav-login">log in</a>
         <a href="/auth/role-confirmation" class="nav-signup">sign up</a>
@@ -431,11 +668,11 @@
 <!-- ══════════════════════════ HERO ══════════════════════════ -->
 <section class="hero">
     <div class="hero-text">
-        <h1>Build with trusted engineers across Rwanda</h1>
-        <p>AGUKA connects clients with verified engineers to plan, build, and manage construction projects safely and efficiently.</p>
+        <h1 data-i18n="hero-title">Build with trusted engineers across Rwanda</h1>
+        <p data-i18n="hero-desc">UBAKA connects clients with verified engineers to plan, build, and manage construction projects safely and efficiently.</p>
         <div class="hero-actions">
-            <a href="/auth/role-confirmation" class="btn-solid">Post a job offer</a>
-            <a href="/auth/login"            class="btn-outline-dark">Apply for offer</a>
+            <a href="/auth/role-confirmation" class="btn-solid" data-i18n="hero-post">Post a job offer</a>
+            <a href="/auth/login" class="btn-outline-dark" data-i18n="hero-apply">Apply for offer</a>
         </div>
     </div>
     <div class="hero-image">
@@ -445,19 +682,19 @@
 
 <!-- ══════════════════════════ WHAT ARE YOU HERE TO DO ══════════════════════════ -->
 <section class="section-center">
-    <h2>What are you here to do?</h2>
+    <h2 data-i18n="section-what">What are you here to do?</h2>
     <div class="role-cards">
         <!-- Hire an engineer -->
         <div class="role-card">
-            <h3>Hire an enginner</h3>
-            <p>Post a construction job and get matched with verified professionals.</p>
-            <a href="/auth/role-confirmation" class="btn-solid">Post a job</a>
+            <h3 data-i18n="card-hire-title">Hire an engineer</h3>
+            <p data-i18n="card-hire-desc">Post a construction job and get matched with verified professionals.</p>
+            <a href="/auth/role-confirmation" class="btn-solid" data-i18n="card-hire-btn">Post a job</a>
         </div>
         <!-- Find construction jobs -->
         <div class="role-card">
-            <h3>Find construction jobs</h3>
-            <p>Apply for jobs, get hired, and earn securely, fairly.</p>
-            <a href="/auth/login" class="btn-solid">Find jobs</a>
+            <h3 data-i18n="card-find-title">Find construction jobs</h3>
+            <p data-i18n="card-find-desc">Apply for jobs, get hired, and earn securely, fairly.</p>
+            <a href="/auth/login" class="btn-solid" data-i18n="card-find-btn">Find jobs</a>
         </div>
     </div>
 </section>
@@ -465,8 +702,8 @@
 <!-- ══════════════════════════ LOG IN SECTION ══════════════════════════ -->
 <section class="two-col">
     <div class="two-col-text">
-        <h2>Log in to see your account information</h2>
-        <p>View past contracts, tailored suggestions, online sites, and more.</p>
+        <h2 data-i18n="section-login">Log in to see your account information</h2>
+        <p data-i18n="section-login-desc">View past contracts, tailored suggestions, online sites, and more.</p>
         <div class="inline-actions">
             <a href="/auth/login" class="btn-solid">Log in</a>
             <a href="/auth/role-confirmation" class="link-plain">Create an account</a>
@@ -483,8 +720,8 @@
         <img src="/icons/3.svg" alt="Engineer with clipboard illustration"/>
     </div>
     <div class="two-col-text">
-        <h2>Get or apply for offers from different clients</h2>
-        <p>Make money from your own projects or build for others using AGUKA</p>
+        <h2 data-i18n="section-apply">Get or apply for offers from different clients</h2>
+        <p data-i18n="section-apply-desc">Make money from your own projects or build for others using UBAKA</p>
         <div class="inline-actions">
             <a href="/auth/role-confirmation" class="btn-solid">Get started</a>
             <a href="/auth/login" class="link-plain">or Log in</a>
@@ -495,8 +732,8 @@
 <!-- ══════════════════════════ BUILD YOUR HOME ══════════════════════════ -->
 <section class="two-col">
     <div class="two-col-text">
-        <h2>Build your home with trusted, verified engineers</h2>
-        <p>Find good and trustworthy engineers with AGUKA from the comfort of your home.</p>
+        <h2 data-i18n="section-build">Build your home with trusted, verified engineers</h2>
+        <p data-i18n="section-build-desc">Find good and trustworthy engineers with UBAKA from the comfort of your home.</p>
         <div class="inline-actions">
             <a href="/auth/role-confirmation" class="btn-solid">Get started</a>
             <a href="/auth/login" class="link-plain">or Log in</a>
@@ -509,27 +746,27 @@
 
 <!-- ══════════════════════════ HOW AGUKA WORKS ══════════════════════════ -->
 <section class="how-section" id="how">
-    <h2>How UBAKA works</h2>
+    <h2 data-i18n="section-how">How UBAKA works</h2>
     <div class="how-steps">
         <div class="how-step">
-            <div class="how-step-title">1. Post or apply for a job</div>
-            <p>Clients post projects, engineers apply or get matched.</p>
+            <div class="how-step-title" data-i18n="how-step1">1. Post or apply for a job</div>
+            <p data-i18n="how-step1-desc">Clients post projects, engineers apply or get matched.</p>
         </div>
         <div class="how-step">
-            <div class="how-step-title">2. Get matched & chat</div>
-            <p>Review profiles, communicate, and agree on terms.</p>
+            <div class="how-step-title" data-i18n="how-step2">2. Get matched & chat</div>
+            <p data-i18n="how-step2-desc">Review profiles, communicate, and agree on terms.</p>
         </div>
         <div class="how-step">
-            <div class="how-step-title">3. Build with confidence</div>
-            <p>Work with verified professionals.</p>
+            <div class="how-step-title" data-i18n="how-step3">3. Build with confidence</div>
+            <p data-i18n="how-step3-desc">Work with verified professionals.</p>
         </div>
     </div>
 </section>
 
 <!-- ══════════════════════════ TRUSTED STRIP ══════════════════════════ -->
 <section class="trust-section">
-    <h2>Trusted by builders and homeowners</h2>
-    <div class="stat">10+ Verified engineers</div>
+    <h2 data-i18n="trust-title">Trusted by builders and homeowners</h2>
+    <div class="stat" data-i18n="trust-stat">10+ Verified engineers</div>
 </section>
 
 <!-- ══════════════════════════ FOOTER ══════════════════════════ -->
@@ -571,6 +808,9 @@
         © 2026 UBAKA Technologies
     </div>
 </footer>
+
+<script src="/assets/engineer-theme.js"></script>
+<script src="/assets/index-language.js"></script>
 
 </body>
 </html>
