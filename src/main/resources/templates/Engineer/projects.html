@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Browse Jobs - UBAKA</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <style>
         :root {
             --bg: #0f1114;
@@ -901,7 +901,7 @@
                 <p class="animate-slide-up" style="animation-delay: 0.15s; margin-top: 1rem;">No active jobs available at the moment.</p>
             </th:block>
 
-            <article class="job-card animate-slide-up" th:each="job, iterStat : ${openJobs}" th:style="'animation-delay: ' + (0.15 + iterStat.index * 0.05) + 's;'">
+            <article class="job-card animate-slide-up" th:each="job, iterStat : ${openJobs}" th:style="|animation-delay: ${0.15 + iterStat.index * 0.05}s;|">
                 <div class="card-header">
                     <div class="card-header-left">
                         <span class="badge-open" th:text="${job.status.name()}">Open</span>

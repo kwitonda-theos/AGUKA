@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Notifications - UBAKA</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <style>
         :root {
             --bg: #0f1114;
@@ -436,7 +436,7 @@
 <body>
     <div class="page-controls" aria-label="Page utilities">
         <div class="control control-language" aria-label="Translate page">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h8"></path><path d="M8 3v2"></path><path d="M6 5c.8 4 3.3 7 6 9"></path><path d="M10 5c0 3.8-2 7.2-5 10"></path><path d="M14 19h6"></path><path d="M16.5 13l3.5 6"></path><path d="M18.2 16h-3.4"></path></svg>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h8" /><path d="M8 3v2" /><path d="M6 5c.8 4 3.3 7 6 9" /><path d="M10 5c0 3.8-2 7.2-5 10" /><path d="M14 19h6" /><path d="M16.5 13l3.5 6" /><path d="M18.2 16h-3.4" /></svg>
             <span class="language-initials">EN</span>
             <select class="language-select" aria-label="Select language">
                 <option value="en" selected>EN</option>
@@ -453,7 +453,7 @@
             </div>
         </div>
         <button class="control control-theme" type="button" aria-label="Toggle theme">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.2 8.2 0 0 1 9.5 4a7.7 7.7 0 1 0 10.5 10.5Z"></path></svg>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.2 8.2 0 0 1 9.5 4a7.7 7.7 0 1 0 10.5 10.5Z" /></svg>
         </button>
     </div>
     <main class="app">
@@ -462,19 +462,19 @@
 
             <nav class="nav" aria-label="Sidebar navigation">
                 <a class="nav-item" href="/engineer/dashboard">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 1 16 0"></path><path d="M8 13h3"></path><path d="M13 9l-2 4"></path><circle cx="12" cy="12" r="9"></circle></svg>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 1 16 0" /><path d="M8 13h3" /><path d="M13 9l-2 4" /><circle cx="12" cy="12" r="9" /></svg>
                     <span>Dashboard</span>
                 </a>
                 <a class="nav-item" href="/engineer/projects">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="8" r="3"></circle><circle cx="16" cy="8" r="3"></circle><path d="M3 20a5 5 0 0 1 10 0"></path><path d="M11 20a5 5 0 0 1 10 0"></path></svg>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="8" r="3" /><circle cx="16" cy="8" r="3" /><path d="M3 20a5 5 0 0 1 10 0" /><path d="M11 20a5 5 0 0 1 10 0" /></svg>
                     <span>Browse jobs</span>
                 </a>
                 <a class="nav-item active" href="/engineer/notifications">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h8a4 4 0 0 1 0 8H9l-3 3z"></path><path d="M14 4h2a2 2 0 0 1 2 2v2"></path></svg>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h8a4 4 0 0 1 0 8H9l-3 3z" /><path d="M14 4h2a2 2 0 0 1 2 2v2" /></svg>
                     <span>Notifications</span>
                 </a>
                 <a class="nav-item" href="/engineer/verification">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="M9 12l2 2 4-4" /></svg>
                     <span>Get Verified</span>
                 </a>
             </nav>
@@ -493,7 +493,7 @@
                 <p class="animate-slide-up" style="animation-delay: 0.1s; margin-top: 1rem;">No notifications yet.</p>
             </th:block>
 
-            <article class="notice animate-slide-up" th:each="note, iterStat : ${notifications}" th:style="'animation-delay: ' + (0.1 + iterStat.index * 0.05) + 's;'">
+            <article class="notice animate-slide-up" th:each="note, iterStat : ${notifications}" th:style="|animation-delay: ${0.1 + iterStat.index * 0.05}s;|">
                 <div>
                     <p class="notice-head" th:text="${note.title}">Notification Title</p>
                     <p class="notice-body" th:text="${note.message}">Notification message body...</p>
@@ -501,7 +501,7 @@
                 <div class="notice-side">
                     <span class="time" th:text="${#temporals.format(note.createdAt, 'dd/MM/yyyy HH:mm')}">Time</span>
                     <button class="trash" type="button" aria-label="Delete notification">
-                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"></path><path d="M9 7V5h6v2"></path><path d="M8 7l1 12h6l1-12"></path><path d="M10 11v5"></path><path d="M14 11v5"></path></svg>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16" /><path d="M9 7V5h6v2" /><path d="M8 7l1 12h6l1-12" /><path d="M10 11v5" /><path d="M14 11v5" /></svg>
                     </button>
                 </div>
             </article>
