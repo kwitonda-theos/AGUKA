@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Verification - UBAKA</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <style>
         :root {
             --bg: #0f1114;
@@ -485,7 +485,14 @@
             <h2 class="page-title">Verification Profile</h2>
             <p class="page-sub">Keep your profile updated to increase your chances of being hired.</p>
 
-            <form th:action="@{/engineer/verification}" method="post" class="animate-slide-up" style="animation-delay: 0.1s;">
+            <div th:if="${param.success}" style="background: rgba(1, 71, 60, 0.1); border: 1px solid var(--brand); color: var(--brand); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; font-weight: 600;">
+                Profile saved successfully!
+            </div>
+            <div th:if="${param.submitted}" style="background: rgba(1, 71, 60, 0.1); border: 1px solid var(--brand); color: var(--brand); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; font-weight: 600;">
+                Profile submitted for verification successfully!
+            </div>
+
+            <form th:action="@{/engineer/verification}" method="post" enctype="multipart/form-data" class="animate-slide-up" style="animation-delay: 0.1s;">
                 <h3 class="section-title">Personal information</h3>
                 <div class="grid">
                     <div class="field">
@@ -548,7 +555,10 @@
                     </div>
                     <div class="field">
                         <label for="idFile">UPLOAD NATIONAL ID</label>
-                        <input id="idFile" type="file">
+                        <input id="idFile" name="idFile" type="file">
+                        <p th:if="${engineer.idDocumentPath != null}" class="text-xs mt-1">
+                            <a th:href="${engineer.idDocumentPath}" target="_blank" class="text-brand font-bold">View current document</a>
+                        </p>
                     </div>
                 </div>
 
@@ -557,7 +567,12 @@
                 <div class="grid">
                     <div class="field wide">
                         <label for="certificates">CERTIFICATES</label>
-                        <input id="certificates" type="file" multiple>
+                        <input id="certificates" name="certificateFiles" type="file" multiple>
+                        <div th:if="${not #lists.isEmpty(engineer.certificates)}" class="mt-3 flex flex-wrap gap-2">
+                            <div th:each="cert : ${engineer.certificates}" class="skill-chip flex items-center gap-2">
+                                <a th:href="${cert.certificatePath}" target="_blank" class="text-white hover:underline" th:text="${cert.certificateName}">Cert</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -583,9 +598,9 @@
                 </div>
 
                 <div class="center-group">
-                    <button class="btn btn-primary btn-full" type="submit">Save</button>
+                    <button class="btn btn-primary btn-full" type="submit" name="action" value="save">Save</button>
                     <p class="submit-note">Note: submit for verification after making sure all required documents are uploaded.</p>
-                    <button class="btn btn-ghost btn-full" type="button">Submit for verification</button>
+                    <button class="btn btn-ghost btn-full" type="submit" name="action" value="submit">Submit for verification</button>
                 </div>
             </form>
         </section>

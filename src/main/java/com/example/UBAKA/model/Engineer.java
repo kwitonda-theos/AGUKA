@@ -68,6 +68,10 @@ public class Engineer {
     @JsonIgnoreProperties({"engineer"})
     private List<VerificationRequest> verificationRequests = new ArrayList<>();
 
+    @OneToMany(mappedBy = "engineer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties({"engineer"})
+    private List<EngineerCertificate> certificates = new ArrayList<>();
+
     public Engineer() {
     }
 
@@ -158,6 +162,10 @@ public class Engineer {
         return verificationRequests;
     }
 
+    public List<EngineerCertificate> getCertificates() {
+        return certificates;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -220,5 +228,9 @@ public class Engineer {
 
     public void setVerificationRequests(List<VerificationRequest> verificationRequests) {
         this.verificationRequests = verificationRequests;
+    }
+
+    public void setCertificates(List<EngineerCertificate> certificates) {
+        this.certificates = certificates;
     }
 }

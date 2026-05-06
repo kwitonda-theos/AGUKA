@@ -44,6 +44,7 @@ public class SecurityConfig {
                 .requestMatchers(
                     "/", "/auth/**", "/register/**",
                     "/assets/**", "/favicon.svg", "/icons/**",
+                    "/uploads/**",
                     "/error", "/*.css", "/*.js", "/*.svg", "/*.png"
                 ).permitAll()
                 // Role-protected areas

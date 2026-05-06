@@ -12,9 +12,18 @@ import com.example.UBAKA.repository.EngineerRepository;
 import com.example.UBAKA.repository.JobRepository;
 import com.example.UBAKA.repository.UserRepository;
 import com.example.UBAKA.service.NotificationService;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Controller
 @RequestMapping("/admin")
@@ -114,5 +123,40 @@ public class AdminController {
         user.setAccountStatus(AccountStatus.DISABLED);
         userRepository.save(user);
         return "redirect:/admin/users";
+    }
+
+    @GetMapping("/view-document")
+    public ResponseEntity<Resource> viewDocument(@RequestParam String path) {
+        if (!path.startsWith("/uploads/")) {
+            return ResponseEntity.badRequest().build();
+        }
+        try {
+            Path file = Paths.get(path.substring(1)); // Remove leading slash
+            Resource resource = new UrlResource(file.toUri());
+
+            if (resource.exists() || resource.isReadable()) {
+                String contentType = Files.probeContentType(file);
+                if (contentType == null || contentType.equals("application/octet-stream")) {
+                    // Fallback to manual check if probeContentType fails or returns generic type
+                    String filename = file.getFileName().toString().toLowerCase();
+                    if (filename.endsWith(".pdf")) contentType = "application/pdf";
+                    else if (filename.endsWith(".jpg") || filename.endsWith(".jpeg")) contentType = "image/jpeg";
+                    else if (filename.endsWith(".png")) contentType = "image/png";
+                    else if (filename.endsWith(".svg")) contentType = "image/svg+xml";
+                    else if (filename.endsWith(".gif")) contentType = "image/gif";
+                    else if (filename.endsWith(".txt")) contentType = "text/plain";
+                    else if (contentType == null) contentType = "application/octet-stream";
+                }
+
+                return ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline")
+                        .contentType(MediaType.parseMediaType(contentType))
+                        .body(resource);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }
