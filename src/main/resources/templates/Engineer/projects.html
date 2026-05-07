@@ -48,7 +48,6 @@
             min-height: 100vh;
             margin: 0;
             border-radius: 0;
-            overflow: hidden;
             display: grid;
             grid-template-columns: 300px 1fr;
         }
@@ -288,47 +287,53 @@
             font-size: 1.18rem;
         }
 
-        .filters {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 0.65rem;
-            max-width: 680px;
-            margin-bottom: 0.85rem;
+        .status-filter-bar {
+            display: inline-flex;
+            background: #e2d9cd;
+            padding: 0.375rem;
+            border-radius: 0.75rem;
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+            align-self: flex-start;
         }
 
-        .filter {
-            border: 1.6px solid var(--line);
-            border-radius: 7px;
-            padding: 0.28rem 0.45rem 0.35rem;
-            background: var(--chip);
+        body[data-theme="dark"] .status-filter-bar {
+            background: #2c3136;
         }
 
-        .filter label {
-            display: block;
-            font-size: 0.58rem;
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            color: #5f7c76;
-            margin-bottom: 0.2rem;
-        }
-
-        .select-wrap {
-            position: relative;
-        }
-
-        .filter select {
-            width: 100%;
+        .status-btn {
+            padding: 0.625rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 700;
+            cursor: pointer;
             border: none;
-            outline: none;
-            appearance: none;
             background: transparent;
-            border-radius: 4px;
-            padding: 0.24rem 0.4rem;
-            font-size: 0.73rem;
-            color: #2f4a44;
-            text-transform: uppercase;
-            font-weight: 600;
-            font-family: inherit;
+            color: var(--muted);
+            transition: all 150ms;
+        }
+
+        .status-btn:hover {
+            color: var(--brand);
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        body[data-theme="dark"] .status-btn:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .status-btn.active {
+            color: var(--brand);
+            background: #ffffff;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        body[data-theme="dark"] .status-btn.active {
+            color: #ffffff;
+            background: #3a4045;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
         }
 
         .section-title {
@@ -904,9 +909,6 @@
             .logo {
                 font-size: 1.55rem;
             }
-            .filters {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
@@ -982,48 +984,12 @@
             <h2 class="title">Browse jobs</h2>
             <p class="subtitle">Find and search for posted jobs tailored to you.</p>
 
-            <section class="filters animate-slide-up" aria-label="Job filters" id="select-filters">
-                <div class="filter">
-                    <label for="location">Location</label>
-                    <div class="select-wrap">
-                        <select id="location" class="job-filter">
-                            <option value="ALL">All</option>
-                            <option value="kicukiro">kicukiro</option>
-                            <option value="nyarugenge">nyarugenge</option>
-                            <option value="gasabo">gasabo</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="filter">
-                    <label for="budget">Budget</label>
-                    <div class="select-wrap">
-                        <select id="budget" class="job-filter">
-                            <option value="ALL">All</option>
-                            <option value="10000000-20000000">10,000,000 - 20,000,000</option>
-                            <option value="20000000-50000000">20,000,000 - 50,000,000</option>
-                            <option value="50000000-">50,000,000+</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="filter">
-                    <label for="specialization">Specialization</label>
-                    <div class="select-wrap">
-                        <select id="specialization" class="job-filter">
-                            <option value="ALL">All</option>
-                            <option value="civil engineer">civil engineer</option>
-                            <option value="architect">architect</option>
-                            <option value="structural engineer">structural engineer</option>
-                        </select>
-                    </div>
-                </div>
-            </section>
-
-            <div class="inline-flex bg-[#e2d9cd] p-1.5 rounded-xl mt-4 mb-8 shadow-inner self-start animate-slide-up" id="status-filter-bar">
-                <button class="status-btn active px-6 py-2.5 rounded-lg text-sm font-bold text-primary bg-white shadow-sm hover:shadow-md transition-all" data-status-filter="ALL">ALL</button>
-                <button class="status-btn px-6 py-2.5 rounded-lg text-sm font-bold text-muted hover:text-primary hover:bg-white/40 transition-colors" data-status-filter="OPEN">Open</button>
-                <button class="status-btn px-6 py-2.5 rounded-lg text-sm font-bold text-muted hover:text-primary hover:bg-white/40 transition-colors" data-status-filter="APPLIED">Applied</button>
-                <button class="status-btn px-6 py-2.5 rounded-lg text-sm font-bold text-muted hover:text-primary hover:bg-white/40 transition-colors" data-status-filter="IN_PROGRESS">In progress</button>
-                <button class="status-btn px-6 py-2.5 rounded-lg text-sm font-bold text-muted hover:text-primary hover:bg-white/40 transition-colors" data-status-filter="COMPLETED">Completed</button>
+            <div class="status-filter-bar animate-slide-up" id="status-filter-bar">
+                <button class="status-btn active" data-status-filter="ALL">ALL</button>
+                <button class="status-btn" data-status-filter="OPEN">Open</button>
+                <button class="status-btn" data-status-filter="APPLIED">Applied</button>
+                <button class="status-btn" data-status-filter="IN_PROGRESS">In progress</button>
+                <button class="status-btn" data-status-filter="COMPLETED">Completed</button>
             </div>
 
             <h3 class="section-title animate-slide-up" style="animation-delay: 0.1s;">jobs</h3>
@@ -1218,39 +1184,16 @@
         // Filtering Logic
         document.addEventListener('DOMContentLoaded', () => {
             const statusBtns = document.querySelectorAll('.status-btn');
-            const selects = document.querySelectorAll('.job-filter');
             const jobs = document.querySelectorAll('.job-item');
 
             let currentStatus = 'ALL';
 
             function applyFilters() {
-                const locFilter = document.getElementById('location').value.toLowerCase();
-                const specFilter = document.getElementById('specialization').value.toLowerCase();
-                const budgetFilter = document.getElementById('budget').value;
-
                 jobs.forEach(job => {
                     const status = job.dataset.status;
-                    const loc = job.dataset.location ? job.dataset.location.toLowerCase() : '';
-                    const spec = job.dataset.specialization ? job.dataset.specialization.toLowerCase() : '';
-                    const budget = parseFloat(job.dataset.budget) || 0;
-
                     let statusMatch = (currentStatus === 'ALL' || status === currentStatus);
-                    let locMatch = (locFilter === 'all' || loc.includes(locFilter));
-                    let specMatch = (specFilter === 'all' || spec.includes(specFilter));
-                    
-                    let budgetMatch = true;
-                    if (budgetFilter !== 'ALL') {
-                        const parts = budgetFilter.split('-');
-                        const min = parseFloat(parts[0]);
-                        if (parts.length > 1 && parts[1]) {
-                            const max = parseFloat(parts[1]);
-                            budgetMatch = budget >= min && budget <= max;
-                        } else {
-                            budgetMatch = budget >= min;
-                        }
-                    }
 
-                    if (statusMatch && locMatch && specMatch && budgetMatch) {
+                    if (statusMatch) {
                         job.style.display = 'block';
                     } else {
                         job.style.display = 'none';
@@ -1260,20 +1203,12 @@
 
             statusBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
-                    statusBtns.forEach(b => {
-                        b.classList.remove('text-primary', 'bg-white', 'shadow-sm', 'active');
-                        b.classList.add('text-muted', 'hover:text-primary', 'hover:bg-white/40');
-                    });
-                    btn.classList.add('text-primary', 'bg-white', 'shadow-sm', 'active');
-                    btn.classList.remove('text-muted', 'hover:text-primary', 'hover:bg-white/40');
+                    statusBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
                     
                     currentStatus = btn.dataset.statusFilter;
                     applyFilters();
                 });
-            });
-
-            selects.forEach(sel => {
-                sel.addEventListener('change', applyFilters);
             });
         });
     })();
