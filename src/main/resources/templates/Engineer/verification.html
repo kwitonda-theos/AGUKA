@@ -59,6 +59,7 @@
             position: sticky;
             top: 0;
             height: 100vh;
+            align-self: start;
         }
 
         .logo {
@@ -106,6 +107,22 @@
             background: #e4ddcd;
         }
 
+        .notif-badge {
+            display: inline-flex;
+            min-width: 22px;
+            height: 22px;
+            padding: 0 6px;
+            align-items: center;
+            justify-content: center;
+            border-radius: 999px;
+            background: #ff4757;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 0.75rem;
+            margin-left: auto;
+            flex-shrink: 0;
+        }
+
         .nav-item svg {
             width: 1.15rem;
             height: 1.15rem;
@@ -116,7 +133,6 @@
         }
 
         .profile-cta {
-            margin-top: auto;
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 12px;
@@ -127,6 +143,94 @@
             width: calc(100% - 3rem);
             margin-left: 1.5rem;
             margin-right: 1.5rem;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .profile-menu {
+            position: relative;
+            width: 100%;
+            margin-top: auto;
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            left: 0;
+            bottom: calc(100% + 0.75rem);
+            width: 100%;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.24);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(8px);
+            transition: opacity 160ms ease, transform 160ms ease, visibility 160ms ease;
+            z-index: 20;
+        }
+
+        .profile-menu:hover .profile-dropdown,
+        .profile-menu:focus-within .profile-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .profile-dropdown-head {
+            padding: 1rem 1.2rem 0.9rem;
+            background: #f7f5f0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .profile-dropdown-label {
+            margin: 0 0 0.2rem;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #67807a;
+        }
+
+        .profile-dropdown-email {
+            margin: 0;
+            font-size: 0.94rem;
+            font-weight: 700;
+            color: var(--text);
+            word-break: break-word;
+        }
+
+        .profile-dropdown form {
+            margin: 0;
+        }
+
+        .profile-dropdown button {
+            width: 100%;
+            border: none;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            padding: 1rem 1.2rem;
+            color: #e53935;
+            font: inherit;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .profile-dropdown button:hover {
+            background: rgba(229, 57, 53, 0.08);
+        }
+
+        .profile-dropdown svg {
+            width: 1.1rem;
+            height: 1.1rem;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            flex-shrink: 0;
         }
 
         .avatar {
@@ -468,6 +572,7 @@
                 <a class="nav-item" href="/engineer/notifications">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h8a4 4 0 0 1 0 8H9l-3 3z"></path><path d="M14 4h2a2 2 0 0 1 2 2v2"></path></svg>
                     <span>Notifications</span>
+                    <span class="notif-badge" th:if="${unreadCount != null and unreadCount > 0}" th:text="${unreadCount > 99 ? '99+' : unreadCount}">0</span>
                 </a>
                 <a class="nav-item active" href="/engineer/verification">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg>
@@ -475,9 +580,24 @@
                 </a>
             </nav>
 
-            <div class="profile-cta">
-                <div class="avatar" aria-hidden="true"></div>
-                <span th:text="${engineerName}">Profile</span>
+            <div class="profile-menu">
+                <div class="profile-cta">
+                    <div class="avatar" aria-hidden="true"></div>
+                    <span th:text="${engineerName}">Profile</span>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"></path></svg>
+                </div>
+                <div class="profile-dropdown" aria-label="Profile actions">
+                    <div class="profile-dropdown-head">
+                        <p class="profile-dropdown-label">Signed in as</p>
+                        <p class="profile-dropdown-email" th:text="${engineer.user.email}">engineer@email.com</p>
+                    </div>
+                    <form th:action="@{/auth/logout}" method="post">
+                        <button type="submit">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"></path><path d="M15 12H3"></path><path d="M21 3v18"></path></svg>
+                            Log out
+                        </button>
+                    </form>
+                </div>
             </div>
         </aside>
 

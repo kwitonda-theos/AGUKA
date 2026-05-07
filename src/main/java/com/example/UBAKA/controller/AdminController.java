@@ -82,16 +82,21 @@ public class AdminController {
     }
 
     @PostMapping("/engineers/reject")
-    public String rejectEngineer(@RequestParam Long engineerId) {
+        public String rejectEngineer(@RequestParam Long engineerId,
+                     @RequestParam(required = false) String rejectionReason) {
         Engineer engineer = engineerRepository.findById(engineerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Engineer not found"));
         engineer.setVerificationStatus(VerificationStatus.REJECTED);
         engineerRepository.save(engineer);
 
+        String reason = (rejectionReason == null || rejectionReason.trim().isEmpty())
+            ? "No reason provided"
+            : rejectionReason.trim();
+
         notificationService.createNotification(
                 engineer.getUser().getId(),
                 "Verification Rejected",
-                "Your verification request was rejected",
+            "Your verification request was rejected. Reason: " + reason,
                 NotificationType.ACCOUNT_REJECTED
         );
 
