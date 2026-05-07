@@ -16,33 +16,70 @@
         </header>
 
         <!-- Notifications List -->
+        <style>
+            .notice { 
+                border: 1.6px solid rgba(43,111,97,0.9);
+                border-radius: 7px;
+                background: #e4dfd2;
+                padding: 0.78rem 0.85rem;
+                display: flex;
+                justify-content: space-between;
+                gap: 0.9rem;
+                margin-bottom: 0.7rem;
+                color: #073f35;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            }
+
+            .notice.unread {
+                background: linear-gradient(180deg, #0f6654 0%, #01473c 100%);
+                border-color: rgba(255, 255, 255, 0.08);
+                box-shadow: 0 10px 22px rgba(1, 71, 60, 0.22);
+            }
+
+            .notice.unread .notice-head { color: #ffffff !important; }
+            .notice.unread .notice-body { color: #ffffff !important; }
+            .notice.unread .time { color: rgba(255,255,255,0.88) !important; }
+            .notice.unread .notice-head *,
+            .notice.unread .notice-body * { color: #ffffff !important; }
+
+            .notice-head { margin: 0; font-size: 1rem; font-weight: 700; }
+            .notice-body { margin: 0.42rem 0 0; color: #6b7c78; font-size: 0.88rem; }
+
+            .notice-side { display:flex; flex-direction:column; align-items:flex-end; gap:0.5rem; min-width:5rem; }
+
+            .mark-read { border: none; background: transparent; padding: 0; cursor: pointer; color: #0f6654; transition: color 150ms; }
+            .mark-read.read { color: rgba(7,63,53,0.35); cursor: default; }
+        </style>
+
         <div class="flex flex-col gap-5 max-w-4xl animate-slide-up">
-            
-            <div th:each="notif : ${notifications}" class="glass-card rounded-2xl p-6 px-8 flex flex-col gap-4 group hover:bg-white/40">
+
+            <div th:each="notif, iterStat : ${notifications}" class="glass-card notice rounded-2xl p-6 px-8 flex flex-col gap-4 group hover:bg-white/40" th:classappend="${!notif.isRead} ? ' unread' : ''" th:style="|animation-delay: ${0.1 + iterStat.index * 0.05}s;|">
                 <div class="flex justify-between items-start">
                     <div class="text-[16px] pr-8">
-                        <span class="font-black text-primary" th:text="${notif.title}">Notification Title</span>
-                        <span class="text-muted font-medium mx-1.5" th:if="${notif.type != null}" th:text="'- ' + ${notif.type.name()}">- TYPE</span>
+                        <p class="notice-head font-black text-primary" th:text="${notif.title}">Notification Title</p>
+                        <p class="notice-body text-muted font-medium mx-1.5" th:if="${notif.type != null}" th:text="'- ' + ${notif.type.name()}">- TYPE</p>
                     </div>
-                    <div class="text-[11px] font-bold text-muted uppercase tracking-wider whitespace-nowrap mt-1" th:text="${#temporals.format(notif.createdAt, 'dd/MM/yyyy HH:mm')}">JUST NOW</div>
+                    <div class="text-[11px] font-bold text-muted uppercase tracking-wider whitespace-nowrap mt-1 time" th:text="${#temporals.format(notif.createdAt, 'dd/MM/yyyy HH:mm')}">JUST NOW</div>
                 </div>
                 <div class="flex justify-between items-end">
                     <div class="text-[15px] text-muted italic font-medium" th:text="${notif.message}">
                         Notification message content here.
                     </div>
-                    <form th:action="@{/customer/notifications/{id}/read(id=${notif.id})}" method="post" class="m-0 p-0" th:if="${!notif.isRead}">
-                        <button type="submit" class="text-2xl text-primary opacity-80 hover:opacity-100 hover:text-[#13773b] transition-colors bg-white/50 hover:bg-[#A2E4B8]/50 p-2 rounded-full -mr-2 -mb-2 cursor-pointer" title="Mark as read">
-                            <i class="ri-check-line font-bold"></i>
-                        </button>
-                    </form>
-                    <div th:if="${notif.isRead}" class="text-2xl text-[#13773b] opacity-50 p-2 rounded-full -mr-2 -mb-2 cursor-default" title="Read">
-                        <i class="ri-check-double-line font-bold"></i>
+                    <div class="notice-side">
+                        <form th:action="@{/customer/notifications/{id}/read(id=${notif.id})}" method="post" class="m-0 p-0" th:if="${!notif.isRead}">
+                            <button type="submit" class="mark-read" title="Mark as read">
+                                <i class="ri-check-line font-bold"></i>
+                            </button>
+                        </form>
+                        <div th:if="${notif.isRead}" class="mark-read read" title="Read">
+                            <i class="ri-check-double-line font-bold"></i>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div th:if="${#lists.isEmpty(notifications)}" class="text-muted font-medium italic" th:text="#{notifications.no_notifications}">No notifications yet.</div>
-            
+        
         </div>
 
     </main>
